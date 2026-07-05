@@ -1,5 +1,5 @@
 import { motion, type Variants } from "framer-motion";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 
 const variants: Record<"fade" | "slide-up" | "scale", Variants> = {
   fade: {
@@ -28,18 +28,21 @@ export function Reveal({
   variant = "slide-up",
   delay = 0,
   className,
+  style,
 }: {
   children: ReactNode;
   as?: keyof typeof tags;
   variant?: "fade" | "slide-up" | "scale";
   delay?: number;
   className?: string;
+  style?: CSSProperties;
 }) {
   const Component = tags[as];
 
   return (
     <Component
       className={className}
+      style={style}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-80px" }}

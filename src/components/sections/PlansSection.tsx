@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 import { Check } from "lucide-react";
 import { listActivePlans } from "@/services/homeService";
 import { SectionTitle } from "./SectionTitle";
@@ -50,11 +51,16 @@ export function PlansSection() {
                 </li>
               ))}
             </ul>
-            <Button variant={plan.is_featured ? "secondary" : "default"} className="w-full">
-              Contratar
+            <Button asChild variant={plan.is_featured ? "secondary" : "default"} className="w-full">
+              <Link to="/planos">Contratar</Link>
             </Button>
           </Reveal>
         ))}
+      </div>
+      <div className="text-center">
+        <Button asChild variant="outline">
+          <Link to="/planos">Ver todos os planos</Link>
+        </Button>
       </div>
     </section>
   );
