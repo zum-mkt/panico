@@ -13,6 +13,9 @@ const Dashboard = lazy(() =>
 const ComingSoon = lazy(() =>
   import("@/pages/admin/ComingSoon").then((m) => ({ default: m.ComingSoon })),
 );
+const DesignSystemPreview = lazy(() =>
+  import("@/pages/DesignSystemPreview").then((m) => ({ default: m.DesignSystemPreview })),
+);
 
 export function AppRoutes() {
   return (
@@ -20,6 +23,7 @@ export function AppRoutes() {
       <Routes>
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/design-system" element={<DesignSystemPreview />} />
         </Route>
 
         <Route path="/admin/login" element={<Login />} />
