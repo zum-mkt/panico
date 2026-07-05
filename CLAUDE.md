@@ -1,1 +1,1 @@
-@AGENTS.md
+@00-LEIA_PRIMEIRO.md

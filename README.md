@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Funerária Paníco — novo site
 
-## Getting Started
+Ver [00-LEIA_PRIMEIRO.md](./00-LEIA_PRIMEIRO.md) para as diretrizes obrigatórias do projeto (missão, stack, design system, CMS).
 
-First, run the development server:
+## Stack
+
+React 19 + TypeScript + Vite + TailwindCSS v4 + shadcn/ui, com Supabase (database, storage, auth) como backend. Deploy em Cloudflare Workers (assets estáticos).
+
+## Desenvolvimento
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Copie `.env.example` para `.env.local` e preencha as variáveis do Supabase.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Build e deploy
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build     # gera dist/
+npm run deploy    # build + wrangler deploy
+```
 
-## Learn More
+O deploy também roda automaticamente via Cloudflare Workers Builds a cada push na branch `main`.
 
-To learn more about Next.js, take a look at the following resources:
+## Estrutura
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `legacy/` — cópia estática do site antigo (funerariapanico.com.br), mantida como referência de conteúdo e design.
+- `supabase/` — configuração do projeto Supabase (migrations, config.toml).
+- `src/` — aplicação React.
