@@ -1,10 +1,37 @@
+import { Hero } from "@/components/sections/Hero";
+import { ShortcutsBar } from "@/components/sections/ShortcutsBar";
+import { ServicesSection } from "@/components/sections/ServicesSection";
+import { AboutSection } from "@/components/sections/AboutSection";
+import { PlansSection } from "@/components/sections/PlansSection";
+import { ObituariesSection } from "@/components/sections/ObituariesSection";
+import { CemeteryTeaserSection } from "@/components/sections/CemeteryTeaserSection";
+import { PartnersSection } from "@/components/sections/PartnersSection";
+import { TestimonialsSection } from "@/components/sections/TestimonialsSection";
+import { FaqSection } from "@/components/sections/FaqSection";
+import { HomeCTA } from "@/components/sections/HomeCTA";
+
+// Ordem das seções — ver 05-HOME_PAGE.md (Header e Footer ficam no PublicLayout).
 export function Home() {
   return (
-    <main className="flex min-h-svh flex-col items-center justify-center gap-4 bg-background px-6 text-center text-foreground">
-      <h1 className="text-4xl text-primary">Funerária Paníco</h1>
-      <p className="max-w-md text-secondary">
-        Novo site em construção.
-      </p>
+    <main>
+      <Hero
+        eyebrow="Funerária Paníco"
+        title="Cuidado, respeito e acolhimento em cada momento"
+        description="Estamos ao seu lado com serenidade e profissionalismo, 24 horas por dia."
+        imageUrl="/hero-placeholder.svg"
+        primaryCta={{ label: "Ver planos", href: "/planos" }}
+        secondaryCta={{ label: "Atendimento 24h", href: "tel:+551140000000" }}
+      />
+      <ShortcutsBar />
+      <ServicesSection />
+      <AboutSection />
+      <PlansSection />
+      <ObituariesSection />
+      <CemeteryTeaserSection />
+      <PartnersSection />
+      <TestimonialsSection />
+      <FaqSection />
+      <HomeCTA />
     </main>
   );
 }

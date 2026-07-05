@@ -11,7 +11,7 @@ const Dashboard = lazy(() =>
   import("@/pages/admin/Dashboard").then((m) => ({ default: m.Dashboard })),
 );
 const ComingSoon = lazy(() =>
-  import("@/pages/admin/ComingSoon").then((m) => ({ default: m.ComingSoon })),
+  import("@/pages/ComingSoon").then((m) => ({ default: m.ComingSoon })),
 );
 const DesignSystemPreview = lazy(() =>
   import("@/pages/DesignSystemPreview").then((m) => ({ default: m.DesignSystemPreview })),
@@ -24,6 +24,24 @@ export function AppRoutes() {
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/design-system" element={<DesignSystemPreview />} />
+          <Route
+            path="/planos"
+            element={<ComingSoon title="Planos" doc="07-PLANOS_FUNERARIOS.md" />}
+          />
+          <Route
+            path="/obituarios"
+            element={<ComingSoon title="Obituários" doc="06-OBITUARIOS.md" />}
+          />
+          <Route
+            path="/cemiterio"
+            element={<ComingSoon title="Cemitério Parque" doc="09-CEMITERIO_PARQUE.md" />}
+          />
+          <Route path="/coroas" element={<ComingSoon title="Coroas" doc="08-COROAS.md" />} />
+          <Route path="/blog" element={<ComingSoon title="Blog" doc="11-BLOG.md" />} />
+          <Route
+            path="/area-do-cliente"
+            element={<ComingSoon title="Área do Cliente" doc="10-AREA_DO_CLIENTE.md" />}
+          />
         </Route>
 
         <Route path="/admin/login" element={<Login />} />
