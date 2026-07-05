@@ -16,6 +16,17 @@ const ComingSoon = lazy(() =>
 const DesignSystemPreview = lazy(() =>
   import("@/pages/DesignSystemPreview").then((m) => ({ default: m.DesignSystemPreview })),
 );
+const Obituarios = lazy(() =>
+  import("@/pages/Obituarios").then((m) => ({ default: m.Obituarios })),
+);
+const ObituarioDetalhe = lazy(() =>
+  import("@/pages/ObituarioDetalhe").then((m) => ({ default: m.ObituarioDetalhe })),
+);
+const ObituariosAdmin = lazy(() =>
+  import("@/pages/admin/obituarios/ObituariosAdmin").then((m) => ({
+    default: m.ObituariosAdmin,
+  })),
+);
 
 export function AppRoutes() {
   return (
@@ -28,10 +39,8 @@ export function AppRoutes() {
             path="/planos"
             element={<ComingSoon title="Planos" doc="07-PLANOS_FUNERARIOS.md" />}
           />
-          <Route
-            path="/obituarios"
-            element={<ComingSoon title="Obituários" doc="06-OBITUARIOS.md" />}
-          />
+          <Route path="/obituarios" element={<Obituarios />} />
+          <Route path="/obituarios/:id" element={<ObituarioDetalhe />} />
           <Route
             path="/cemiterio"
             element={<ComingSoon title="Cemitério Parque" doc="09-CEMITERIO_PARQUE.md" />}
@@ -64,10 +73,7 @@ export function AppRoutes() {
             path="paginas"
             element={<ComingSoon title="Páginas" doc="16-CONSTRUTOR_DE_PAGINAS.md" />}
           />
-          <Route
-            path="obituarios"
-            element={<ComingSoon title="Obituários" doc="06-OBITUARIOS.md" />}
-          />
+          <Route path="obituarios" element={<ObituariosAdmin />} />
           <Route
             path="planos"
             element={<ComingSoon title="Planos" doc="07-PLANOS_FUNERARIOS.md" />}

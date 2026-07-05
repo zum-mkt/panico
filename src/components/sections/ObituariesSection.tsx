@@ -23,26 +23,28 @@ export function ObituariesSection() {
           <Reveal
             key={obituary.id}
             delay={i * 0.08}
-            className="space-y-3 overflow-hidden rounded-card border border-border bg-card"
+            className="overflow-hidden rounded-card border border-border bg-card"
           >
-            {obituary.photo_url && (
-              <img
-                src={obituary.photo_url}
-                alt={obituary.name}
-                loading="lazy"
-                decoding="async"
-                className="aspect-video w-full object-cover"
-              />
-            )}
-            <div className="space-y-1 px-6 pb-6">
-              <h3 className="font-heading text-lg text-primary">{obituary.name}</h3>
-              <p className="text-sm text-secondary">
-                {dateFormatter.format(new Date(obituary.deceased_at))}
-              </p>
-              {obituary.wake_location && (
-                <p className="text-sm text-secondary">{obituary.wake_location}</p>
+            <Link to={`/obituarios/${obituary.id}`} className="block space-y-3">
+              {obituary.photo_url && (
+                <img
+                  src={obituary.photo_url}
+                  alt={obituary.name}
+                  loading="lazy"
+                  decoding="async"
+                  className="aspect-video w-full object-cover"
+                />
               )}
-            </div>
+              <div className="space-y-1 px-6 pb-6">
+                <h3 className="font-heading text-lg text-primary">{obituary.name}</h3>
+                <p className="text-sm text-secondary">
+                  {dateFormatter.format(new Date(obituary.deceased_at))}
+                </p>
+                {obituary.wake_location && (
+                  <p className="text-sm text-secondary">{obituary.wake_location}</p>
+                )}
+              </div>
+            </Link>
           </Reveal>
         ))}
       </div>
