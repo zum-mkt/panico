@@ -56,6 +56,7 @@ export function Coroas() {
             <Reveal
               key={crown.id}
               delay={i * 0.05}
+              hover
               className="flex flex-col overflow-hidden rounded-card border border-border bg-card"
             >
               {crown.photos[0] && (

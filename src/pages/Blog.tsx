@@ -70,6 +70,7 @@ export function Blog() {
             <Reveal
               key={post.id}
               delay={i * 0.05}
+              hover
               className="overflow-hidden rounded-card border border-border bg-card"
             >
               <Link to={`/blog/${post.slug}`} className="block">

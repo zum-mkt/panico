@@ -23,6 +23,7 @@ export function ObituariesSection() {
           <Reveal
             key={obituary.id}
             delay={i * 0.08}
+            hover
             className="overflow-hidden rounded-card border border-border bg-card"
           >
             <Link to={`/obituarios/${obituary.id}`} className="block space-y-3">

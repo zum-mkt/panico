@@ -48,7 +48,7 @@ export function Obituarios() {
       ) : (
         <div className="grid gap-6 md:grid-cols-3">
           {filtered.map((obituary, i) => (
-            <Reveal key={obituary.id} delay={i * 0.05} as="div">
+            <Reveal key={obituary.id} delay={i * 0.05} as="div" hover>
               <Link
                 to={`/obituarios/${obituary.id}`}
                 className="block space-y-3 overflow-hidden rounded-card border border-border bg-card"

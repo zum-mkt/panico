@@ -21,12 +21,15 @@ const tags = { div: motion.div, li: motion.li } as const;
 /**
  * Scroll reveal discreto — ver 19-ANIMACOES.md.
  * Envolve qualquer seção/bloco para animar a entrada quando visível.
+ * `hover` liga um leve levantamento no hover/tap, para cards e itens
+ * clicáveis (também parte do conjunto de efeitos do documento).
  */
 export function Reveal({
   children,
   as = "div",
   variant = "slide-up",
   delay = 0,
+  hover = false,
   className,
   style,
 }: {
@@ -34,6 +37,7 @@ export function Reveal({
   as?: keyof typeof tags;
   variant?: "fade" | "slide-up" | "scale";
   delay?: number;
+  hover?: boolean;
   className?: string;
   style?: CSSProperties;
 }) {
@@ -48,6 +52,8 @@ export function Reveal({
       viewport={{ once: true, margin: "-80px" }}
       transition={{ duration: 0.6, delay, ease: "easeOut" }}
       variants={variants[variant]}
+      whileHover={hover ? { y: -4, transition: { duration: 0.2, ease: "easeOut" } } : undefined}
+      whileTap={hover ? { scale: 0.98 } : undefined}
     >
       {children}
     </Component>
