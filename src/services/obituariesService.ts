@@ -44,7 +44,7 @@ export async function listAllObituariesAdmin(): Promise<Obituary[]> {
   const { data, error } = await supabase
     .from("obituaries")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("deceased_at", { ascending: false });
   if (error) throw error;
   return data;
 }
