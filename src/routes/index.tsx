@@ -77,6 +77,9 @@ const PaginasAdmin = lazy(() =>
 const PageBuilder = lazy(() =>
   import("@/pages/admin/paginas/PageBuilder").then((m) => ({ default: m.PageBuilder })),
 );
+const UsuariosAdmin = lazy(() =>
+  import("@/pages/admin/usuarios/UsuariosAdmin").then((m) => ({ default: m.UsuariosAdmin })),
+);
 
 export function AppRoutes() {
   return (
@@ -138,10 +141,7 @@ export function AppRoutes() {
           <Route path="formularios" element={<FormulariosAdmin />} />
           <Route path="seo" element={<ComingSoon title="SEO" doc="12-SEO_E_MARKETING.md" />} />
           <Route path="midia" element={<MidiaAdmin />} />
-          <Route
-            path="usuarios"
-            element={<ComingSoon title="Usuários" doc="17-USUARIOS_E_PERMISSOES.md" />}
-          />
+          <Route path="usuarios" element={<UsuariosAdmin />} />
         </Route>
       </Routes>
     </Suspense>
