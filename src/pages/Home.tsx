@@ -1,5 +1,6 @@
 import { Seo } from "@/components/seo/Seo";
 import { Hero } from "@/components/sections/Hero";
+import { BannerDisplay } from "@/components/sections/BannerDisplay";
 import { ShortcutsBar } from "@/components/sections/ShortcutsBar";
 import { ServicesSection } from "@/components/sections/ServicesSection";
 import { AboutSection } from "@/components/sections/AboutSection";
@@ -28,6 +29,7 @@ export function Home() {
         secondaryCta={{ label: "Atendimento 24h", href: "tel:+551140000000" }}
       />
       <ShortcutsBar />
+      <BannerDisplay />
       <ServicesSection />
       <AboutSection />
       <PlansSection />

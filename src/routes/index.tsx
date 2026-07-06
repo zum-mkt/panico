@@ -65,6 +65,9 @@ const FormulariosAdmin = lazy(() =>
 const MidiaAdmin = lazy(() =>
   import("@/pages/admin/midia/MidiaAdmin").then((m) => ({ default: m.MidiaAdmin })),
 );
+const BannersAdmin = lazy(() =>
+  import("@/pages/admin/banners/BannersAdmin").then((m) => ({ default: m.BannersAdmin })),
+);
 
 export function AppRoutes() {
   return (
@@ -108,6 +111,7 @@ export function AppRoutes() {
             element={<ComingSoon title="Configurações" doc="18-CONFIGURACOES_GERAIS.md" />}
           />
           <Route path="home" element={<ComingSoon title="Home" doc="05-HOME_PAGE.md" />} />
+          <Route path="banners" element={<BannersAdmin />} />
           <Route
             path="paginas"
             element={<ComingSoon title="Páginas" doc="16-CONSTRUTOR_DE_PAGINAS.md" />}

@@ -15,6 +15,7 @@ import {
   Users,
   IdCard,
   ListChecks,
+  GalleryHorizontal,
 } from "lucide-react";
 
 export type AdminNavItem = {
@@ -28,6 +29,7 @@ export const adminNavItems: AdminNavItem[] = [
   { label: "Dashboard", to: "/admin", icon: LayoutDashboard },
   { label: "Configurações", to: "/admin/configuracoes", icon: Settings },
   { label: "Home", to: "/admin/home", icon: Home },
+  { label: "Banners", to: "/admin/banners", icon: GalleryHorizontal },
   { label: "Páginas", to: "/admin/paginas", icon: FileText },
   { label: "Obituários", to: "/admin/obituarios", icon: HeartHandshake },
   { label: "Planos", to: "/admin/planos", icon: ClipboardList },
