@@ -29,3 +29,4 @@ O deploy também roda automaticamente via Cloudflare Workers Builds a cada push 
 - `legacy/` — cópia estática do site antigo (funerariapanico.com.br), mantida como referência de conteúdo e design.
 - `supabase/` — configuração do projeto Supabase (migrations, config.toml).
 - `src/` — aplicação React.
+
