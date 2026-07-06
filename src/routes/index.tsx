@@ -85,6 +85,21 @@ const ConfiguracoesAdmin = lazy(() =>
     default: m.ConfiguracoesAdmin,
   })),
 );
+const HomeAdmin = lazy(() =>
+  import("@/pages/admin/home/HomeAdmin").then((m) => ({ default: m.HomeAdmin })),
+);
+const ServicosAdmin = lazy(() =>
+  import("@/pages/admin/servicos/ServicosAdmin").then((m) => ({ default: m.ServicosAdmin })),
+);
+const ParceirosAdmin = lazy(() =>
+  import("@/pages/admin/parceiros/ParceirosAdmin").then((m) => ({ default: m.ParceirosAdmin })),
+);
+const DepoimentosAdmin = lazy(() =>
+  import("@/pages/admin/depoimentos/DepoimentosAdmin").then((m) => ({ default: m.DepoimentosAdmin })),
+);
+const FaqAdmin = lazy(() =>
+  import("@/pages/admin/faq/FaqAdmin").then((m) => ({ default: m.FaqAdmin })),
+);
 
 export function AppRoutes() {
   return (
@@ -126,7 +141,7 @@ export function AppRoutes() {
         >
           <Route index element={<Dashboard />} />
           <Route path="configuracoes" element={<ConfiguracoesAdmin />} />
-          <Route path="home" element={<ComingSoon title="Home" doc="05-HOME_PAGE.md" />} />
+          <Route path="home" element={<HomeAdmin />} />
           <Route path="banners" element={<BannersAdmin />} />
           <Route path="paginas" element={<PaginasAdmin />} />
           <Route path="paginas/:id" element={<PageBuilder />} />
@@ -135,10 +150,10 @@ export function AppRoutes() {
           <Route path="coroas" element={<CoroasAdmin />} />
           <Route path="cemiterio" element={<CemiterioAdmin />} />
           <Route path="clientes" element={<ClientesAdmin />} />
-          <Route
-            path="parceiros"
-            element={<ComingSoon title="Parceiros" doc="02-SUPABASE_E_DATABASE.md" />}
-          />
+          <Route path="servicos" element={<ServicosAdmin />} />
+          <Route path="parceiros" element={<ParceirosAdmin />} />
+          <Route path="depoimentos" element={<DepoimentosAdmin />} />
+          <Route path="faq" element={<FaqAdmin />} />
           <Route path="blog" element={<BlogAdmin />} />
           <Route path="formularios" element={<FormulariosAdmin />} />
           <Route path="seo" element={<ComingSoon title="SEO" doc="12-SEO_E_MARKETING.md" />} />

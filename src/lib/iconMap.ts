@@ -7,6 +7,8 @@ import {
   FileText,
   Phone,
   MapPin,
+  IdCard,
+  ClipboardList,
   type LucideIcon,
 } from "lucide-react";
 
@@ -21,7 +23,11 @@ const iconMap: Record<string, LucideIcon> = {
   FileText,
   Phone,
   MapPin,
+  IdCard,
+  ClipboardList,
 };
+
+export const iconNames = Object.keys(iconMap);
 
 export function resolveIcon(name?: string | null): LucideIcon {
   return (name && iconMap[name]) || HeartHandshake;

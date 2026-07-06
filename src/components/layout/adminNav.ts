@@ -16,6 +16,9 @@ import {
   IdCard,
   ListChecks,
   GalleryHorizontal,
+  Church,
+  MessageSquareQuote,
+  HelpCircle,
 } from "lucide-react";
 
 export type AdminNavItem = {
@@ -31,12 +34,15 @@ export const adminNavItems: AdminNavItem[] = [
   { label: "Home", to: "/admin/home", icon: Home },
   { label: "Banners", to: "/admin/banners", icon: GalleryHorizontal },
   { label: "Páginas", to: "/admin/paginas", icon: FileText },
+  { label: "Serviços", to: "/admin/servicos", icon: Church },
   { label: "Obituários", to: "/admin/obituarios", icon: HeartHandshake },
   { label: "Planos", to: "/admin/planos", icon: ClipboardList },
   { label: "Coroas", to: "/admin/coroas", icon: Flower2 },
   { label: "Cemitério", to: "/admin/cemiterio", icon: TreePine },
   { label: "Clientes", to: "/admin/clientes", icon: IdCard },
   { label: "Parceiros", to: "/admin/parceiros", icon: Handshake },
+  { label: "Depoimentos", to: "/admin/depoimentos", icon: MessageSquareQuote },
+  { label: "FAQ", to: "/admin/faq", icon: HelpCircle },
   { label: "Blog", to: "/admin/blog", icon: Newspaper },
   { label: "Formulários", to: "/admin/formularios", icon: ListChecks },
   { label: "SEO", to: "/admin/seo", icon: Search },

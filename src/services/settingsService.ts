@@ -16,3 +16,12 @@ export async function uploadSiteAsset(file: File): Promise<string> {
   const { data } = supabase.storage.from("gallery").getPublicUrl(path);
   return data.publicUrl;
 }
+
+export async function uploadHeroImage(file: File): Promise<string> {
+  const processed = await compressToWebp(file);
+  const path = `${crypto.randomUUID()}-${processed.name}`;
+  const { error } = await supabase.storage.from("hero").upload(path, processed);
+  if (error) throw error;
+  const { data } = supabase.storage.from("hero").getPublicUrl(path);
+  return data.publicUrl;
+}
