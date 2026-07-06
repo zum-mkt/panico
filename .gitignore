@@ -23,6 +23,11 @@ cloudflare-env.d.ts
 # supabase local
 supabase/.temp
 
+# credenciais e estado do sync com o sistema legado — nunca commitar
+legacy-sync/config.php
+legacy-sync/state.json
+legacy-sync.zip
+
 # gerado em build time — ver scripts/generate-sitemap.mjs
 public/sitemap.xml
 

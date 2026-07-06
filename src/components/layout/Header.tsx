@@ -43,7 +43,11 @@ export function Header() {
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link to="/" className="flex items-center font-heading text-xl text-primary">
-          {site?.logo_url ? <img src={site.logo_url} alt="Paníco" className="h-8" /> : "Paníco"}
+          {site?.logo_url ? (
+            <img src={site.logo_url} alt="Paníco" className="h-14 w-auto object-contain" />
+          ) : (
+            "Paníco"
+          )}
         </Link>
 
         <nav className="hidden gap-6 md:flex">
