@@ -65,20 +65,20 @@ export function Hero({
           )}
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.7, ease: "easeOut" }}
-          className="overflow-hidden rounded-hero"
-        >
+        {/* Sem animação de entrada aqui: esta imagem costuma ser o
+            candidato a Largest Contentful Paint — atrasar sua
+            visibilidade com fade/scale piora o LCP. */}
+        <div className="overflow-hidden rounded-hero">
           <img
             src={imageUrl}
             alt={imageAlt}
-            loading="lazy"
+            width={800}
+            height={800}
             decoding="async"
+            fetchPriority="high"
             className="h-full w-full object-cover"
           />
-        </motion.div>
+        </div>
       </div>
     </section>
   );

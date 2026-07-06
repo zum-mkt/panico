@@ -58,7 +58,12 @@ function Block({ section }: { section: PageSection }) {
       return (
         <section className="mx-auto max-w-5xl space-y-2 px-6 py-10">
           <Reveal variant="scale" className="overflow-hidden rounded-card">
-            <img src={c.url} alt={c.alt ?? ""} className="w-full object-cover" loading="lazy" />
+            <img
+              src={c.url}
+              alt={c.alt ?? ""}
+              className="aspect-video w-full object-cover"
+              loading="lazy"
+            />
           </Reveal>
           {c.caption && <p className="text-center text-sm text-secondary">{c.caption}</p>}
         </section>

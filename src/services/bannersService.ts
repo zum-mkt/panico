@@ -1,5 +1,6 @@
 import { supabase } from "@/supabase/client";
 import { createCrudService } from "@/services/createCrudService";
+import { compressToWebp } from "@/lib/imageProcessing";
 import type { Banner } from "@/types/banner";
 
 export const bannersCrud = createCrudService<Banner>("banners");
@@ -33,8 +34,9 @@ export async function swapBannerPosition(a: Banner, b: Banner) {
 }
 
 export async function uploadBannerImage(file: File): Promise<string> {
-  const path = `${crypto.randomUUID()}-${file.name}`;
-  const { error } = await supabase.storage.from("banners").upload(path, file);
+  const processed = await compressToWebp(file);
+  const path = `${crypto.randomUUID()}-${processed.name}`;
+  const { error } = await supabase.storage.from("banners").upload(path, processed);
   if (error) throw error;
   const { data } = supabase.storage.from("banners").getPublicUrl(path);
   return data.publicUrl;

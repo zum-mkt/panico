@@ -38,8 +38,11 @@ export function BannerDisplay() {
                 <img
                   src={banner.image_desktop_url ?? banner.image_tablet_url ?? banner.image_mobile_url ?? ""}
                   alt={banner.title ?? ""}
+                  width={1600}
+                  height={686}
                   loading="lazy"
-                  className="w-full object-cover"
+                  decoding="async"
+                  className="aspect-[21/9] w-full object-cover"
                 />
               </picture>
               {(banner.title || banner.cta_label) && (

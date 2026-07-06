@@ -1,4 +1,5 @@
 import { supabase } from "@/supabase/client";
+import { compressToWebp } from "@/lib/imageProcessing";
 
 export async function upsertSetting<T>(key: string, value: T) {
   const { error } = await supabase
@@ -8,8 +9,9 @@ export async function upsertSetting<T>(key: string, value: T) {
 }
 
 export async function uploadSiteAsset(file: File): Promise<string> {
-  const path = `${crypto.randomUUID()}-${file.name}`;
-  const { error } = await supabase.storage.from("gallery").upload(path, file);
+  const processed = await compressToWebp(file);
+  const path = `${crypto.randomUUID()}-${processed.name}`;
+  const { error } = await supabase.storage.from("gallery").upload(path, processed);
   if (error) throw error;
   const { data } = supabase.storage.from("gallery").getPublicUrl(path);
   return data.publicUrl;

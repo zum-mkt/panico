@@ -1,5 +1,6 @@
 import { supabase } from "@/supabase/client";
 import { createCrudService } from "@/services/createCrudService";
+import { compressToWebp } from "@/lib/imageProcessing";
 import type { BlogPost } from "@/types/blogPost";
 
 export const blogPostsCrud = createCrudService<BlogPost>("blog_posts");
@@ -34,8 +35,9 @@ export async function listAllPostsAdmin(): Promise<BlogPost[]> {
 }
 
 export async function uploadBlogCover(file: File): Promise<string> {
-  const path = `${crypto.randomUUID()}-${file.name}`;
-  const { error } = await supabase.storage.from("blog").upload(path, file);
+  const processed = await compressToWebp(file);
+  const path = `${crypto.randomUUID()}-${processed.name}`;
+  const { error } = await supabase.storage.from("blog").upload(path, processed);
   if (error) throw error;
   const { data } = supabase.storage.from("blog").getPublicUrl(path);
   return data.publicUrl;

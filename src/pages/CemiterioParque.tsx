@@ -64,7 +64,7 @@ export function CemiterioParque() {
         <section className="mx-auto grid max-w-6xl items-center gap-8 px-6 md:grid-cols-2">
           {history.image_url && (
             <Reveal variant="scale" className="overflow-hidden rounded-card">
-              <img src={history.image_url} alt="" className="w-full object-cover" loading="lazy" />
+              <img src={history.image_url} alt="" className="aspect-[4/3] w-full object-cover" loading="lazy" />
             </Reveal>
           )}
           <Reveal className="space-y-3">
@@ -87,7 +87,7 @@ export function CemiterioParque() {
               <img
                 src={structure.image_url}
                 alt=""
-                className="w-full object-cover"
+                className="aspect-[4/3] w-full object-cover"
                 loading="lazy"
               />
             </Reveal>

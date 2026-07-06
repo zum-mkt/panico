@@ -1,5 +1,6 @@
 import { supabase } from "@/supabase/client";
 import { createCrudService } from "@/services/createCrudService";
+import { compressToWebp } from "@/lib/imageProcessing";
 import type { BlockType, Page, PageSection } from "@/types/page";
 
 export const pagesCrud = createCrudService<Page>("pages");
@@ -70,8 +71,9 @@ export async function reorderSections(sections: PageSection[]) {
 }
 
 export async function uploadPageImage(file: File): Promise<string> {
-  const path = `${crypto.randomUUID()}-${file.name}`;
-  const { error } = await supabase.storage.from("gallery").upload(path, file);
+  const processed = await compressToWebp(file);
+  const path = `${crypto.randomUUID()}-${processed.name}`;
+  const { error } = await supabase.storage.from("gallery").upload(path, processed);
   if (error) throw error;
   const { data } = supabase.storage.from("gallery").getPublicUrl(path);
   return data.publicUrl;

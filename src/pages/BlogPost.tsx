@@ -88,7 +88,11 @@ export function BlogPost() {
 
       {post.cover_image_url && (
         <Reveal variant="scale" className="overflow-hidden rounded-card">
-          <img src={post.cover_image_url} alt={post.title} className="w-full object-cover" />
+          <img
+            src={post.cover_image_url}
+            alt={post.title}
+            className="aspect-video w-full object-cover"
+          />
         </Reveal>
       )}
 
