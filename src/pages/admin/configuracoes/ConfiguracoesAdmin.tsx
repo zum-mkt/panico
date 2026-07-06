@@ -1,14 +1,17 @@
 import { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { Plus, Trash2 } from "lucide-react";
 import { getSetting } from "@/services/homeService";
 import { upsertSetting, uploadSiteAsset } from "@/services/settingsService";
 import { defaultTheme, type ThemeTokens } from "@/contexts/ThemeContext";
 import type { MarketingSettings } from "@/components/seo/MarketingScripts";
+import type { Location } from "@/types/location";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 type SiteSettings = {
   logo_url?: string;
@@ -158,6 +161,75 @@ function TemaTab() {
   );
 }
 
+function UnidadesTab() {
+  const { data } = useQuery({
+    queryKey: ["settings", "locations"],
+    queryFn: () => getSetting<Location[]>("locations"),
+  });
+  const [items, setItems] = useState<Location[]>([]);
+  useEffect(() => {
+    if (data) setItems(data);
+  }, [data]);
+
+  const mutation = useMutation({
+    mutationFn: () => upsertSetting("locations", items),
+    onSuccess: () => toast.success("Unidades salvas."),
+  });
+
+  function update(i: number, patch: Partial<Location>) {
+    setItems((prev) => prev.map((item, idx) => (idx === i ? { ...item, ...patch } : item)));
+  }
+  function remove(i: number) {
+    setItems((prev) => prev.filter((_, idx) => idx !== i));
+  }
+  function add() {
+    setItems((prev) => [...prev, { name: "", address: "", phone: "", email: "" }]);
+  }
+
+  return (
+    <div className="max-w-2xl space-y-4">
+      <p className="text-sm text-secondary">
+        Unidades exibidas na página de Contato, cada uma com endereço, telefone, e-mail e mapa.
+      </p>
+      {items.map((item, i) => (
+        <Card key={i} className="space-y-3 p-4">
+          <div className="flex items-start justify-between gap-3">
+            <div className="flex-1 space-y-2">
+              <Label>Nome da unidade</Label>
+              <Input value={item.name} onChange={(e) => update(i, { name: e.target.value })} />
+            </div>
+            <Button size="icon-sm" variant="ghost" onClick={() => remove(i)}>
+              <Trash2 className="size-4" />
+            </Button>
+          </div>
+          <div className="space-y-2">
+            <Label>Endereço</Label>
+            <Input value={item.address} onChange={(e) => update(i, { address: e.target.value })} />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label>Telefone</Label>
+              <Input value={item.phone} onChange={(e) => update(i, { phone: e.target.value })} />
+            </div>
+            <div className="space-y-2">
+              <Label>E-mail</Label>
+              <Input value={item.email} onChange={(e) => update(i, { email: e.target.value })} />
+            </div>
+          </div>
+        </Card>
+      ))}
+      <Button variant="outline" onClick={add}>
+        <Plus className="size-4" /> Adicionar unidade
+      </Button>
+      <div>
+        <Button onClick={() => mutation.mutate()} disabled={mutation.isPending}>
+          {mutation.isPending ? "Salvando…" : "Salvar"}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
 function ScriptsTab() {
   const { data } = useQuery({
     queryKey: ["settings", "marketing"],
@@ -226,11 +298,15 @@ export function ConfiguracoesAdmin() {
       <Tabs defaultValue="geral">
         <TabsList>
           <TabsTrigger value="geral">Geral</TabsTrigger>
+          <TabsTrigger value="unidades">Unidades</TabsTrigger>
           <TabsTrigger value="tema">Cores e Fontes</TabsTrigger>
           <TabsTrigger value="scripts">Scripts globais</TabsTrigger>
         </TabsList>
         <TabsContent value="geral">
           <GeralTab />
+        </TabsContent>
+        <TabsContent value="unidades">
+          <UnidadesTab />
         </TabsContent>
         <TabsContent value="tema">
           <TemaTab />

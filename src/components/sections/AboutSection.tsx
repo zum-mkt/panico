@@ -16,7 +16,11 @@ export function AboutSection() {
     <section className="mx-auto max-w-3xl px-6 py-20 text-center">
       <Reveal className="space-y-4">
         <h2 className="font-heading text-3xl text-primary md:text-4xl">{about.title}</h2>
-        <p className="text-secondary">{about.text}</p>
+        {about.text.split("\n").filter(Boolean).map((paragraph, i) => (
+          <p key={i} className="text-secondary">
+            {paragraph}
+          </p>
+        ))}
       </Reveal>
     </section>
   );
