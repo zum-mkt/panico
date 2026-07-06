@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { Helmet } from "react-helmet-async";
+import { Seo } from "@/components/seo/Seo";
 import { listPublicCrowns } from "@/services/crownsService";
 import { SectionTitle } from "@/components/sections/SectionTitle";
 import { Reveal } from "@/components/ui/reveal";
@@ -28,9 +28,10 @@ export function Coroas() {
 
   return (
     <main className="mx-auto max-w-6xl space-y-10 px-6 py-24">
-      <Helmet>
-        <title>Coroas de Flores — Funerária Paníco</title>
-      </Helmet>
+      <Seo
+        title="Coroas de Flores"
+        description="Catálogo de coroas de flores da Funerária Paníco, com encomenda rápida pelo WhatsApp."
+      />
 
       <SectionTitle eyebrow="Catálogo" title="Coroas de Flores" align="left" className="mx-0" />
 

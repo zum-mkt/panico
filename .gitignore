@@ -23,6 +23,9 @@ cloudflare-env.d.ts
 # supabase local
 supabase/.temp
 
+# gerado em build time — ver scripts/generate-sitemap.mjs
+public/sitemap.xml
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

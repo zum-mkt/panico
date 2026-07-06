@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /area-do-cliente
+
+Sitemap: https://panico.morning-mouse-a96d.workers.dev/sitemap.xml

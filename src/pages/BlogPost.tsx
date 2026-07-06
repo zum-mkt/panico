@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Helmet } from "react-helmet-async";
 import { Share2 } from "lucide-react";
+import { Seo } from "@/components/seo/Seo";
 import { getPostBySlug, listPublishedPosts } from "@/services/blogService";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
@@ -48,15 +49,13 @@ export function BlogPost() {
 
   return (
     <main className="mx-auto max-w-3xl space-y-10 px-6 py-24">
+      <Seo
+        title={seoTitle}
+        description={seoDescription}
+        image={post.cover_image_url ?? undefined}
+        type="article"
+      />
       <Helmet>
-        <title>{seoTitle} — Funerária Paníco</title>
-        {seoDescription && <meta name="description" content={seoDescription} />}
-        <link rel="canonical" href={pageUrl} />
-        <meta property="og:type" content="article" />
-        <meta property="og:title" content={seoTitle} />
-        {seoDescription && <meta property="og:description" content={seoDescription} />}
-        {post.cover_image_url && <meta property="og:image" content={post.cover_image_url} />}
-        <meta name="twitter:card" content="summary_large_image" />
         <script type="application/ld+json">
           {JSON.stringify({
             "@context": "https://schema.org",

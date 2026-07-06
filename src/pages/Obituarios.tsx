@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Search } from "lucide-react";
-import { Helmet } from "react-helmet-async";
+import { Seo } from "@/components/seo/Seo";
 import { listPublishedObituaries } from "@/services/obituariesService";
 import { SectionTitle } from "@/components/sections/SectionTitle";
 import { Reveal } from "@/components/ui/reveal";
@@ -26,9 +26,10 @@ export function Obituarios() {
 
   return (
     <main className="mx-auto max-w-6xl space-y-10 px-6 py-24">
-      <Helmet>
-        <title>Obituários — Funerária Paníco</title>
-      </Helmet>
+      <Seo
+        title="Obituários"
+        description="Consulte homenagens e informações de velório e sepultamento da Funerária Paníco."
+      />
 
       <SectionTitle eyebrow="Homenagens" title="Obituários" align="left" className="mx-0" />
 

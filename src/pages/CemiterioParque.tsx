@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { Helmet } from "react-helmet-async";
+import { Seo } from "@/components/seo/Seo";
 import { Clock, MapPin } from "lucide-react";
 import {
   listActiveCemeterySections,
@@ -51,9 +51,10 @@ export function CemiterioParque() {
 
   return (
     <main className="space-y-20 py-20">
-      <Helmet>
-        <title>Cemitério Parque — Funerária Paníco</title>
-      </Helmet>
+      <Seo
+        title="Cemitério Parque"
+        description="Conheça o Cemitério Parque Paníco: estrutura, galeria, localização e horários de funcionamento."
+      />
 
       <div className="mx-auto max-w-3xl px-6 text-center">
         <SectionTitle eyebrow="Cemitério Parque" title="Um espaço de paz e memória" />

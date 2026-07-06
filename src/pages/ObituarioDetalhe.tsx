@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Helmet } from "react-helmet-async";
+import { Seo } from "@/components/seo/Seo";
 import { QRCodeSVG } from "qrcode.react";
 import { Share2, MapPin } from "lucide-react";
 import {
@@ -77,11 +78,23 @@ export function ObituarioDetalhe() {
 
   return (
     <main className="mx-auto max-w-3xl space-y-12 px-6 py-24">
+      <Seo
+        title={obituary.seo_title || obituary.name}
+        description={obituary.seo_description ?? undefined}
+        image={obituary.photo_url ?? undefined}
+      />
       <Helmet>
-        <title>{obituary.seo_title || `${obituary.name} — Funerária Paníco`}</title>
-        {obituary.seo_description && (
-          <meta name="description" content={obituary.seo_description} />
-        )}
+        <script type="application/ld+json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ProfilePage",
+            mainEntity: {
+              "@type": "Person",
+              name: obituary.name,
+              image: obituary.photo_url ?? undefined,
+            },
+          })}
+        </script>
       </Helmet>
 
       <Reveal className="space-y-6 text-center">

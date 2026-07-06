@@ -1,3 +1,4 @@
+import { Seo } from "@/components/seo/Seo";
 import { Hero } from "@/components/sections/Hero";
 import { ShortcutsBar } from "@/components/sections/ShortcutsBar";
 import { ServicesSection } from "@/components/sections/ServicesSection";
@@ -14,6 +15,10 @@ import { HomeCTA } from "@/components/sections/HomeCTA";
 export function Home() {
   return (
     <main>
+      <Seo
+        title="Cuidado, respeito e acolhimento em cada momento"
+        description="Funerária Paníco: planos funerários, obituários, cemitério parque e atendimento 24h com serenidade e profissionalismo."
+      />
       <Hero
         eyebrow="Funerária Paníco"
         title="Cuidado, respeito e acolhimento em cada momento"

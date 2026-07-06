@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Check, X } from "lucide-react";
-import { Helmet } from "react-helmet-async";
+import { Seo } from "@/components/seo/Seo";
 import { listPublicPlans } from "@/services/plansService";
 import { getSetting } from "@/services/homeService";
 import { supabase } from "@/supabase/client";
@@ -49,9 +49,10 @@ export function Planos() {
 
   return (
     <main>
-      <Helmet>
-        <title>Planos Funerários — Funerária Paníco</title>
-      </Helmet>
+      <Seo
+        title="Planos Funerários"
+        description="Conheça os planos funerários da Paníco: assistência 24h, sem burocracia e com cobertura para toda a família."
+      />
 
       <Hero
         eyebrow="Planos"

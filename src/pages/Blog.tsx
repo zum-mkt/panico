@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
+import { Seo } from "@/components/seo/Seo";
 import { Search } from "lucide-react";
 import { listPublishedPosts } from "@/services/blogService";
 import { SectionTitle } from "@/components/sections/SectionTitle";
@@ -31,9 +31,10 @@ export function Blog() {
 
   return (
     <main className="mx-auto max-w-6xl space-y-10 px-6 py-24">
-      <Helmet>
-        <title>Blog — Funerária Paníco</title>
-      </Helmet>
+      <Seo
+        title="Blog"
+        description="Conteúdos sobre luto, planejamento funerário e acolhimento da Funerária Paníco."
+      />
 
       <SectionTitle eyebrow="Blog" title="Conteúdos para acolher e informar" align="left" className="mx-0" />
 
