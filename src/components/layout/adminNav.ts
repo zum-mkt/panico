@@ -13,6 +13,7 @@ import {
   Search,
   Image,
   Users,
+  IdCard,
 } from "lucide-react";
 
 export type AdminNavItem = {
@@ -31,6 +32,7 @@ export const adminNavItems: AdminNavItem[] = [
   { label: "Planos", to: "/admin/planos", icon: ClipboardList },
   { label: "Coroas", to: "/admin/coroas", icon: Flower2 },
   { label: "Cemitério", to: "/admin/cemiterio", icon: TreePine },
+  { label: "Clientes", to: "/admin/clientes", icon: IdCard },
   { label: "Parceiros", to: "/admin/parceiros", icon: Handshake },
   { label: "Blog", to: "/admin/blog", icon: Newspaper },
   { label: "SEO", to: "/admin/seo", icon: Search },

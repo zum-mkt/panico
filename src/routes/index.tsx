@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { PublicLayout } from "@/components/layout/PublicLayout";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { ProtectedClientRoute } from "@/components/auth/ProtectedClientRoute";
 
 // Lazy loading nas páginas — ver 01-ARQUITETURA_DO_PROJETO.md > Regras.
 const Home = lazy(() => import("@/pages/Home").then((m) => ({ default: m.Home })));
@@ -41,6 +42,15 @@ const CemiterioParque = lazy(() =>
 const CemiterioAdmin = lazy(() =>
   import("@/pages/admin/cemiterio/CemiterioAdmin").then((m) => ({ default: m.CemiterioAdmin })),
 );
+const ClienteLogin = lazy(() =>
+  import("@/pages/area-cliente/ClienteLogin").then((m) => ({ default: m.ClienteLogin })),
+);
+const ClienteDashboard = lazy(() =>
+  import("@/pages/area-cliente/ClienteDashboard").then((m) => ({ default: m.ClienteDashboard })),
+);
+const ClientesAdmin = lazy(() =>
+  import("@/pages/admin/clientes/ClientesAdmin").then((m) => ({ default: m.ClientesAdmin })),
+);
 
 export function AppRoutes() {
   return (
@@ -55,9 +65,14 @@ export function AppRoutes() {
           <Route path="/cemiterio" element={<CemiterioParque />} />
           <Route path="/coroas" element={<Coroas />} />
           <Route path="/blog" element={<ComingSoon title="Blog" doc="11-BLOG.md" />} />
+          <Route path="/area-do-cliente/login" element={<ClienteLogin />} />
           <Route
             path="/area-do-cliente"
-            element={<ComingSoon title="Área do Cliente" doc="10-AREA_DO_CLIENTE.md" />}
+            element={
+              <ProtectedClientRoute>
+                <ClienteDashboard />
+              </ProtectedClientRoute>
+            }
           />
         </Route>
 
@@ -85,6 +100,7 @@ export function AppRoutes() {
           <Route path="planos" element={<PlanosAdmin />} />
           <Route path="coroas" element={<CoroasAdmin />} />
           <Route path="cemiterio" element={<CemiterioAdmin />} />
+          <Route path="clientes" element={<ClientesAdmin />} />
           <Route
             path="parceiros"
             element={<ComingSoon title="Parceiros" doc="02-SUPABASE_E_DATABASE.md" />}
