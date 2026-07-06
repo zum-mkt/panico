@@ -35,6 +35,12 @@ const Coroas = lazy(() => import("@/pages/Coroas").then((m) => ({ default: m.Cor
 const CoroasAdmin = lazy(() =>
   import("@/pages/admin/coroas/CoroasAdmin").then((m) => ({ default: m.CoroasAdmin })),
 );
+const CemiterioParque = lazy(() =>
+  import("@/pages/CemiterioParque").then((m) => ({ default: m.CemiterioParque })),
+);
+const CemiterioAdmin = lazy(() =>
+  import("@/pages/admin/cemiterio/CemiterioAdmin").then((m) => ({ default: m.CemiterioAdmin })),
+);
 
 export function AppRoutes() {
   return (
@@ -46,10 +52,7 @@ export function AppRoutes() {
           <Route path="/planos" element={<Planos />} />
           <Route path="/obituarios" element={<Obituarios />} />
           <Route path="/obituarios/:id" element={<ObituarioDetalhe />} />
-          <Route
-            path="/cemiterio"
-            element={<ComingSoon title="Cemitério Parque" doc="09-CEMITERIO_PARQUE.md" />}
-          />
+          <Route path="/cemiterio" element={<CemiterioParque />} />
           <Route path="/coroas" element={<Coroas />} />
           <Route path="/blog" element={<ComingSoon title="Blog" doc="11-BLOG.md" />} />
           <Route
@@ -81,10 +84,7 @@ export function AppRoutes() {
           <Route path="obituarios" element={<ObituariosAdmin />} />
           <Route path="planos" element={<PlanosAdmin />} />
           <Route path="coroas" element={<CoroasAdmin />} />
-          <Route
-            path="cemiterio"
-            element={<ComingSoon title="Cemitério" doc="09-CEMITERIO_PARQUE.md" />}
-          />
+          <Route path="cemiterio" element={<CemiterioAdmin />} />
           <Route
             path="parceiros"
             element={<ComingSoon title="Parceiros" doc="02-SUPABASE_E_DATABASE.md" />}
