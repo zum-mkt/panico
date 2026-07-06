@@ -15,6 +15,31 @@ export async function listPublishedObituaries(): Promise<Obituary[]> {
   return data;
 }
 
+const OBITUARIES_PAGE_SIZE = 15;
+
+export async function listPublishedObituariesPage(
+  page: number,
+  search: string,
+): Promise<{ data: Obituary[]; count: number }> {
+  const from = (page - 1) * OBITUARIES_PAGE_SIZE;
+  const to = from + OBITUARIES_PAGE_SIZE - 1;
+
+  let query = supabase
+    .from("obituaries")
+    .select("*", { count: "exact" })
+    .eq("status", "published")
+    .order("deceased_at", { ascending: false })
+    .range(from, to);
+
+  if (search.trim()) {
+    query = query.ilike("name", `%${search.trim()}%`);
+  }
+
+  const { data, count, error } = await query;
+  if (error) throw error;
+  return { data, count: count ?? 0 };
+}
+
 export async function listAllObituariesAdmin(): Promise<Obituary[]> {
   const { data, error } = await supabase
     .from("obituaries")
