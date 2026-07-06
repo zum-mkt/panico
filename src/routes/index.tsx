@@ -80,6 +80,11 @@ const PageBuilder = lazy(() =>
 const UsuariosAdmin = lazy(() =>
   import("@/pages/admin/usuarios/UsuariosAdmin").then((m) => ({ default: m.UsuariosAdmin })),
 );
+const ConfiguracoesAdmin = lazy(() =>
+  import("@/pages/admin/configuracoes/ConfiguracoesAdmin").then((m) => ({
+    default: m.ConfiguracoesAdmin,
+  })),
+);
 
 export function AppRoutes() {
   return (
@@ -120,10 +125,7 @@ export function AppRoutes() {
           }
         >
           <Route index element={<Dashboard />} />
-          <Route
-            path="configuracoes"
-            element={<ComingSoon title="Configurações" doc="18-CONFIGURACOES_GERAIS.md" />}
-          />
+          <Route path="configuracoes" element={<ConfiguracoesAdmin />} />
           <Route path="home" element={<ComingSoon title="Home" doc="05-HOME_PAGE.md" />} />
           <Route path="banners" element={<BannersAdmin />} />
           <Route path="paginas" element={<PaginasAdmin />} />

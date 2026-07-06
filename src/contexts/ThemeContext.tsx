@@ -1,9 +1,17 @@
-import { createContext, useContext, useEffect, useMemo, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
+import { supabase } from "@/supabase/client";
 
 /**
  * Tokens padrão do Design System (ver 04-DESIGN_SYSTEM.md).
- * Futuramente sobrescrevíveis pela tabela `settings` do Supabase
- * (ver 18-CONFIGURACOES_GERAIS.md > Cores do tema / Fontes).
+ * Sobrescrevíveis pela tabela `settings` (key = 'theme') — ver
+ * 18-CONFIGURACOES_GERAIS.md > Cores do tema / Fontes.
  */
 export type ThemeTokens = {
   colors: {
@@ -20,7 +28,7 @@ export type ThemeTokens = {
   };
 };
 
-const defaultTheme: ThemeTokens = {
+export const defaultTheme: ThemeTokens = {
   colors: {
     background: "#FAF8F4",
     surface: "#FFFFFF",
@@ -37,13 +45,25 @@ const defaultTheme: ThemeTokens = {
 
 const ThemeContext = createContext<ThemeTokens>(defaultTheme);
 
-export function ThemeProvider({
-  theme = defaultTheme,
-  children,
-}: {
-  theme?: ThemeTokens;
-  children: ReactNode;
-}) {
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [theme, setTheme] = useState<ThemeTokens>(defaultTheme);
+
+  useEffect(() => {
+    supabase
+      .from("settings")
+      .select("value")
+      .eq("key", "theme")
+      .maybeSingle()
+      .then(({ data }) => {
+        const override = data?.value as Partial<ThemeTokens> | undefined;
+        if (!override) return;
+        setTheme({
+          colors: { ...defaultTheme.colors, ...override.colors },
+          fonts: { ...defaultTheme.fonts, ...override.fonts },
+        });
+      });
+  }, []);
+
   const value = useMemo(() => theme, [theme]);
 
   useEffect(() => {
