@@ -14,6 +14,7 @@ import {
   Image,
   Users,
   IdCard,
+  ListChecks,
 } from "lucide-react";
 
 export type AdminNavItem = {
@@ -35,6 +36,7 @@ export const adminNavItems: AdminNavItem[] = [
   { label: "Clientes", to: "/admin/clientes", icon: IdCard },
   { label: "Parceiros", to: "/admin/parceiros", icon: Handshake },
   { label: "Blog", to: "/admin/blog", icon: Newspaper },
+  { label: "Formulários", to: "/admin/formularios", icon: ListChecks },
   { label: "SEO", to: "/admin/seo", icon: Search },
   { label: "Biblioteca de mídia", to: "/admin/midia", icon: Image },
   { label: "Usuários", to: "/admin/usuarios", icon: Users },

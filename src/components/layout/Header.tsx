@@ -10,6 +10,7 @@ const links = [
   { label: "Cemitério", to: "/cemiterio" },
   { label: "Coroas", to: "/coroas" },
   { label: "Blog", to: "/blog" },
+  { label: "Contato", to: "/contato" },
 ];
 
 export function Header() {
