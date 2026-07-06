@@ -68,6 +68,15 @@ const MidiaAdmin = lazy(() =>
 const BannersAdmin = lazy(() =>
   import("@/pages/admin/banners/BannersAdmin").then((m) => ({ default: m.BannersAdmin })),
 );
+const DynamicPage = lazy(() =>
+  import("@/pages/DynamicPage").then((m) => ({ default: m.DynamicPage })),
+);
+const PaginasAdmin = lazy(() =>
+  import("@/pages/admin/paginas/PaginasAdmin").then((m) => ({ default: m.PaginasAdmin })),
+);
+const PageBuilder = lazy(() =>
+  import("@/pages/admin/paginas/PageBuilder").then((m) => ({ default: m.PageBuilder })),
+);
 
 export function AppRoutes() {
   return (
@@ -93,6 +102,8 @@ export function AppRoutes() {
               </ProtectedClientRoute>
             }
           />
+          {/* Catch-all do construtor de páginas — precisa ser a última rota pública. */}
+          <Route path="/:slug" element={<DynamicPage />} />
         </Route>
 
         <Route path="/admin/login" element={<Login />} />
@@ -112,10 +123,8 @@ export function AppRoutes() {
           />
           <Route path="home" element={<ComingSoon title="Home" doc="05-HOME_PAGE.md" />} />
           <Route path="banners" element={<BannersAdmin />} />
-          <Route
-            path="paginas"
-            element={<ComingSoon title="Páginas" doc="16-CONSTRUTOR_DE_PAGINAS.md" />}
-          />
+          <Route path="paginas" element={<PaginasAdmin />} />
+          <Route path="paginas/:id" element={<PageBuilder />} />
           <Route path="obituarios" element={<ObituariosAdmin />} />
           <Route path="planos" element={<PlanosAdmin />} />
           <Route path="coroas" element={<CoroasAdmin />} />
