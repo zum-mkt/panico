@@ -51,6 +51,11 @@ const ClienteDashboard = lazy(() =>
 const ClientesAdmin = lazy(() =>
   import("@/pages/admin/clientes/ClientesAdmin").then((m) => ({ default: m.ClientesAdmin })),
 );
+const Blog = lazy(() => import("@/pages/Blog").then((m) => ({ default: m.Blog })));
+const BlogPost = lazy(() => import("@/pages/BlogPost").then((m) => ({ default: m.BlogPost })));
+const BlogAdmin = lazy(() =>
+  import("@/pages/admin/blog/BlogAdmin").then((m) => ({ default: m.BlogAdmin })),
+);
 
 export function AppRoutes() {
   return (
@@ -64,7 +69,8 @@ export function AppRoutes() {
           <Route path="/obituarios/:id" element={<ObituarioDetalhe />} />
           <Route path="/cemiterio" element={<CemiterioParque />} />
           <Route path="/coroas" element={<Coroas />} />
-          <Route path="/blog" element={<ComingSoon title="Blog" doc="11-BLOG.md" />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/area-do-cliente/login" element={<ClienteLogin />} />
           <Route
             path="/area-do-cliente"
@@ -105,7 +111,7 @@ export function AppRoutes() {
             path="parceiros"
             element={<ComingSoon title="Parceiros" doc="02-SUPABASE_E_DATABASE.md" />}
           />
-          <Route path="blog" element={<ComingSoon title="Blog" doc="11-BLOG.md" />} />
+          <Route path="blog" element={<BlogAdmin />} />
           <Route path="seo" element={<ComingSoon title="SEO" doc="12-SEO_E_MARKETING.md" />} />
           <Route
             path="midia"
