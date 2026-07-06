@@ -13,6 +13,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
+type SiteSettings = { logo_url?: string; favicon_url?: string; phone?: string; whatsapp?: string; address?: string; instagram?: string; facebook?: string };
+
 type HeroContent = {
   eyebrow: string;
   title: string;
@@ -42,6 +44,50 @@ function SaveButton({ onClick, pending }: { onClick: () => void; pending: boolea
     <Button onClick={onClick} disabled={pending}>
       {pending ? "Salvando…" : "Salvar"}
     </Button>
+  );
+}
+
+function LogoTab() {
+  const { data } = useQuery({ queryKey: ["settings", "site"], queryFn: () => getSetting<SiteSettings>("site") });
+  const [values, setValues] = useState<SiteSettings>({});
+  const [uploading, setUploading] = useState(false);
+  useEffect(() => {
+    if (data) setValues(data);
+  }, [data]);
+
+  const mutation = useMutation({
+    mutationFn: () => upsertSetting("site", values),
+    onSuccess: () => toast.success("Logo salva."),
+  });
+
+  async function handleLogo(file?: File) {
+    if (!file) return;
+    setUploading(true);
+    try {
+      const url = await uploadSiteAsset(file);
+      setValues((p) => ({ ...p, logo_url: url }));
+    } finally {
+      setUploading(false);
+    }
+  }
+
+  return (
+    <div className="max-w-xl space-y-4">
+      <p className="text-sm text-secondary">
+        Logo exibida no cabeçalho do site inteiro. Telefone, WhatsApp e redes sociais ficam em{" "}
+        <Link to="/admin/configuracoes" className="text-primary underline">
+          Configurações → Geral
+        </Link>
+        .
+      </p>
+      <div className="space-y-2">
+        <Label>Logo</Label>
+        <Input type="file" accept="image/*" onChange={(e) => handleLogo(e.target.files?.[0])} />
+        {uploading && <p className="text-sm text-secondary">Enviando…</p>}
+        {values.logo_url && <img src={values.logo_url} alt="" className="h-10" />}
+      </div>
+      <SaveButton onClick={() => mutation.mutate()} pending={mutation.isPending} />
+    </div>
   );
 }
 
@@ -398,14 +444,18 @@ export function HomeAdmin() {
         ))}
       </Card>
 
-      <Tabs defaultValue="hero">
+      <Tabs defaultValue="logo">
         <TabsList>
+          <TabsTrigger value="logo">Logo</TabsTrigger>
           <TabsTrigger value="hero">Hero</TabsTrigger>
           <TabsTrigger value="atalhos">Atalhos</TabsTrigger>
           <TabsTrigger value="sobre">Sobre</TabsTrigger>
           <TabsTrigger value="cemiterio">Cemitério</TabsTrigger>
           <TabsTrigger value="cta">CTA final</TabsTrigger>
         </TabsList>
+        <TabsContent value="logo">
+          <LogoTab />
+        </TabsContent>
         <TabsContent value="hero">
           <HeroTab />
         </TabsContent>
