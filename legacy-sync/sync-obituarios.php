@@ -15,6 +15,17 @@
 
 declare(strict_types=1);
 
+ini_set('display_errors', '0');
+error_reporting(E_ALL);
+
+register_shutdown_function(function (): void {
+    $error = error_get_last();
+    if ($error && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
+        echo '[' . date('Y-m-d H:i:s') . '] ERRO FATAL: ' . $error['message']
+            . ' em ' . $error['file'] . ':' . $error['line'] . "\n";
+    }
+});
+
 $configPath = __DIR__ . '/config.php';
 if (!file_exists($configPath)) {
     fwrite(STDERR, "config.php não encontrado. Copie config.example.php para config.php e preencha.\n");
@@ -154,17 +165,36 @@ for ($batch = 0; $batch < $maxBatches; $batch++) {
 
     $rows = [];
     $maxIdInBatch = $lastId;
+    $mapError = null;
     while ($row = $result->fetch_assoc()) {
-        $rows[] = map_row($row);
-        $maxIdInBatch = max($maxIdInBatch, (int) $row['obi_id']);
+        try {
+            $rows[] = map_row($row);
+            $maxIdInBatch = max($maxIdInBatch, (int) $row['obi_id']);
+        } catch (Throwable $e) {
+            $mapError = 'obi_id=' . ($row['obi_id'] ?? '?') . ': ' . $e->getMessage();
+            break;
+        }
     }
     $stmt->close();
+
+    if ($mapError !== null) {
+        log_line("ERRO ao converter registro ($mapError). Parando aqui — corrija o dado ou o map_row() antes de continuar.");
+        break;
+    }
 
     if (!$rows) {
         break;
     }
 
-    upsert_to_supabase($config, $rows);
+    try {
+        upsert_to_supabase($config, $rows);
+    } catch (Throwable $e) {
+        log_line(
+            'ERRO ao sincronizar lote (obi_id de ' . ($lastId + 1) . " até $maxIdInBatch): "
+            . $e->getMessage(),
+        );
+        break;
+    }
 
     $state['last_legacy_id'] = $maxIdInBatch;
     save_state($statePath, $state);
