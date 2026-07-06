@@ -60,6 +60,13 @@ function save_state(string $path, array $state): void
  */
 function map_row(array $row): array
 {
+    // Postgres rejeita byte nulo (\0) em colunas de texto — dado legado do MySQL
+    // às vezes vem com esse lixo. Remove de todo campo antes de montar o payload.
+    $row = array_map(
+        static fn ($value) => is_string($value) ? str_replace("\0", '', $value) : $value,
+        $row,
+    );
+
     $timezone = new DateTimeZone('America/Sao_Paulo');
 
     $burialAt = null;
