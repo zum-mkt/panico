@@ -55,6 +55,20 @@ function save_state(string $path, array $state): void
 }
 
 /**
+ * Datas "zeradas" do MySQL (ex: '0000-00-00') não são datas inválidas para o
+ * PHP — DateTime as interpreta "rolando pra trás" (mês/dia 0), virando algo
+ * como ano -1, que o Postgres rejeita. Trata como "sem data" (null).
+ */
+function parse_legacy_datetime(string $value, string $format, DateTimeZone $timezone): ?string
+{
+    $dt = DateTime::createFromFormat($format, $value, $timezone);
+    if ($dt === false || (int) $dt->format('Y') < 1900) {
+        return null;
+    }
+    return $dt->format(DateTime::ATOM);
+}
+
+/**
  * Mapeia uma linha de ms_obituario para o formato da tabela `obituaries` do Supabase.
  * Ajuste aqui se os nomes das colunas do MySQL forem diferentes do esperado.
  */
@@ -69,22 +83,13 @@ function map_row(array $row): array
 
     $timezone = new DateTimeZone('America/Sao_Paulo');
 
-    $burialAt = null;
-    if (!empty($row['obi_dt_sep'])) {
-        $time = $row['obi_hr_sep'] ?? '00:00';
-        $dt = DateTime::createFromFormat('Y-m-d H:i', $row['obi_dt_sep'] . ' ' . $time, $timezone);
-        if ($dt !== false) {
-            $burialAt = $dt->format(DateTime::ATOM);
-        }
-    }
+    $burialAt = !empty($row['obi_dt_sep'])
+        ? parse_legacy_datetime($row['obi_dt_sep'] . ' ' . ($row['obi_hr_sep'] ?? '00:00'), 'Y-m-d H:i', $timezone)
+        : null;
 
-    $createdAt = null;
-    if (!empty($row['obi_msdata'])) {
-        $dt = DateTime::createFromFormat('Y-m-d H:i:s', $row['obi_msdata'], $timezone);
-        if ($dt !== false) {
-            $createdAt = $dt->format(DateTime::ATOM);
-        }
-    }
+    $createdAt = !empty($row['obi_msdata'])
+        ? parse_legacy_datetime($row['obi_msdata'], 'Y-m-d H:i:s', $timezone)
+        : null;
 
     $burialLocationParts = array_filter([
         trim((string) ($row['obi_sep'] ?? '')),
