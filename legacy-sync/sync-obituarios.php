@@ -83,6 +83,13 @@ function map_row(array $row): array
 
     $timezone = new DateTimeZone('America/Sao_Paulo');
 
+    // deceased_at é obrigatório na tabela (not null, sem default) — sem uma data
+    // de falecimento real, esse registro do legado não pode virar um obituário.
+    $deceasedAt = trim((string) ($row['obi_dt_faleciment'] ?? ''));
+    if ($deceasedAt === '' || str_starts_with($deceasedAt, '0000-00-00')) {
+        throw new InvalidArgumentException('sem deceased_at (obi_dt_faleciment vazio/zerado)');
+    }
+
     $burialAt = !empty($row['obi_dt_sep'])
         ? parse_legacy_datetime($row['obi_dt_sep'] . ' ' . ($row['obi_hr_sep'] ?? '00:00'), 'Y-m-d H:i', $timezone)
         : null;
@@ -101,18 +108,26 @@ function map_row(array $row): array
         !empty($row['obi_filhos']) ? trim($row['obi_filhos']) : null,
     ]);
 
-    return [
+    $mapped = [
         'legacy_id' => (int) $row['obi_id'],
         'name' => trim((string) ($row['obi_nome'] ?? '')),
-        'deceased_at' => $row['obi_dt_faleciment'] ?? null,
+        'deceased_at' => $deceasedAt,
         'wake_location' => trim((string) ($row['obi_velorio'] ?? '')) ?: null,
         'wake_at' => null,
         'burial_location' => $burialLocationParts ? implode(' — ', $burialLocationParts) : null,
         'burial_at' => $burialAt,
         'message' => $messageParts ? implode("\n", $messageParts) : null,
         'status' => 'published',
-        'created_at' => $createdAt,
     ];
+
+    // created_at tem "default now()" no Supabase — só inclui a chave quando temos
+    // um valor real, senão mandar null explícito bloquearia o default e quebraria
+    // a constraint not-null.
+    if ($createdAt !== null) {
+        $mapped['created_at'] = $createdAt;
+    }
+
+    return $mapped;
 }
 
 function upsert_to_supabase(array $config, array $rows): void
@@ -177,24 +192,21 @@ for ($batch = 0; $batch < $maxBatches; $batch++) {
 
     $rows = [];
     $maxIdInBatch = $lastId;
-    $mapError = null;
+    $fetchedCount = 0;
     while ($row = $result->fetch_assoc()) {
+        $fetchedCount++;
+        // Avança o cursor mesmo quando o registro é pulado, senão a próxima
+        // execução tentaria o mesmo obi_id ruim para sempre.
+        $maxIdInBatch = max($maxIdInBatch, (int) $row['obi_id']);
         try {
             $rows[] = map_row($row);
-            $maxIdInBatch = max($maxIdInBatch, (int) $row['obi_id']);
         } catch (Throwable $e) {
-            $mapError = 'obi_id=' . ($row['obi_id'] ?? '?') . ': ' . $e->getMessage();
-            break;
+            log_line('AVISO: pulando obi_id=' . $row['obi_id'] . ' — ' . $e->getMessage());
         }
     }
     $stmt->close();
 
-    if ($mapError !== null) {
-        log_line("ERRO ao converter registro ($mapError). Parando aqui — corrija o dado ou o map_row() antes de continuar.");
-        break;
-    }
-
-    if (!$rows) {
+    if ($fetchedCount === 0) {
         break;
     }
 
@@ -214,7 +226,7 @@ for ($batch = 0; $batch < $maxBatches; $batch++) {
     $totalSynced += count($rows);
     log_line('Sincronizados ' . count($rows) . " registros (até obi_id=$maxIdInBatch).");
 
-    if (count($rows) < $batchSize) {
+    if ($fetchedCount < $batchSize) {
         break;
     }
 }
