@@ -94,9 +94,13 @@ function map_row(array $row): array
         ? parse_legacy_datetime($row['obi_dt_sep'] . ' ' . ($row['obi_hr_sep'] ?? '00:00'), 'Y-m-d H:i', $timezone)
         : null;
 
-    $createdAt = !empty($row['obi_msdata'])
+    // created_at precisa de um valor em toda linha (não dá pra omitir a chave só
+    // em algumas: o Supabase exige que todo objeto do lote tenha as mesmas
+    // chaves). Sem data real do legado, usa a hora do sync como fallback — é
+    // exatamente o que o default da coluna faria sozinho.
+    $createdAt = (!empty($row['obi_msdata'])
         ? parse_legacy_datetime($row['obi_msdata'], 'Y-m-d H:i:s', $timezone)
-        : null;
+        : null) ?? (new DateTime('now', $timezone))->format(DateTime::ATOM);
 
     $burialLocationParts = array_filter([
         trim((string) ($row['obi_sep'] ?? '')),
@@ -108,7 +112,7 @@ function map_row(array $row): array
         !empty($row['obi_filhos']) ? trim($row['obi_filhos']) : null,
     ]);
 
-    $mapped = [
+    return [
         'legacy_id' => (int) $row['obi_id'],
         'name' => trim((string) ($row['obi_nome'] ?? '')),
         'deceased_at' => $deceasedAt,
@@ -118,16 +122,8 @@ function map_row(array $row): array
         'burial_at' => $burialAt,
         'message' => $messageParts ? implode("\n", $messageParts) : null,
         'status' => 'published',
+        'created_at' => $createdAt,
     ];
-
-    // created_at tem "default now()" no Supabase — só inclui a chave quando temos
-    // um valor real, senão mandar null explícito bloquearia o default e quebraria
-    // a constraint not-null.
-    if ($createdAt !== null) {
-        $mapped['created_at'] = $createdAt;
-    }
-
-    return $mapped;
 }
 
 function upsert_to_supabase(array $config, array $rows): void
