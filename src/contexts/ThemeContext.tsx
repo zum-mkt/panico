@@ -30,12 +30,12 @@ export type ThemeTokens = {
 
 export const defaultTheme: ThemeTokens = {
   colors: {
-    background: "#FAF8F4",
+    background: "#F5F6F8",
     surface: "#FFFFFF",
-    primary: "#294B3D",
-    secondary: "#72886C",
-    accent: "#B79A5A",
-    text: "#2D2D2D",
+    primary: "#16283D",
+    secondary: "#4F6478",
+    accent: "#2F6690",
+    text: "#1E2226",
   },
   fonts: {
     heading: "'Playfair Display Variable', serif",

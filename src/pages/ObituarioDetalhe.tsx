@@ -152,7 +152,7 @@ export function ObituarioDetalhe() {
 
       <div className="flex flex-col items-center gap-3 rounded-card border border-border bg-card p-8">
         <p className="text-sm text-secondary">Escaneie para acessar esta página</p>
-        <QRCodeSVG value={pageUrl} size={128} fgColor="#294B3D" />
+        <QRCodeSVG value={pageUrl} size={128} fgColor="#16283D" />
       </div>
 
       <section className="space-y-6">
