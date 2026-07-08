@@ -24,7 +24,7 @@ const SUPABASE_URL = env.VITE_SUPABASE_URL;
 const SUPABASE_KEY = env.VITE_SUPABASE_PUBLISHABLE_KEY;
 const SITE_URL = env.VITE_SITE_URL || "https://panico.morning-mouse-a96d.workers.dev";
 
-const staticRoutes = ["/", "/planos", "/obituarios", "/cemiterio", "/coroas", "/blog"];
+const staticRoutes = ["/", "/planos", "/obituarios", "/cemiterio", "/coroas", "/blog", "/contato"];
 
 async function fetchColumn(table, select, filter) {
   if (!SUPABASE_URL || !SUPABASE_KEY) return [];
@@ -38,11 +38,13 @@ async function fetchColumn(table, select, filter) {
 
 const obituaries = await fetchColumn("obituaries", "id", "status=eq.published");
 const posts = await fetchColumn("blog_posts", "slug", "status=eq.published");
+const pages = await fetchColumn("pages", "slug", "status=eq.published");
 
 const urls = [
   ...staticRoutes,
   ...obituaries.map((o) => `/obituarios/${o.id}`),
   ...posts.map((p) => `/blog/${p.slug}`),
+  ...pages.map((p) => `/${p.slug}`),
 ];
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>

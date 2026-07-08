@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Check, X } from "lucide-react";
 import { Seo } from "@/components/seo/Seo";
+import { useSeoPage } from "@/hooks/useSeoPage";
 import { listPublicPlans } from "@/services/plansService";
 import { getSetting } from "@/services/homeService";
 import { supabase } from "@/supabase/client";
@@ -46,13 +47,15 @@ export function Planos() {
     plans?.forEach((p) => p.benefits.forEach((b) => set.add(b)));
     return Array.from(set);
   }, [plans]);
+  const seo = useSeoPage("planos", {
+    title: "Planos Funerários",
+    description:
+      "Conheça os planos funerários da Paníco: assistência 24h, sem burocracia e com cobertura para toda a família.",
+  });
 
   return (
     <main>
-      <Seo
-        title="Planos Funerários"
-        description="Conheça os planos funerários da Paníco: assistência 24h, sem burocracia e com cobertura para toda a família."
-      />
+      <Seo title={seo.title} description={seo.description} />
 
       <Hero
         eyebrow="Planos"

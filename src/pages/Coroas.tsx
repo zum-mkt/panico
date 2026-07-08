@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Seo } from "@/components/seo/Seo";
+import { useSeoPage } from "@/hooks/useSeoPage";
 import { listPublicCrowns } from "@/services/crownsService";
 import { SectionTitle } from "@/components/sections/SectionTitle";
 import { Reveal } from "@/components/ui/reveal";
@@ -25,13 +26,14 @@ export function Coroas() {
     if (category === "todas") return crowns;
     return crowns.filter((c) => c.category === category);
   }, [crowns, category]);
+  const seo = useSeoPage("coroas", {
+    title: "Coroas de Flores",
+    description: "Catálogo de coroas de flores da Funerária Paníco, com encomenda rápida pelo WhatsApp.",
+  });
 
   return (
     <main className="mx-auto max-w-6xl space-y-10 px-6 py-24">
-      <Seo
-        title="Coroas de Flores"
-        description="Catálogo de coroas de flores da Funerária Paníco, com encomenda rápida pelo WhatsApp."
-      />
+      <Seo title={seo.title} description={seo.description} />
 
       <SectionTitle eyebrow="Catálogo" title="Coroas de Flores" align="left" className="mx-0" />
 

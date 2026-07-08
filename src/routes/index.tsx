@@ -11,9 +11,6 @@ const Login = lazy(() => import("@/pages/admin/Login").then((m) => ({ default: m
 const Dashboard = lazy(() =>
   import("@/pages/admin/Dashboard").then((m) => ({ default: m.Dashboard })),
 );
-const ComingSoon = lazy(() =>
-  import("@/pages/ComingSoon").then((m) => ({ default: m.ComingSoon })),
-);
 const DesignSystemPreview = lazy(() =>
   import("@/pages/DesignSystemPreview").then((m) => ({ default: m.DesignSystemPreview })),
 );
@@ -100,6 +97,9 @@ const DepoimentosAdmin = lazy(() =>
 const FaqAdmin = lazy(() =>
   import("@/pages/admin/faq/FaqAdmin").then((m) => ({ default: m.FaqAdmin })),
 );
+const SeoAdmin = lazy(() =>
+  import("@/pages/admin/seo/SeoAdmin").then((m) => ({ default: m.SeoAdmin })),
+);
 
 export function AppRoutes() {
   return (
@@ -156,7 +156,7 @@ export function AppRoutes() {
           <Route path="faq" element={<FaqAdmin />} />
           <Route path="blog" element={<BlogAdmin />} />
           <Route path="formularios" element={<FormulariosAdmin />} />
-          <Route path="seo" element={<ComingSoon title="SEO" doc="12-SEO_E_MARKETING.md" />} />
+          <Route path="seo" element={<SeoAdmin />} />
           <Route path="midia" element={<MidiaAdmin />} />
           <Route path="usuarios" element={<UsuariosAdmin />} />
         </Route>

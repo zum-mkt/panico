@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Seo } from "@/components/seo/Seo";
+import { useSeoPage } from "@/hooks/useSeoPage";
 import { Clock, MapPin } from "lucide-react";
 import {
   listActiveCemeterySections,
@@ -48,13 +49,14 @@ export function CemiterioParque() {
   const drone = byKey.drone as VideoContent | undefined;
   const location = byKey.location as LocationContent | undefined;
   const hours = byKey.hours as HoursContent | undefined;
+  const seo = useSeoPage("cemiterio", {
+    title: "Cemitério Parque",
+    description: "Conheça o Cemitério Parque Paníco: estrutura, galeria, localização e horários de funcionamento.",
+  });
 
   return (
     <main className="space-y-20 py-20">
-      <Seo
-        title="Cemitério Parque"
-        description="Conheça o Cemitério Parque Paníco: estrutura, galeria, localização e horários de funcionamento."
-      />
+      <Seo title={seo.title} description={seo.description} />
 
       <div className="mx-auto max-w-3xl px-6 text-center">
         <SectionTitle eyebrow="Cemitério Parque" title="Um espaço de paz e memória" />

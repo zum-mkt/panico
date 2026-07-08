@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Search } from "lucide-react";
 import { Seo } from "@/components/seo/Seo";
+import { useSeoPage } from "@/hooks/useSeoPage";
 import { listPublishedObituariesPage } from "@/services/obituariesService";
 import { SectionTitle } from "@/components/sections/SectionTitle";
 import { Reveal } from "@/components/ui/reveal";
@@ -43,12 +44,14 @@ export function Obituarios() {
     setPage(1);
   }
 
+  const seo = useSeoPage("obituarios", {
+    title: "Obituários",
+    description: "Consulte homenagens e informações de velório e sepultamento da Funerária Paníco.",
+  });
+
   return (
     <main className="mx-auto max-w-6xl space-y-10 px-6 py-24">
-      <Seo
-        title="Obituários"
-        description="Consulte homenagens e informações de velório e sepultamento da Funerária Paníco."
-      />
+      <Seo title={seo.title} description={seo.description} />
 
       <SectionTitle eyebrow="Homenagens" title="Obituários" align="left" className="mx-0" />
 

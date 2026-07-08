@@ -1,4 +1,7 @@
 import { Helmet } from "react-helmet-async";
+import { useQuery } from "@tanstack/react-query";
+import { getSetting } from "@/services/homeService";
+import type { SeoGlobalSettings } from "@/types/seo";
 
 /**
  * Meta tags padrão de SEO — ver 12-SEO_E_MARKETING.md.
@@ -16,6 +19,12 @@ export function Seo({
   image?: string;
   type?: "website" | "article";
 }) {
+  const { data: seoGlobal } = useQuery({
+    queryKey: ["settings", "seo_global"],
+    queryFn: () => getSetting<SeoGlobalSettings>("seo_global"),
+  });
+  const resolvedImage = image || seoGlobal?.default_image;
+
   const url = typeof window !== "undefined" ? window.location.href : undefined;
   const fullTitle = `${title} — Funerária Paníco`;
 
@@ -29,13 +38,13 @@ export function Seo({
       <meta property="og:title" content={fullTitle} />
       {description && <meta property="og:description" content={description} />}
       {url && <meta property="og:url" content={url} />}
-      {image && <meta property="og:image" content={image} />}
+      {resolvedImage && <meta property="og:image" content={resolvedImage} />}
       <meta property="og:site_name" content="Funerária Paníco" />
 
-      <meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
+      <meta name="twitter:card" content={resolvedImage ? "summary_large_image" : "summary"} />
       <meta name="twitter:title" content={fullTitle} />
       {description && <meta name="twitter:description" content={description} />}
-      {image && <meta name="twitter:image" content={image} />}
+      {resolvedImage && <meta name="twitter:image" content={resolvedImage} />}
     </Helmet>
   );
 }

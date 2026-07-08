@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { getSetting } from "@/services/homeService";
 import { Seo } from "@/components/seo/Seo";
+import { useSeoPage } from "@/hooks/useSeoPage";
 import { Hero } from "@/components/sections/Hero";
 import { BannerDisplay } from "@/components/sections/BannerDisplay";
 import { ShortcutsBar } from "@/components/sections/ShortcutsBar";
@@ -43,13 +44,15 @@ export function Home() {
     queryFn: () => getSetting<HeroContent>("home_hero"),
   });
   const h = hero ?? FALLBACK_HERO;
+  const seo = useSeoPage("home", {
+    title: "Cuidado, respeito e acolhimento em cada momento",
+    description:
+      "Funerária Paníco: planos funerários, obituários, cemitério parque e atendimento 24h com serenidade e profissionalismo.",
+  });
 
   return (
     <main>
-      <Seo
-        title="Cuidado, respeito e acolhimento em cada momento"
-        description="Funerária Paníco: planos funerários, obituários, cemitério parque e atendimento 24h com serenidade e profissionalismo."
-      />
+      <Seo title={seo.title} description={seo.description} />
       <Hero
         eyebrow={h.eyebrow}
         title={h.title}
