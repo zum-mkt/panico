@@ -64,11 +64,11 @@ export function Home() {
         }
       />
       <ShortcutsBar />
+      <ObituariesSection />
       <BannerDisplay />
       <ServicesSection />
       <AboutSection />
       <PlansSection />
-      <ObituariesSection />
       <CemeteryTeaserSection />
       <PartnersSection />
       <TestimonialsSection />

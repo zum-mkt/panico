@@ -1,4 +1,6 @@
+import { useRef } from "react";
 import { useQuery } from "@tanstack/react-query";
+import Autoplay from "embla-carousel-autoplay";
 import { listScheduledBanners } from "@/services/bannersService";
 import {
   Carousel,
@@ -20,10 +22,16 @@ export function BannerDisplay() {
     queryFn: listScheduledBanners,
   });
 
+  const autoplay = useRef(Autoplay({ delay: 6000, stopOnInteraction: false }));
+
   if (!banners?.length) return null;
 
   return (
-    <Carousel className="mx-auto max-w-6xl px-6 pt-6">
+    <Carousel
+      opts={{ loop: banners.length > 1 }}
+      plugins={[autoplay.current]}
+      className="mx-auto max-w-6xl px-6 pt-6"
+    >
       <CarouselContent>
         {banners.map((banner) => (
           <CarouselItem key={banner.id}>

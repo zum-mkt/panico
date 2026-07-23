@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,8 @@ type SiteSettings = { phone?: string; logo_url?: string };
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
+  const isHome = location.pathname === "/";
   const { data: site } = useQuery({
     queryKey: ["settings", "site"],
     queryFn: () => getSetting<SiteSettings>("site"),
@@ -38,15 +40,26 @@ export function Header() {
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-colors",
-        scrolled ? "bg-background/95 shadow-sm backdrop-blur" : "bg-transparent",
+        isHome
+          ? "bg-primary shadow-sm"
+          : scrolled
+            ? "bg-background/95 shadow-sm backdrop-blur"
+            : "bg-transparent",
       )}
     >
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link to="/" className="flex items-center font-heading text-xl text-primary">
           {site?.logo_url ? (
-            <img src={site.logo_url} alt="Paníco" className="h-14 w-auto object-contain" />
+            <span
+              className={cn(
+                "flex items-center rounded-lg px-3 py-1.5 transition-colors",
+                isHome && "bg-white",
+              )}
+            >
+              <img src={site.logo_url} alt="Paníco" className="h-11 w-auto object-contain" />
+            </span>
           ) : (
-            "Paníco"
+            <span className={isHome ? "text-primary-foreground" : "text-primary"}>Paníco</span>
           )}
         </Link>
 
@@ -55,14 +68,23 @@ export function Header() {
             <Link
               key={link.to}
               to={link.to}
-              className="text-sm text-foreground/80 hover:text-primary"
+              className={cn(
+                "text-sm transition-colors",
+                isHome
+                  ? "text-primary-foreground/75 hover:text-primary-foreground"
+                  : "text-foreground/80 hover:text-primary",
+              )}
             >
               {link.label}
             </Link>
           ))}
         </nav>
 
-        <Button asChild size="sm">
+        <Button
+          asChild
+          size="sm"
+          className={cn(isHome && "bg-white text-primary hover:bg-white/90")}
+        >
           <a href={phoneHref}>
             <Phone className="size-4" />
             Atendimento 24h
