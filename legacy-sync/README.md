@@ -43,11 +43,14 @@ os campos do Supabase:
 | `obi_id`                     | `legacy_id`              |
 | `obi_nome`                   | `name`                   |
 | `obi_dt_faleciment`          | `deceased_at`            |
+| `obi_conj`                    | `spouse_name`             |
+| `obi_filhos`                  | `children_names`          |
 | `obi_velorio`                | `wake_location`          |
 | *(não existe no legado)*     | `wake_at` *(sempre nulo)* |
 | `obi_sep` + `obi_cid_sep`     | `burial_location`        |
 | `obi_dt_sep` + `obi_hr_sep`   | `burial_at`              |
-| `obi_conj` + `obi_filhos`     | `message`                |
+| *(não existe no legado)*     | `message` *(sempre nulo — livre para um texto/tributo adicionado manualmente no admin)* |
+| *(não existe no legado)*     | `wake_map_url` / `burial_map_url` *(sempre nulos — preenchidos manualmente no admin com o link exato do Google Maps)* |
 | `obi_msdata`                  | `created_at`             |
 
 Confirmado com uma amostra real da tabela (`SELECT *` em uma linha) — os

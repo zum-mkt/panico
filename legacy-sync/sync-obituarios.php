@@ -107,20 +107,16 @@ function map_row(array $row): array
         trim((string) ($row['obi_cid_sep'] ?? '')),
     ]);
 
-    $messageParts = array_filter([
-        !empty($row['obi_conj']) ? 'Cônjuge: ' . trim($row['obi_conj']) : null,
-        !empty($row['obi_filhos']) ? trim($row['obi_filhos']) : null,
-    ]);
-
     return [
         'legacy_id' => (int) $row['obi_id'],
         'name' => trim((string) ($row['obi_nome'] ?? '')),
         'deceased_at' => $deceasedAt,
+        'spouse_name' => trim((string) ($row['obi_conj'] ?? '')) ?: null,
+        'children_names' => trim((string) ($row['obi_filhos'] ?? '')) ?: null,
         'wake_location' => trim((string) ($row['obi_velorio'] ?? '')) ?: null,
         'wake_at' => null,
         'burial_location' => $burialLocationParts ? implode(' — ', $burialLocationParts) : null,
         'burial_at' => $burialAt,
-        'message' => $messageParts ? implode("\n", $messageParts) : null,
         'status' => 'published',
         'created_at' => $createdAt,
     ];
