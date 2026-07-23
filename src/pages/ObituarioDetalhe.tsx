@@ -179,6 +179,7 @@ export function ObituarioDetalhe() {
         )}
         <div className="space-y-1.5">
           <h1 className="font-heading text-3xl text-primary sm:text-4xl">{obituary.name}</h1>
+          {obituary.age != null && <p className="text-secondary">{obituary.age} anos</p>}
           <p className="text-secondary">{dateOnlyFormatter.format(new Date(obituary.deceased_at))}</p>
         </div>
         {obituary.message && (
