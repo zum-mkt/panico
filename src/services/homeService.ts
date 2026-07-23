@@ -26,7 +26,9 @@ export async function listActivePlans() {
 export async function listRecentObituaries(limit = 3) {
   const { data } = await supabase
     .from("obituaries")
-    .select("id, name, photo_url, deceased_at, wake_location")
+    .select(
+      "id, name, photo_url, deceased_at, wake_location, wake_at, burial_location, burial_at",
+    )
     .eq("status", "published")
     .order("deceased_at", { ascending: false })
     .limit(limit);
