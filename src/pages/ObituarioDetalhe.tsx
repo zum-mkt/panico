@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Helmet } from "react-helmet-async";
 import { Seo } from "@/components/seo/Seo";
-import { Share2, MapPin, Clock, Heart, Users, MessageCircle, ExternalLink } from "lucide-react";
+import { Share2, MapPin, Clock, Users, MessageCircle, ExternalLink } from "lucide-react";
 import {
   getObituaryById,
   listApprovedMessages,
@@ -194,10 +194,6 @@ export function ObituarioDetalhe() {
       {/* Família */}
       {(obituary.spouse_name || children.length > 0) && (
         <Reveal className="rounded-card border border-border bg-card p-6">
-          <div className="flex items-center gap-2 pb-4 text-primary">
-            <Heart className="size-4 text-accent" />
-            <p className="font-heading text-lg">Deixa</p>
-          </div>
           <dl className="grid gap-4 sm:grid-cols-2">
             {obituary.spouse_name && (
               <div className="space-y-1">
