@@ -8,16 +8,6 @@ import { Button } from "@/components/ui/button";
 const dateFormatter = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: "short" });
 const timeFormatter = new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit" });
 
-function initials(name: string) {
-  return name
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0])
-    .join("")
-    .toUpperCase();
-}
-
 export function ObituariesSection() {
   const { data: obituaries } = useQuery({
     queryKey: ["home", "obituaries"],
@@ -56,8 +46,8 @@ export function ObituariesSection() {
               className="group overflow-hidden rounded-card border border-border bg-card shadow-sm transition-colors hover:border-accent/40"
             >
               <Link to={`/obituarios/${obituary.id}`} className="flex h-full flex-col">
-                <div className="relative aspect-[4/3] w-full overflow-hidden bg-primary/5">
-                  {obituary.photo_url ? (
+                {obituary.photo_url ? (
+                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-primary/5">
                     <img
                       src={obituary.photo_url}
                       alt={obituary.name}
@@ -65,33 +55,43 @@ export function ObituariesSection() {
                       decoding="async"
                       className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                  ) : (
-                    <div className="flex size-full items-center justify-center bg-gradient-to-br from-primary/10 via-primary/5 to-accent/10">
-                      <span className="font-heading text-3xl text-primary/50">
-                        {initials(obituary.name)}
-                      </span>
-                    </div>
+                    <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-background/90 px-2.5 py-1 text-xs font-medium text-primary shadow-sm backdrop-blur">
+                      <Calendar className="size-3" />
+                      {dateFormatter.format(new Date(obituary.deceased_at))}
+                    </span>
+                  </div>
+                ) : (
+                  <div className="flex items-start justify-between gap-3 px-6 pt-5">
+                    <h3 className="font-heading text-lg text-primary">{obituary.name}</h3>
+                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary/5 px-2.5 py-1 text-xs font-medium text-primary">
+                      <Calendar className="size-3" />
+                      {dateFormatter.format(new Date(obituary.deceased_at))}
+                    </span>
+                  </div>
+                )}
+                <div
+                  className={
+                    obituary.photo_url
+                      ? "flex flex-1 flex-col gap-1.5 border-t border-border px-6 py-4"
+                      : "flex flex-1 flex-col gap-1.5 px-6 pt-3 pb-4"
+                  }
+                >
+                  {obituary.photo_url && (
+                    <h3 className="font-heading text-lg text-primary">{obituary.name}</h3>
                   )}
-                  <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-background/90 px-2.5 py-1 text-xs font-medium text-primary shadow-sm backdrop-blur">
-                    <Calendar className="size-3" />
-                    {dateFormatter.format(new Date(obituary.deceased_at))}
-                  </span>
-                </div>
-                <div className="flex flex-1 flex-col gap-2 border-t border-border px-6 py-5">
-                  <h3 className="font-heading text-lg text-primary">{obituary.name}</h3>
                   {obituary.wake_location && (
                     <div className="space-y-0.5">
                       <p className="text-xs font-medium tracking-wide text-accent">Velório</p>
                       <p className="flex items-center gap-1.5 text-sm text-secondary">
                         <MapPin className="size-3.5 shrink-0 text-accent" />
                         <span className="line-clamp-1">{obituary.wake_location}</span>
-                        {obituary.wake_at && (
-                          <span className="ml-auto flex shrink-0 items-center gap-1 text-xs text-secondary/80">
-                            <Clock className="size-3" />
-                            {timeFormatter.format(new Date(obituary.wake_at))}
-                          </span>
-                        )}
                       </p>
+                      {obituary.wake_at && (
+                        <p className="flex items-center gap-1.5 text-xs text-secondary/80">
+                          <Clock className="size-3 shrink-0" />
+                          Horário: {timeFormatter.format(new Date(obituary.wake_at))}
+                        </p>
+                      )}
                     </div>
                   )}
                   {obituary.burial_location && (
@@ -100,13 +100,13 @@ export function ObituariesSection() {
                       <p className="flex items-center gap-1.5 text-sm text-secondary">
                         <MapPin className="size-3.5 shrink-0 text-accent" />
                         <span className="line-clamp-1">{obituary.burial_location}</span>
-                        {obituary.burial_at && (
-                          <span className="ml-auto flex shrink-0 items-center gap-1 text-xs text-secondary/80">
-                            <Clock className="size-3" />
-                            {timeFormatter.format(new Date(obituary.burial_at))}
-                          </span>
-                        )}
                       </p>
+                      {obituary.burial_at && (
+                        <p className="flex items-center gap-1.5 text-xs text-secondary/80">
+                          <Clock className="size-3 shrink-0" />
+                          Horário: {timeFormatter.format(new Date(obituary.burial_at))}
+                        </p>
+                      )}
                     </div>
                   )}
                   <span className="mt-auto flex items-center gap-1 pt-2 text-sm font-medium text-accent opacity-0 transition-opacity group-hover:opacity-100">
