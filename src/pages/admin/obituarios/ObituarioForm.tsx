@@ -19,6 +19,7 @@ import type { Obituary } from "@/types/obituary";
 const schema = z.object({
   name: z.string().min(2, "Informe o nome"),
   deceased_at: z.string().min(1, "Informe a data de falecimento"),
+  age: z.string().optional(),
   spouse_name: z.string().optional(),
   children_names: z.string().optional(),
   wake_location: z.string().optional(),
@@ -40,6 +41,7 @@ function toFormValues(o?: Obituary | null): ObituaryFormValues {
   return {
     name: o?.name ?? "",
     deceased_at: o?.deceased_at ?? "",
+    age: o?.age != null ? String(o.age) : "",
     spouse_name: o?.spouse_name ?? "",
     children_names: o?.children_names ?? "",
     wake_location: o?.wake_location ?? "",
@@ -113,10 +115,14 @@ export function ObituarioForm({
             {photoUrl && <img src={photoUrl} alt="" className="size-20 rounded-full object-cover" />}
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-3">
             <div className="space-y-2">
               <Label htmlFor="deceased_at">Data de falecimento</Label>
               <Input id="deceased_at" type="date" {...form.register("deceased_at")} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="age">Idade</Label>
+              <Input id="age" type="number" min={0} max={130} {...form.register("age")} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="status">Status</Label>

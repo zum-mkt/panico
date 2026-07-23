@@ -22,6 +22,7 @@ const dateFormatter = new Intl.DateTimeFormat("pt-BR", { dateStyle: "long" });
 function toPayload(values: ObituaryFormValues & { photo_url?: string | null }) {
   return {
     ...values,
+    age: values.age ? Number(values.age) : null,
     wake_at: values.wake_at || null,
     burial_at: values.burial_at || null,
     published_at: values.published_at || null,

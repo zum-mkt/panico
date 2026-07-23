@@ -111,6 +111,7 @@ function map_row(array $row): array
         'legacy_id' => (int) $row['obi_id'],
         'name' => trim((string) ($row['obi_nome'] ?? '')),
         'deceased_at' => $deceasedAt,
+        'age' => is_numeric($row['obi_idade'] ?? null) ? (int) $row['obi_idade'] : null,
         'spouse_name' => trim((string) ($row['obi_conj'] ?? '')) ?: null,
         'children_names' => trim((string) ($row['obi_filhos'] ?? '')) ?: null,
         'wake_location' => trim((string) ($row['obi_velorio'] ?? '')) ?: null,

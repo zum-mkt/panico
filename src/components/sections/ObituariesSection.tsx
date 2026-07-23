@@ -60,6 +60,9 @@ export function ObituariesSection() {
                 <div className="flex flex-1 flex-col gap-3 px-6 pt-5 pb-4">
                   <div className="rounded-2xl border border-accent/15 bg-accent/[0.07] px-4 py-3">
                     <h3 className="font-heading text-lg text-primary">{obituary.name}</h3>
+                    {obituary.age != null && (
+                      <p className="mt-0.5 text-sm text-secondary">{obituary.age} anos</p>
+                    )}
                     <span className="mt-1 inline-flex items-center gap-1.5 text-xs font-medium text-secondary">
                       <Calendar className="size-3" />
                       {dateFormatter.format(new Date(obituary.deceased_at))}
