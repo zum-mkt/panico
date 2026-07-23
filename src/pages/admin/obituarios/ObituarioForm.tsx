@@ -19,10 +19,14 @@ import type { Obituary } from "@/types/obituary";
 const schema = z.object({
   name: z.string().min(2, "Informe o nome"),
   deceased_at: z.string().min(1, "Informe a data de falecimento"),
+  spouse_name: z.string().optional(),
+  children_names: z.string().optional(),
   wake_location: z.string().optional(),
   wake_at: z.string().optional(),
+  wake_map_url: z.string().optional(),
   burial_location: z.string().optional(),
   burial_at: z.string().optional(),
+  burial_map_url: z.string().optional(),
   message: z.string().optional(),
   seo_title: z.string().optional(),
   seo_description: z.string().optional(),
@@ -36,10 +40,14 @@ function toFormValues(o?: Obituary | null): ObituaryFormValues {
   return {
     name: o?.name ?? "",
     deceased_at: o?.deceased_at ?? "",
+    spouse_name: o?.spouse_name ?? "",
+    children_names: o?.children_names ?? "",
     wake_location: o?.wake_location ?? "",
     wake_at: o?.wake_at?.slice(0, 16) ?? "",
+    wake_map_url: o?.wake_map_url ?? "",
     burial_location: o?.burial_location ?? "",
     burial_at: o?.burial_at?.slice(0, 16) ?? "",
+    burial_map_url: o?.burial_map_url ?? "",
     message: o?.message ?? "",
     seo_title: o?.seo_title ?? "",
     seo_description: o?.seo_description ?? "",
@@ -125,6 +133,21 @@ export function ObituarioForm({
 
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
+              <Label htmlFor="spouse_name">Nome do(a) cônjuge</Label>
+              <Input id="spouse_name" {...form.register("spouse_name")} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="children_names">Nome dos filhos</Label>
+              <Textarea
+                id="children_names"
+                placeholder={"Um nome por linha"}
+                {...form.register("children_names")}
+              />
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
               <Label htmlFor="wake_location">Local do velório</Label>
               <Input id="wake_location" {...form.register("wake_location")} />
             </div>
@@ -132,6 +155,18 @@ export function ObituarioForm({
               <Label htmlFor="wake_at">Data/hora do velório</Label>
               <Input id="wake_at" type="datetime-local" {...form.register("wake_at")} />
             </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="wake_map_url">Link do mapa do velório (Google Maps)</Label>
+            <Input
+              id="wake_map_url"
+              placeholder="https://www.google.com/maps/embed?pb=..."
+              {...form.register("wake_map_url")}
+            />
+            <p className="text-xs text-secondary">
+              No Google Maps: Compartilhar → Incorporar um mapa → copie o link (src) do iframe
+              para exibir a localização exata.
+            </p>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -143,6 +178,18 @@ export function ObituarioForm({
               <Label htmlFor="burial_at">Data/hora do sepultamento</Label>
               <Input id="burial_at" type="datetime-local" {...form.register("burial_at")} />
             </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="burial_map_url">Link do mapa do sepultamento (Google Maps)</Label>
+            <Input
+              id="burial_map_url"
+              placeholder="https://www.google.com/maps/embed?pb=..."
+              {...form.register("burial_map_url")}
+            />
+            <p className="text-xs text-secondary">
+              No Google Maps: Compartilhar → Incorporar um mapa → copie o link (src) do iframe
+              para exibir a localização exata.
+            </p>
           </div>
 
           <div className="space-y-2">

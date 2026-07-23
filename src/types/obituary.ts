@@ -3,10 +3,14 @@ export type Obituary = {
   name: string;
   photo_url: string | null;
   deceased_at: string;
+  spouse_name: string | null;
+  children_names: string | null;
   wake_location: string | null;
   wake_at: string | null;
+  wake_map_url: string | null;
   burial_location: string | null;
   burial_at: string | null;
+  burial_map_url: string | null;
   message: string | null;
   status: "draft" | "published";
   published_at: string | null;
