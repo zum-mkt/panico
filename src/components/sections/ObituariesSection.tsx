@@ -46,7 +46,7 @@ export function ObituariesSection() {
               className="group overflow-hidden rounded-card border border-border bg-card shadow-sm transition-colors hover:border-accent/40"
             >
               <Link to={`/obituarios/${obituary.id}`} className="flex h-full flex-col">
-                {obituary.photo_url ? (
+                {obituary.photo_url && (
                   <div className="relative aspect-[16/9] w-full overflow-hidden bg-primary/5">
                     <img
                       src={obituary.photo_url}
@@ -55,30 +55,16 @@ export function ObituariesSection() {
                       decoding="async"
                       className="size-full object-cover transition-transform duration-500 group-hover:scale-105"
                     />
-                    <span className="absolute top-3 left-3 inline-flex items-center gap-1 rounded-full bg-background/90 px-2.5 py-1 text-xs font-medium text-primary shadow-sm backdrop-blur">
-                      <Calendar className="size-3" />
-                      {dateFormatter.format(new Date(obituary.deceased_at))}
-                    </span>
-                  </div>
-                ) : (
-                  <div className="flex items-start justify-between gap-3 px-6 pt-5">
-                    <h3 className="font-heading text-lg text-primary">{obituary.name}</h3>
-                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary/5 px-2.5 py-1 text-xs font-medium text-primary">
-                      <Calendar className="size-3" />
-                      {dateFormatter.format(new Date(obituary.deceased_at))}
-                    </span>
                   </div>
                 )}
-                <div
-                  className={
-                    obituary.photo_url
-                      ? "flex flex-1 flex-col gap-1.5 border-t border-border px-6 py-4"
-                      : "flex flex-1 flex-col gap-1.5 px-6 pt-3 pb-4"
-                  }
-                >
-                  {obituary.photo_url && (
+                <div className="flex flex-1 flex-col gap-3 px-6 pt-5 pb-4">
+                  <div className="rounded-2xl border border-accent/15 bg-accent/[0.07] px-4 py-3">
                     <h3 className="font-heading text-lg text-primary">{obituary.name}</h3>
-                  )}
+                    <span className="mt-1 inline-flex items-center gap-1.5 text-xs font-medium text-secondary">
+                      <Calendar className="size-3" />
+                      {dateFormatter.format(new Date(obituary.deceased_at))}
+                    </span>
+                  </div>
                   {obituary.wake_location && (
                     <div className="space-y-0.5">
                       <p className="text-xs font-medium tracking-wide text-accent">Velório</p>
@@ -110,7 +96,7 @@ export function ObituariesSection() {
                     </div>
                   )}
                   <span className="mt-auto flex items-center gap-1 pt-2 text-sm font-medium text-accent opacity-0 transition-opacity group-hover:opacity-100">
-                    Ver homenagem
+                    Mais informações
                     <ArrowUpRight className="size-3.5" />
                   </span>
                 </div>
