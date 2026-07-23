@@ -44,6 +44,7 @@ os campos do Supabase:
 | `obi_nome`                   | `name`                   |
 | `obi_dt_faleciment`          | `deceased_at`            |
 | `obi_idade`                    | `age`                     |
+| `obi_bairro`                   | `neighborhood`            |
 | `obi_conj`                    | `spouse_name`             |
 | `obi_filhos`                  | `children_names`          |
 | `obi_velorio`                | `wake_location`          |

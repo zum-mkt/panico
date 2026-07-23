@@ -20,6 +20,7 @@ const schema = z.object({
   name: z.string().min(2, "Informe o nome"),
   deceased_at: z.string().min(1, "Informe a data de falecimento"),
   age: z.string().optional(),
+  neighborhood: z.string().optional(),
   spouse_name: z.string().optional(),
   children_names: z.string().optional(),
   wake_location: z.string().optional(),
@@ -42,6 +43,7 @@ function toFormValues(o?: Obituary | null): ObituaryFormValues {
     name: o?.name ?? "",
     deceased_at: o?.deceased_at ?? "",
     age: o?.age != null ? String(o.age) : "",
+    neighborhood: o?.neighborhood ?? "",
     spouse_name: o?.spouse_name ?? "",
     children_names: o?.children_names ?? "",
     wake_location: o?.wake_location ?? "",
@@ -135,6 +137,11 @@ export function ObituarioForm({
                 <option value="published">Publicado</option>
               </select>
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="neighborhood">Bairro</Label>
+            <Input id="neighborhood" {...form.register("neighborhood")} />
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">

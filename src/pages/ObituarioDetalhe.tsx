@@ -181,6 +181,12 @@ export function ObituarioDetalhe() {
           <h1 className="font-heading text-3xl text-primary sm:text-4xl">{obituary.name}</h1>
           {obituary.age != null && <p className="text-secondary">{obituary.age} anos</p>}
           <p className="text-secondary">{dateOnlyFormatter.format(new Date(obituary.deceased_at))}</p>
+          {obituary.neighborhood && (
+            <p className="flex items-center justify-center gap-1.5 text-sm text-secondary">
+              <MapPin className="size-3.5 shrink-0" />
+              {obituary.neighborhood}
+            </p>
+          )}
         </div>
         {obituary.message && (
           <p className="mx-auto max-w-xl text-secondary italic">"{obituary.message}"</p>

@@ -4,6 +4,7 @@ export type Obituary = {
   photo_url: string | null;
   deceased_at: string;
   age: number | null;
+  neighborhood: string | null;
   spouse_name: string | null;
   children_names: string | null;
   wake_location: string | null;
