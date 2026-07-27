@@ -96,6 +96,7 @@ export function PlanosAdmin() {
         <TableHeader>
           <TableRow>
             <TableHead>Ordem</TableHead>
+            <TableHead></TableHead>
             <TableHead>Título</TableHead>
             <TableHead>Preço</TableHead>
             <TableHead>Status</TableHead>
@@ -122,6 +123,11 @@ export function PlanosAdmin() {
                 >
                   <ArrowDown className="size-3.5" />
                 </Button>
+              </TableCell>
+              <TableCell>
+                {plan.image_url && (
+                  <img src={plan.image_url} alt="" className="h-8 w-12 rounded object-cover" />
+                )}
               </TableCell>
               <TableCell className="flex items-center gap-2">
                 {plan.title}

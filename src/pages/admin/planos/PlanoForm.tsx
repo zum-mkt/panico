@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -14,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { uploadPlanImage } from "@/services/plansService";
 import type { Plan } from "@/types/plan";
 
 const schema = z.object({
@@ -21,6 +23,7 @@ const schema = z.object({
   description: z.string().optional(),
   price: z.string().optional(),
   benefits: z.array(z.object({ value: z.string().min(1, "Obrigatório") })),
+  image_url: z.string().nullable(),
   is_featured: z.boolean(),
   is_active: z.boolean(),
   color: z.string().optional(),
@@ -38,6 +41,7 @@ function toFormValues(p?: Plan | null): PlanFormValues {
     description: p?.description ?? "",
     price: p?.price != null ? String(p.price) : "",
     benefits: (p?.benefits ?? []).map((value) => ({ value })),
+    image_url: p?.image_url ?? null,
     is_featured: p?.is_featured ?? false,
     is_active: p?.is_active ?? true,
     color: p?.color ?? "",
@@ -66,6 +70,18 @@ export function PlanoForm({
     values: toFormValues(plan),
   });
   const { fields, append, remove } = useFieldArray({ control: form.control, name: "benefits" });
+  const [uploading, setUploading] = useState(false);
+
+  async function handleImage(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploading(true);
+    try {
+      form.setValue("image_url", await uploadPlanImage(file));
+    } finally {
+      setUploading(false);
+    }
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -83,6 +99,19 @@ export function PlanoForm({
           <div className="space-y-2">
             <Label htmlFor="description">Descrição</Label>
             <Textarea id="description" {...form.register("description")} />
+          </div>
+
+          <div className="space-y-2">
+            <Label>Imagem</Label>
+            <Input type="file" accept="image/*" onChange={handleImage} />
+            {uploading && <p className="text-sm text-secondary">Enviando…</p>}
+            {form.watch("image_url") && (
+              <img
+                src={form.watch("image_url")!}
+                alt=""
+                className="h-32 w-full rounded-card object-cover"
+              />
+            )}
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">

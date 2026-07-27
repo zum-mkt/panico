@@ -1,8 +1,18 @@
 import { supabase } from "@/supabase/client";
 import { createCrudService } from "@/services/createCrudService";
+import { compressToWebp } from "@/lib/imageProcessing";
 import type { Plan } from "@/types/plan";
 
 export const plansCrud = createCrudService<Plan>("plans");
+
+export async function uploadPlanImage(file: File): Promise<string> {
+  const processed = await compressToWebp(file);
+  const path = `${crypto.randomUUID()}-${processed.name}`;
+  const { error } = await supabase.storage.from("plans").upload(path, processed);
+  if (error) throw error;
+  const { data } = supabase.storage.from("plans").getPublicUrl(path);
+  return data.publicUrl;
+}
 
 export async function listPublicPlans(): Promise<Plan[]> {
   const { data, error } = await supabase

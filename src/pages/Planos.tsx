@@ -99,6 +99,15 @@ export function Planos() {
                 )}
                 style={plan.color && !plan.is_featured ? { borderColor: plan.color } : undefined}
               >
+                {plan.image_url && (
+                  <img
+                    src={plan.image_url}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="-mx-8 -mt-8 aspect-[16/9] w-[calc(100%+4rem)] rounded-t-card object-cover"
+                  />
+                )}
                 <h3 className="font-heading text-xl">{plan.title}</h3>
                 {plan.description && (
                   <p
