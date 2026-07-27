@@ -4,9 +4,10 @@ import { useQuery } from "@tanstack/react-query";
 import { Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getSetting } from "@/services/homeService";
+import { listMenuPages } from "@/services/pagesService";
 import { cn } from "@/lib/utils";
 
-const links = [
+const institutionalLinks = [
   { label: "Planos", to: "/planos" },
   { label: "Obituários", to: "/obituarios" },
   { label: "Cemitério", to: "/cemiterio" },
@@ -25,6 +26,18 @@ export function Header() {
     queryKey: ["settings", "site"],
     queryFn: () => getSetting<SiteSettings>("site"),
   });
+  const { data: menuPages } = useQuery({
+    queryKey: ["pages", "menu"],
+    queryFn: listMenuPages,
+  });
+
+  const links = [
+    ...institutionalLinks,
+    ...(menuPages ?? []).map((page) => ({
+      label: page.menu_label || page.title,
+      to: `/${page.slug}`,
+    })),
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);

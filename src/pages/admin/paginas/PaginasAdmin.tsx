@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Plus, Blocks, Trash2 } from "lucide-react";
+import { Plus, Blocks, Trash2, Pencil } from "lucide-react";
 import { toast } from "sonner";
 import { listAllPagesAdmin, pagesCrud } from "@/services/pagesService";
 import type { Page } from "@/types/page";
@@ -20,6 +20,7 @@ import { PageMetaForm, type PageMetaValues } from "./PageMetaForm";
 export function PaginasAdmin() {
   const queryClient = useQueryClient();
   const [formOpen, setFormOpen] = useState(false);
+  const [editingPage, setEditingPage] = useState<Page | null>(null);
 
   const { data: pages } = useQuery({ queryKey: ["admin", "pages"], queryFn: listAllPagesAdmin });
   const invalidate = () => queryClient.invalidateQueries({ queryKey: ["admin", "pages"] });
@@ -32,6 +33,17 @@ export function PaginasAdmin() {
       setFormOpen(false);
     },
     onError: () => toast.error("Erro ao criar (verifique se o slug já existe)."),
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: (values: PageMetaValues) => pagesCrud.update(editingPage!.id, values),
+    onSuccess: () => {
+      toast.success("Página atualizada.");
+      invalidate();
+      setFormOpen(false);
+      setEditingPage(null);
+    },
+    onError: () => toast.error("Erro ao salvar."),
   });
 
   const deleteMutation = useMutation({
@@ -51,7 +63,12 @@ export function PaginasAdmin() {
             Construtor de páginas com blocos reordenáveis por drag-and-drop.
           </p>
         </div>
-        <Button onClick={() => setFormOpen(true)}>
+        <Button
+          onClick={() => {
+            setEditingPage(null);
+            setFormOpen(true);
+          }}
+        >
           <Plus className="size-4" /> Nova página
         </Button>
       </div>
@@ -62,6 +79,7 @@ export function PaginasAdmin() {
             <TableHead>Título</TableHead>
             <TableHead>Slug</TableHead>
             <TableHead>Status</TableHead>
+            <TableHead>Menu</TableHead>
             <TableHead className="text-right">Ações</TableHead>
           </TableRow>
         </TableHeader>
@@ -75,7 +93,24 @@ export function PaginasAdmin() {
                   {p.status === "published" ? "Publicado" : "Rascunho"}
                 </Badge>
               </TableCell>
+              <TableCell>
+                {p.show_in_menu ? (
+                  <Badge variant="default">Visível</Badge>
+                ) : (
+                  <span className="text-sm text-secondary">—</span>
+                )}
+              </TableCell>
               <TableCell className="flex justify-end gap-2">
+                <Button
+                  size="icon-sm"
+                  variant="ghost"
+                  onClick={() => {
+                    setEditingPage(p);
+                    setFormOpen(true);
+                  }}
+                >
+                  <Pencil className="size-4" />
+                </Button>
                 <Button asChild size="sm" variant="outline">
                   <Link to={`/admin/paginas/${p.id}`}>
                     <Blocks className="size-4" /> Editar blocos
@@ -95,7 +130,7 @@ export function PaginasAdmin() {
           ))}
           {!pages?.length && (
             <TableRow>
-              <TableCell colSpan={4} className="text-center text-secondary">
+              <TableCell colSpan={5} className="text-center text-secondary">
                 Nenhuma página criada ainda.
               </TableCell>
             </TableRow>
@@ -105,9 +140,15 @@ export function PaginasAdmin() {
 
       <PageMetaForm
         open={formOpen}
-        onOpenChange={setFormOpen}
-        submitting={createMutation.isPending}
-        onSubmit={(values) => createMutation.mutate(values)}
+        onOpenChange={(open) => {
+          setFormOpen(open);
+          if (!open) setEditingPage(null);
+        }}
+        page={editingPage}
+        submitting={createMutation.isPending || updateMutation.isPending}
+        onSubmit={(values) =>
+          editingPage ? updateMutation.mutate(values) : createMutation.mutate(values)
+        }
       />
     </div>
   );

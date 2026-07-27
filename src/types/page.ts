@@ -5,6 +5,9 @@ export type Page = {
   seo_title: string | null;
   seo_description: string | null;
   status: "draft" | "published";
+  show_in_menu: boolean;
+  menu_label: string | null;
+  menu_order: number;
   created_at: string;
   updated_at: string;
 };

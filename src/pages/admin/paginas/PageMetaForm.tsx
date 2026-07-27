@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import { slugify } from "@/services/blogService";
 import type { Page } from "@/types/page";
 
@@ -19,6 +20,9 @@ export type PageMetaValues = {
   status: "draft" | "published";
   seo_title: string;
   seo_description: string;
+  show_in_menu: boolean;
+  menu_label: string;
+  menu_order: number;
 };
 
 export function PageMetaForm({
@@ -40,6 +44,9 @@ export function PageMetaForm({
   const [status, setStatus] = useState<"draft" | "published">(page?.status ?? "draft");
   const [seoTitle, setSeoTitle] = useState(page?.seo_title ?? "");
   const [seoDescription, setSeoDescription] = useState(page?.seo_description ?? "");
+  const [showInMenu, setShowInMenu] = useState(page?.show_in_menu ?? false);
+  const [menuLabel, setMenuLabel] = useState(page?.menu_label ?? "");
+  const [menuOrder, setMenuOrder] = useState(page?.menu_order ?? 0);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -81,12 +88,47 @@ export function PageMetaForm({
             <Label>SEO — Descrição</Label>
             <Textarea value={seoDescription} onChange={(e) => setSeoDescription(e.target.value)} />
           </div>
+          <div className="space-y-3 rounded-card border border-border p-4">
+            <div className="flex items-center gap-2">
+              <Switch id="show_in_menu" checked={showInMenu} onCheckedChange={setShowInMenu} />
+              <Label htmlFor="show_in_menu">Mostrar no menu do site</Label>
+            </div>
+            {showInMenu && (
+              <div className="grid grid-cols-3 gap-3">
+                <div className="col-span-2 space-y-2">
+                  <Label>Texto no menu</Label>
+                  <Input
+                    placeholder={title || "usa o título da página"}
+                    value={menuLabel}
+                    onChange={(e) => setMenuLabel(e.target.value)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Ordem</Label>
+                  <Input
+                    type="number"
+                    value={menuOrder}
+                    onChange={(e) => setMenuOrder(Number(e.target.value))}
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
         <DialogFooter>
           <Button
             disabled={submitting}
             onClick={() =>
-              onSubmit({ title, slug, status, seo_title: seoTitle, seo_description: seoDescription })
+              onSubmit({
+                title,
+                slug,
+                status,
+                seo_title: seoTitle,
+                seo_description: seoDescription,
+                show_in_menu: showInMenu,
+                menu_label: menuLabel,
+                menu_order: menuOrder,
+              })
             }
           >
             {submitting ? "Salvando…" : "Salvar"}

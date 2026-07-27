@@ -27,6 +27,17 @@ export async function getPublishedPageBySlug(
   return { page, sections: sections ?? [] };
 }
 
+export async function listMenuPages(): Promise<Pick<Page, "slug" | "title" | "menu_label">[]> {
+  const { data, error } = await supabase
+    .from("pages")
+    .select("slug, title, menu_label")
+    .eq("status", "published")
+    .eq("show_in_menu", true)
+    .order("menu_order");
+  if (error) throw error;
+  return data;
+}
+
 export async function listAllPagesAdmin(): Promise<Page[]> {
   const { data, error } = await supabase
     .from("pages")
