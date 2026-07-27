@@ -14,6 +14,8 @@ const PROPER_NOUN_FIXES: [pattern: RegExp, replacement: string][] = [
   [/\bfuneraria\b/giu, "Funerária"],
   [/\bcemiterio\b/giu, "Cemitério"],
   [/\birmaos\b/giu, "Irmãos"],
+  [/\bvelatorio\b/giu, "Velatório"],
+  [/\bvelorio\b/giu, "Velório"],
 ];
 
 /** Normaliza texto vindo do banco (ex: "MARIA DA SILVA") para "Maria da Silva". */
@@ -59,8 +61,18 @@ const LOCATION_ABBREVIATION_REGEX = new RegExp(
   "giu",
 );
 
+// O local da funerária é sempre "Centro Velatório", nunca "Centro Velório":
+// quando "Centro"/"Cent." vem seguido de alguma forma de "Vel.", o resultado
+// tem que ser "Velatório" (essa regra tem prioridade sobre o dicionário genérico
+// acima, que sozinho expandiria "vel" para "velório").
+const CENTRO_VELATORIO_REGEX = new RegExp(
+  "\\b(?:cent|centro)(?:\\.|(?=[^\\p{L}]|$))\\s*(?:velat|vela|velt|vel)(?:\\.|(?=[^\\p{L}]|$))",
+  "giu",
+);
+
 function expandLocationAbbreviations(text: string): string {
-  const expanded = text.replace(LOCATION_ABBREVIATION_REGEX, (match, key: string) => {
+  const withCentroVelatorio = text.replace(CENTRO_VELATORIO_REGEX, "Centro Velatório ");
+  const expanded = withCentroVelatorio.replace(LOCATION_ABBREVIATION_REGEX, (match, key: string) => {
     const expansion = LOCATION_ABBREVIATION_MAP.get(key.toLowerCase());
     return expansion ? `${expansion} ` : match;
   });
