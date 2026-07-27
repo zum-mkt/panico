@@ -19,6 +19,7 @@ import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Reveal } from "@/components/ui/reveal";
 import { toast } from "sonner";
+import { toTitleCasePt, formatLocation } from "@/lib/textFormat";
 
 const dateOnlyFormatter = new Intl.DateTimeFormat("pt-BR", { dateStyle: "long" });
 const timeFormatter = new Intl.DateTimeFormat("pt-BR", { dateStyle: "short", timeStyle: "short" });
@@ -66,7 +67,7 @@ function LocationCard({
         <p className="text-sm font-medium tracking-wide text-accent">{title}</p>
         <p className="flex items-start gap-2 font-heading text-lg text-primary">
           <MapPin className="mt-0.5 size-4 shrink-0 text-accent" />
-          {location}
+          {formatLocation(location)}
         </p>
         {at && (
           <p className="flex items-center gap-2 text-sm text-secondary">
@@ -131,11 +132,12 @@ export function ObituarioDetalhe() {
   if (!obituary) return null;
 
   const pageUrl = window.location.href;
-  const children = splitNames(obituary.children_names);
+  const displayName = toTitleCasePt(obituary.name);
+  const children = splitNames(obituary.children_names).map(toTitleCasePt);
 
   async function handleShare() {
     if (navigator.share) {
-      await navigator.share({ title: obituary!.name, url: pageUrl });
+      await navigator.share({ title: displayName, url: pageUrl });
       return;
     }
     await navigator.clipboard.writeText(pageUrl);
@@ -146,7 +148,7 @@ export function ObituarioDetalhe() {
   return (
     <main className="mx-auto max-w-3xl space-y-14 px-6 py-24">
       <Seo
-        title={obituary.seo_title || obituary.name}
+        title={obituary.seo_title || displayName}
         description={obituary.seo_description ?? undefined}
         image={obituary.photo_url ?? undefined}
       />
@@ -157,7 +159,7 @@ export function ObituarioDetalhe() {
             "@type": "ProfilePage",
             mainEntity: {
               "@type": "Person",
-              name: obituary.name,
+              name: displayName,
               image: obituary.photo_url ?? undefined,
             },
           })}
@@ -169,7 +171,7 @@ export function ObituarioDetalhe() {
         {obituary.photo_url ? (
           <img
             src={obituary.photo_url}
-            alt={obituary.name}
+            alt={displayName}
             className="mx-auto aspect-square w-40 rounded-full object-cover shadow-sm sm:w-48"
           />
         ) : (
@@ -178,13 +180,13 @@ export function ObituarioDetalhe() {
           </div>
         )}
         <div className="space-y-1.5">
-          <h1 className="font-heading text-3xl text-primary sm:text-4xl">{obituary.name}</h1>
+          <h1 className="font-heading text-3xl text-primary sm:text-4xl">{displayName}</h1>
           {obituary.age != null && <p className="text-secondary">{obituary.age} anos</p>}
           <p className="text-secondary">{dateOnlyFormatter.format(new Date(obituary.deceased_at))}</p>
           {obituary.neighborhood && (
             <p className="flex items-center justify-center gap-1.5 text-sm text-secondary">
               <MapPin className="size-3.5 shrink-0" />
-              {obituary.neighborhood}
+              {toTitleCasePt(obituary.neighborhood)}
             </p>
           )}
         </div>
@@ -204,7 +206,7 @@ export function ObituarioDetalhe() {
             {obituary.spouse_name && (
               <div className="space-y-1">
                 <dt className="text-xs font-medium tracking-wide text-accent">Cônjuge</dt>
-                <dd className="text-secondary">{obituary.spouse_name}</dd>
+                <dd className="text-secondary">{toTitleCasePt(obituary.spouse_name)}</dd>
               </div>
             )}
             {children.length > 0 && (

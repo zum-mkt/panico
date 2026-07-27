@@ -16,6 +16,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import type { Obituary } from "@/types/obituary";
+import { toTitleCasePt, formatLocation } from "@/lib/textFormat";
 
 const PAGE_SIZE = 15;
 
@@ -82,14 +83,16 @@ export function Obituarios() {
                 {obituary.photo_url && (
                   <img
                     src={obituary.photo_url}
-                    alt={obituary.name}
+                    alt={toTitleCasePt(obituary.name)}
                     loading="lazy"
                     decoding="async"
                     className="aspect-video w-full object-cover"
                   />
                 )}
                 <div className="space-y-1 px-6 pb-6">
-                  <h2 className="font-heading text-lg text-primary">{obituary.name}</h2>
+                  <h2 className="font-heading text-lg text-primary">
+                    {toTitleCasePt(obituary.name)}
+                  </h2>
                   <p className="text-sm text-secondary">
                     {dateFormatter.format(new Date(obituary.deceased_at))}
                   </p>
@@ -139,13 +142,13 @@ export function Obituarios() {
                 {selected.photo_url && (
                   <img
                     src={selected.photo_url}
-                    alt={selected.name}
+                    alt={toTitleCasePt(selected.name)}
                     loading="lazy"
                     decoding="async"
                     className="mb-2 aspect-video w-full rounded-card object-cover"
                   />
                 )}
-                <DialogTitle className="text-xl">{selected.name}</DialogTitle>
+                <DialogTitle className="text-xl">{toTitleCasePt(selected.name)}</DialogTitle>
                 <p className="text-sm text-secondary">
                   {dateFormatter.format(new Date(selected.deceased_at))}
                 </p>
@@ -157,7 +160,7 @@ export function Obituarios() {
                 {selected.wake_location && (
                   <div className="space-y-1 rounded-card border border-border bg-background p-4">
                     <p className="text-sm font-medium text-accent">Velório</p>
-                    <p className="text-sm">{selected.wake_location}</p>
+                    <p className="text-sm">{formatLocation(selected.wake_location)}</p>
                     {selected.wake_at && (
                       <p className="text-xs text-secondary">
                         {dateTimeFormatter.format(new Date(selected.wake_at))}
@@ -168,7 +171,7 @@ export function Obituarios() {
                 {selected.burial_location && (
                   <div className="space-y-1 rounded-card border border-border bg-background p-4">
                     <p className="text-sm font-medium text-accent">Sepultamento</p>
-                    <p className="text-sm">{selected.burial_location}</p>
+                    <p className="text-sm">{formatLocation(selected.burial_location)}</p>
                     {selected.burial_at && (
                       <p className="text-xs text-secondary">
                         {dateTimeFormatter.format(new Date(selected.burial_at))}
