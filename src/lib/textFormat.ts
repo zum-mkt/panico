@@ -13,6 +13,7 @@ const PROPER_NOUN_FIXES: [pattern: RegExp, replacement: string][] = [
   [/\blen[cç]ois\b/giu, "Lençóis"],
   [/\bfuneraria\b/giu, "Funerária"],
   [/\bcemiterio\b/giu, "Cemitério"],
+  [/\birmaos\b/giu, "Irmãos"],
 ];
 
 /** Normaliza texto vindo do banco (ex: "MARIA DA SILVA") para "Maria da Silva". */
