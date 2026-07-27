@@ -11,6 +11,8 @@ function capitalizeWord(word: string): string {
 const PROPER_NOUN_FIXES: [pattern: RegExp, replacement: string][] = [
   [/\bpanico\b/giu, "Paníco"],
   [/\blen[cç]ois\b/giu, "Lençóis"],
+  [/\bfuneraria\b/giu, "Funerária"],
+  [/\bcemiterio\b/giu, "Cemitério"],
 ];
 
 /** Normaliza texto vindo do banco (ex: "MARIA DA SILVA") para "Maria da Silva". */
@@ -27,7 +29,8 @@ export function toTitleCasePt(text?: string | null): string {
 
 // Abreviações recorrentes em locais de velório/sepultamento cadastrados sem padrão.
 // Cada chave só é expandida quando aparece como token isolado (limite de palavra),
-// nunca dentro de uma palavra já escrita por extenso (ex: não afeta "CEMITERIO").
+// nunca dentro de uma palavra já escrita por extenso (ex: não afeta "cemiterio",
+// que é corrigido separadamente em PROPER_NOUN_FIXES).
 const LOCATION_ABBREVIATIONS: [key: string, expansion: string][] = [
   ["cemit", "cemitério"],
   ["cemi", "cemitério"],
