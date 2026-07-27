@@ -7,8 +7,11 @@ function capitalizeWord(word: string): string {
   );
 }
 
-// Nome da funerária costuma vir sem acento no banco ("PANICO"); o correto é "Paníco".
-const PROPER_NOUN_FIXES: [pattern: RegExp, replacement: string][] = [[/\bpanico\b/giu, "Paníco"]];
+// Nomes próprios que costumam vir sem acento/cedilha no banco.
+const PROPER_NOUN_FIXES: [pattern: RegExp, replacement: string][] = [
+  [/\bpanico\b/giu, "Paníco"],
+  [/\blen[cç]ois\b/giu, "Lençóis"],
+];
 
 /** Normaliza texto vindo do banco (ex: "MARIA DA SILVA") para "Maria da Silva". */
 export function toTitleCasePt(text?: string | null): string {
