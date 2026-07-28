@@ -35,6 +35,7 @@ export function PageBuilder() {
   const queryClient = useQueryClient();
   const [newBlockType, setNewBlockType] = useState<BlockType>("text");
   const [sections, setSections] = useState<PageSection[]>([]);
+  const [justAddedId, setJustAddedId] = useState<string | null>(null);
 
   const { data: page } = useQuery({
     queryKey: ["admin", "pages", id],
@@ -55,8 +56,12 @@ export function PageBuilder() {
     queryClient.invalidateQueries({ queryKey: ["admin", "pages", id, "sections"] });
 
   const addMutation = useMutation({
-    mutationFn: () => addSection(id!, newBlockType, sections.length ? Math.max(...sections.map((s) => s.position)) : -1),
-    onSuccess: invalidateSections,
+    mutationFn: () =>
+      addSection(id!, newBlockType, sections.length ? Math.max(...sections.map((s) => s.position)) : -1),
+    onSuccess: (created) => {
+      setJustAddedId(created.id);
+      invalidateSections();
+    },
   });
 
   const updateContentMutation = useMutation({
@@ -141,6 +146,7 @@ export function PageBuilder() {
               <SortableSection
                 key={section.id}
                 section={section}
+                defaultExpanded={section.id === justAddedId}
                 onUpdateContent={(content) => {
                   setSections((prev) =>
                     prev.map((s) => (s.id === section.id ? { ...s, content } : s)),

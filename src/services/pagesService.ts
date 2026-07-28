@@ -57,11 +57,18 @@ export async function listSectionsAdmin(pageId: string): Promise<PageSection[]> 
   return data;
 }
 
-export async function addSection(pageId: string, type: BlockType, afterPosition: number) {
-  const { error } = await supabase
+export async function addSection(
+  pageId: string,
+  type: BlockType,
+  afterPosition: number,
+): Promise<PageSection> {
+  const { data, error } = await supabase
     .from("page_sections")
-    .insert({ page_id: pageId, type, content: {}, position: afterPosition + 1 });
+    .insert({ page_id: pageId, type, content: {}, position: afterPosition + 1 })
+    .select()
+    .single();
   if (error) throw error;
+  return data;
 }
 
 export async function duplicateSection(section: PageSection) {
