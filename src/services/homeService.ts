@@ -8,7 +8,7 @@ export async function getSetting<T>(key: string): Promise<T | null> {
 export async function listActiveServices() {
   const { data } = await supabase
     .from("services")
-    .select("id, title, description, icon")
+    .select("id, title, description, icon, image_url, content_html")
     .eq("is_active", true)
     .order("position");
   return data ?? [];
