@@ -41,12 +41,12 @@ function Block({ section }: { section: PageSection }) {
 
     case "text":
       return (
-        <section className="mx-auto max-w-3xl space-y-4 px-6 py-16">
+        <section className="mx-auto max-w-3xl space-y-6 px-6 py-16">
           {c.title && <SectionTitle title={c.title} />}
           {c.body && (
             <Reveal>
               <div
-                className="prose prose-neutral max-w-none prose-headings:font-heading prose-headings:text-primary"
+                className="prose prose-lg max-w-none text-justify leading-relaxed text-foreground prose-headings:font-heading prose-headings:text-primary prose-p:mb-6 prose-p:last:mb-0 [hyphens:auto]"
                 dangerouslySetInnerHTML={{ __html: c.body }}
               />
             </Reveal>
