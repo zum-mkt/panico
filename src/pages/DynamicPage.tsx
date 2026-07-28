@@ -173,8 +173,13 @@ export function DynamicPage() {
 
   if (!data) return null;
 
+  // O header é fixo e transparente até rolar a página; blocos que não sejam
+  // "hero" (que já tem respiro interno suficiente) precisam de espaço no topo
+  // para não ficar atrás do menu.
+  const firstIsHero = data.sections[0]?.type === "hero";
+
   return (
-    <main>
+    <main className={firstIsHero ? undefined : "pt-24"}>
       <Seo
         title={data.page.seo_title || data.page.title}
         description={data.page.seo_description ?? undefined}
