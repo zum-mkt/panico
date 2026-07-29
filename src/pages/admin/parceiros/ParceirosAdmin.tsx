@@ -139,6 +139,7 @@ export function ParceirosAdmin() {
       </Table>
 
       <ParceiroForm
+        key={editing?.id ?? "new"}
         open={formOpen}
         onOpenChange={setFormOpen}
         partner={editing}

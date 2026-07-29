@@ -133,6 +133,7 @@ export function ServicosAdmin() {
       </Table>
 
       <ServicoForm
+        key={editing?.id ?? "new"}
         open={formOpen}
         onOpenChange={setFormOpen}
         service={editing}

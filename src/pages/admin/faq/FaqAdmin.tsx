@@ -133,6 +133,7 @@ export function FaqAdmin() {
       </Table>
 
       <FaqForm
+        key={editing?.id ?? "new"}
         open={formOpen}
         onOpenChange={setFormOpen}
         faq={editing}

@@ -123,6 +123,7 @@ export function CoroasAdmin() {
       </Table>
 
       <CoroaForm
+        key={editing?.id ?? "new"}
         open={formOpen}
         onOpenChange={setFormOpen}
         crown={editing}

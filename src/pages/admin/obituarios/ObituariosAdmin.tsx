@@ -159,6 +159,7 @@ export function ObituariosAdmin() {
       </Table>
 
       <ObituarioForm
+        key={editing?.id ?? "new"}
         open={formOpen}
         onOpenChange={setFormOpen}
         obituary={editing}

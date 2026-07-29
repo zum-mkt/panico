@@ -139,6 +139,7 @@ export function PaginasAdmin() {
       </Table>
 
       <PageMetaForm
+        key={editingPage?.id ?? "new"}
         open={formOpen}
         onOpenChange={(open) => {
           setFormOpen(open);

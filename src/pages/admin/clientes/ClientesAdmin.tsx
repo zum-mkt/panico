@@ -61,7 +61,12 @@ export function ClientesAdmin() {
       </Table>
 
       {editing && (
-        <ClienteDetalhe client={editing} open={!!editing} onOpenChange={() => setEditing(null)} />
+        <ClienteDetalhe
+          key={editing.id}
+          client={editing}
+          open={!!editing}
+          onOpenChange={() => setEditing(null)}
+        />
       )}
     </div>
   );

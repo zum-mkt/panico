@@ -149,6 +149,7 @@ export function BannersAdmin() {
       </Table>
 
       <BannerForm
+        key={editing?.id ?? "new"}
         open={formOpen}
         onOpenChange={setFormOpen}
         banner={editing}

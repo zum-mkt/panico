@@ -123,6 +123,7 @@ export function FormulariosAdmin() {
       </Table>
 
       <FormBuilder
+        key={editing?.id ?? "new"}
         open={formOpen}
         onOpenChange={setFormOpen}
         form={editing}

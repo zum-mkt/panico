@@ -136,6 +136,7 @@ export function BlogAdmin() {
       </Table>
 
       <PostForm
+        key={editing?.id ?? "new"}
         open={formOpen}
         onOpenChange={setFormOpen}
         post={editing}

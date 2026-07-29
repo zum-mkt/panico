@@ -159,6 +159,7 @@ export function PlanosAdmin() {
       </Table>
 
       <PlanoForm
+        key={editing?.id ?? "new"}
         open={formOpen}
         onOpenChange={setFormOpen}
         plan={editing}

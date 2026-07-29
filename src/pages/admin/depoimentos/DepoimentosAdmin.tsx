@@ -138,6 +138,7 @@ export function DepoimentosAdmin() {
       </Table>
 
       <DepoimentoForm
+        key={editing?.id ?? "new"}
         open={formOpen}
         onOpenChange={setFormOpen}
         testimonial={editing}
