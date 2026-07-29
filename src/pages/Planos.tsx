@@ -25,6 +25,20 @@ const currency = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "
 type PlansBenefit = { icon?: string; title: string; description?: string };
 type SiteSettings = { phone?: string; whatsapp?: string };
 
+// Um benefício no formato "Atributo: valor" (ex: "Transporte terrestre: até 125 km")
+// vira uma linha de comparação por valor; sem ":" é tratado como item de checklist
+// (ex: quais dependentes cada plano cobre).
+function isAttributeBenefit(benefit: string) {
+  return benefit.includes(":");
+}
+function parseAttributeBenefit(benefit: string) {
+  const [label, ...rest] = benefit.split(":");
+  return { label: label.trim(), value: rest.join(":").trim() };
+}
+function checklistBenefits(benefits: string[]) {
+  return benefits.filter((b) => !isAttributeBenefit(b));
+}
+
 async function listPlansFaq() {
   const { data } = await supabase
     .from("faq")
@@ -52,8 +66,24 @@ export function Planos() {
 
   const allBenefits = useMemo(() => {
     const set = new Set<string>();
-    plans?.forEach((p) => p.benefits.forEach((b) => set.add(b)));
+    plans?.forEach((p) => checklistBenefits(p.benefits).forEach((b) => set.add(b)));
     return Array.from(set);
+  }, [plans]);
+
+  const comparisonAttributes = useMemo(() => {
+    const labels: string[] = [];
+    const valuesByLabel = new Map<string, Map<string, string>>();
+    plans?.forEach((p) => {
+      p.benefits.filter(isAttributeBenefit).forEach((b) => {
+        const { label, value } = parseAttributeBenefit(b);
+        if (!valuesByLabel.has(label)) {
+          labels.push(label);
+          valuesByLabel.set(label, new Map());
+        }
+        valuesByLabel.get(label)!.set(p.id, value);
+      });
+    });
+    return labels.map((label) => ({ label, values: valuesByLabel.get(label)! }));
   }, [plans]);
   const seo = useSeoPage("planos", {
     title: "Planos Funerários",
@@ -139,7 +169,7 @@ export function Planos() {
                   )}
 
                   <ul className="grid gap-2 text-sm sm:grid-cols-2">
-                    {plan.benefits.map((benefit) => (
+                    {checklistBenefits(plan.benefits).map((benefit) => (
                       <li key={benefit} className="flex items-center gap-2">
                         <Check className="size-4 shrink-0 text-accent" /> {benefit}
                       </li>
@@ -168,9 +198,41 @@ export function Planos() {
         </section>
       )}
 
+      {!!plans?.length && comparisonAttributes.length > 0 && (
+        <section className="mx-auto max-w-6xl space-y-12 px-6 py-20">
+          <SectionTitle eyebrow="Compare" title="Principais diferenças" />
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-sm">
+              <thead>
+                <tr>
+                  <th className="p-3 text-left"></th>
+                  {plans.map((p) => (
+                    <th key={p.id} className="p-3 text-center font-heading text-primary">
+                      {p.title}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {comparisonAttributes.map(({ label, values }) => (
+                  <tr key={label} className="border-t border-border">
+                    <td className="p-3 font-medium">{label}</td>
+                    {plans.map((p) => (
+                      <td key={p.id} className="p-3 text-center text-secondary">
+                        {values.get(p.id) || "—"}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      )}
+
       {!!plans?.length && allBenefits.length > 0 && (
         <section className="mx-auto max-w-6xl space-y-12 px-6 py-20">
-          <SectionTitle eyebrow="Compare" title="Comparativo de planos" />
+          <SectionTitle eyebrow="Compare" title="Quem pode ser incluído" />
           <div className="overflow-x-auto">
             <table className="w-full border-collapse text-sm">
               <thead>
