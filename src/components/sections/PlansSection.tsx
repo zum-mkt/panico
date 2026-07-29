@@ -52,7 +52,7 @@ export function PlansSection() {
               ))}
             </ul>
             <Button asChild variant={plan.is_featured ? "secondary" : "default"} className="w-full">
-              <Link to="/planos">Contratar</Link>
+              <Link to="/planos">Veja plano completo</Link>
             </Button>
           </Reveal>
         ))}
