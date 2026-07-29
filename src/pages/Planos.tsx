@@ -105,7 +105,7 @@ export function Planos() {
                     alt=""
                     loading="lazy"
                     decoding="async"
-                    className="-mx-8 -mt-8 aspect-[16/9] w-[calc(100%+4rem)] rounded-t-card object-cover"
+                    className="mx-auto aspect-square w-32 object-contain"
                   />
                 )}
                 <h3 className="font-heading text-xl">{plan.title}</h3>

@@ -109,7 +109,7 @@ export function PlanoForm({
               <img
                 src={form.watch("image_url")!}
                 alt=""
-                className="h-32 w-full rounded-card object-cover"
+                className="h-32 w-32 rounded-card border border-border object-contain"
               />
             )}
           </div>
