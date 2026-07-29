@@ -66,7 +66,8 @@ function PlanosHeroTab() {
     if (!file) return;
     setUploading(true);
     try {
-      setValues((p) => ({ ...p, image_url: await uploadHeroImage(file) }));
+      const url = await uploadHeroImage(file);
+      setValues((p) => ({ ...p, image_url: url }));
     } finally {
       setUploading(false);
     }
