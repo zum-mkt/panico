@@ -17,7 +17,7 @@ export async function listActiveServices() {
 export async function listActivePlans() {
   const { data } = await supabase
     .from("plans")
-    .select("id, title, description, price, benefits, is_featured")
+    .select("id, title, description, price, benefits, image_url, is_featured")
     .eq("is_active", true)
     .order("position");
   return data ?? [];

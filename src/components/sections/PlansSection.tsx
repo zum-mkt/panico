@@ -32,6 +32,15 @@ export function PlansSection() {
                 : "border-border bg-card",
             )}
           >
+            {plan.image_url && (
+              <img
+                src={plan.image_url}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                className="mx-auto aspect-square w-32 object-contain"
+              />
+            )}
             <h3 className="font-heading text-xl">{plan.title}</h3>
             {plan.description && (
               <p className={cn("text-sm", plan.is_featured ? "text-primary-foreground/80" : "text-secondary")}>
