@@ -9,6 +9,11 @@ import {
   MapPin,
   IdCard,
   ClipboardList,
+  Flame,
+  Users,
+  Sparkles,
+  Megaphone,
+  BookOpen,
   type LucideIcon,
 } from "lucide-react";
 
@@ -25,6 +30,11 @@ const iconMap: Record<string, LucideIcon> = {
   MapPin,
   IdCard,
   ClipboardList,
+  Flame,
+  Users,
+  Sparkles,
+  Megaphone,
+  BookOpen,
 };
 
 export const iconNames = Object.keys(iconMap);
