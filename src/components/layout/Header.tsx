@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Phone } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
+import { Phone, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getSetting } from "@/services/homeService";
 import { listMenuPages } from "@/services/pagesService";
@@ -20,6 +21,7 @@ type SiteSettings = { phone?: string; logo_url?: string };
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === "/";
   const { data: site } = useQuery({
@@ -45,6 +47,10 @@ export function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    setMobileOpen(false);
+  }, [location.pathname]);
 
   const phone = site?.phone ?? "(11) 4000-0000";
   const phoneHref = `tel:+55${phone.replace(/\D/g, "")}`;
@@ -93,17 +99,56 @@ export function Header() {
           ))}
         </nav>
 
-        <Button
-          asChild
-          size="sm"
-          className={cn(isHome && "bg-white text-primary hover:bg-white/90")}
-        >
-          <a href={phoneHref}>
-            <Phone className="size-4" />
-            Atendimento 24h
-          </a>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            asChild
+            size="sm"
+            className={cn(isHome && "bg-white text-primary hover:bg-white/90")}
+          >
+            <a href={phoneHref}>
+              <Phone className="size-4" />
+              <span className="hidden sm:inline">Atendimento 24h</span>
+            </a>
+          </Button>
+
+          <button
+            type="button"
+            onClick={() => setMobileOpen((v) => !v)}
+            aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={mobileOpen}
+            className={cn(
+              "flex size-9 items-center justify-center rounded-full md:hidden",
+              isHome ? "text-primary-foreground" : "text-foreground",
+            )}
+          >
+            {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
+          </button>
+        </div>
       </div>
+
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.nav
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="overflow-hidden bg-background md:hidden"
+          >
+            <div className="flex flex-col gap-1 px-6 pb-6">
+              {links.map((link) => (
+                <Link
+                  key={link.to}
+                  to={link.to}
+                  className="rounded-lg px-3 py-2.5 text-sm text-foreground/80 hover:bg-muted hover:text-primary"
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
