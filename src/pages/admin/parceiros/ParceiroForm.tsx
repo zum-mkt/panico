@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
 import { uploadPartnerLogo } from "@/services/partnersService";
 import type { Partner } from "@/types/partner";
@@ -16,6 +17,8 @@ import type { Partner } from "@/types/partner";
 export type PartnerFormValues = {
   name: string;
   logo_url: string | null;
+  photo_url: string | null;
+  description: string;
   link_url: string;
   is_active: boolean;
 };
@@ -35,24 +38,38 @@ export function ParceiroForm({
 }) {
   const [name, setName] = useState(partner?.name ?? "");
   const [logoUrl, setLogoUrl] = useState<string | null>(partner?.logo_url ?? null);
+  const [photoUrl, setPhotoUrl] = useState<string | null>(partner?.photo_url ?? null);
+  const [description, setDescription] = useState(partner?.description ?? "");
   const [linkUrl, setLinkUrl] = useState(partner?.link_url ?? "");
   const [isActive, setIsActive] = useState(partner?.is_active ?? true);
-  const [uploading, setUploading] = useState(false);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
 
   async function handleLogo(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-    setUploading(true);
+    setUploadingLogo(true);
     try {
       setLogoUrl(await uploadPartnerLogo(file));
     } finally {
-      setUploading(false);
+      setUploadingLogo(false);
+    }
+  }
+
+  async function handlePhoto(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingPhoto(true);
+    try {
+      setPhotoUrl(await uploadPartnerLogo(file));
+    } finally {
+      setUploadingPhoto(false);
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-h-[85vh] max-w-lg overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{partner ? "Editar parceiro" : "Novo parceiro"}</DialogTitle>
         </DialogHeader>
@@ -65,8 +82,20 @@ export function ParceiroForm({
           <div className="space-y-2">
             <Label>Logo</Label>
             <Input type="file" accept="image/*" onChange={handleLogo} />
-            {uploading && <p className="text-sm text-secondary">Enviando…</p>}
+            {uploadingLogo && <p className="text-sm text-secondary">Enviando…</p>}
             {logoUrl && <img src={logoUrl} alt="" className="h-10" />}
+          </div>
+          <div className="space-y-2">
+            <Label>Foto (exibida no card, na Home)</Label>
+            <Input type="file" accept="image/*" onChange={handlePhoto} />
+            {uploadingPhoto && <p className="text-sm text-secondary">Enviando…</p>}
+            {photoUrl && (
+              <img src={photoUrl} alt="" className="h-32 w-full rounded-card object-cover" />
+            )}
+          </div>
+          <div className="space-y-2">
+            <Label>Descrição (a vantagem oferecida aos associados)</Label>
+            <Textarea value={description} onChange={(e) => setDescription(e.target.value)} />
           </div>
           <div className="space-y-2">
             <Label>Link (site do parceiro)</Label>
@@ -81,7 +110,16 @@ export function ParceiroForm({
         <DialogFooter>
           <Button
             disabled={submitting || !name}
-            onClick={() => onSubmit({ name, logo_url: logoUrl, link_url: linkUrl, is_active: isActive })}
+            onClick={() =>
+              onSubmit({
+                name,
+                logo_url: logoUrl,
+                photo_url: photoUrl,
+                description,
+                link_url: linkUrl,
+                is_active: isActive,
+              })
+            }
           >
             {submitting ? "Salvando…" : "Salvar"}
           </Button>

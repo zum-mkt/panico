@@ -39,6 +39,8 @@ type CemeteryTeaserContent = {
 
 type CtaContent = { title: string; description: string };
 
+type PartnersContent = { eyebrow: string; title: string; description: string };
+
 function SaveButton({ onClick, pending }: { onClick: () => void; pending: boolean }) {
   return (
     <Button onClick={onClick} disabled={pending}>
@@ -377,6 +379,51 @@ function CemiterioTab() {
   );
 }
 
+function ParceirosTab() {
+  const { data } = useQuery({
+    queryKey: ["settings", "home_partners"],
+    queryFn: () => getSetting<PartnersContent>("home_partners"),
+  });
+  const [values, setValues] = useState<PartnersContent>({ eyebrow: "", title: "", description: "" });
+  useEffect(() => {
+    if (data) setValues(data);
+  }, [data]);
+
+  const mutation = useMutation({
+    mutationFn: () => upsertSetting("home_partners", values),
+    onSuccess: () => toast.success("Bloco de parceiros salvo."),
+  });
+
+  return (
+    <div className="max-w-xl space-y-4">
+      <p className="text-sm text-secondary">
+        Texto de apresentação da rede de vantagens, exibido acima dos cards de parceiros na Home.
+        Para cadastrar/editar cada parceiro (foto, descrição, logo, link), use o módulo{" "}
+        <Link to="/admin/parceiros" className="text-primary underline">
+          Parceiros
+        </Link>
+        .
+      </p>
+      <div className="space-y-2">
+        <Label>Texto de destaque (eyebrow)</Label>
+        <Input value={values.eyebrow} onChange={(e) => setValues((p) => ({ ...p, eyebrow: e.target.value }))} />
+      </div>
+      <div className="space-y-2">
+        <Label>Título</Label>
+        <Input value={values.title} onChange={(e) => setValues((p) => ({ ...p, title: e.target.value }))} />
+      </div>
+      <div className="space-y-2">
+        <Label>Frase explicando a rede de vantagens aos associados</Label>
+        <Textarea
+          value={values.description}
+          onChange={(e) => setValues((p) => ({ ...p, description: e.target.value }))}
+        />
+      </div>
+      <SaveButton onClick={() => mutation.mutate()} pending={mutation.isPending} />
+    </div>
+  );
+}
+
 function CtaTab() {
   const { data } = useQuery({ queryKey: ["settings", "home_cta"], queryFn: () => getSetting<CtaContent>("home_cta") });
   const [values, setValues] = useState<CtaContent>({ title: "", description: "" });
@@ -451,6 +498,7 @@ export function HomeAdmin() {
           <TabsTrigger value="atalhos">Atalhos</TabsTrigger>
           <TabsTrigger value="sobre">Sobre</TabsTrigger>
           <TabsTrigger value="cemiterio">Cemitério</TabsTrigger>
+          <TabsTrigger value="parceiros">Parceiros</TabsTrigger>
           <TabsTrigger value="cta">CTA final</TabsTrigger>
         </TabsList>
         <TabsContent value="logo">
@@ -467,6 +515,9 @@ export function HomeAdmin() {
         </TabsContent>
         <TabsContent value="cemiterio">
           <CemiterioTab />
+        </TabsContent>
+        <TabsContent value="parceiros">
+          <ParceirosTab />
         </TabsContent>
         <TabsContent value="cta">
           <CtaTab />

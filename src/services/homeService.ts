@@ -57,7 +57,7 @@ export async function listHomeFaq() {
 export async function listActivePartners() {
   const { data } = await supabase
     .from("partners")
-    .select("id, name, logo_url, link_url")
+    .select("id, name, logo_url, photo_url, description, link_url")
     .eq("is_active", true)
     .order("position");
   return data ?? [];
