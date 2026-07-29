@@ -24,6 +24,13 @@ const currency = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "
 
 type PlansBenefit = { icon?: string; title: string; description?: string };
 type SiteSettings = { phone?: string; whatsapp?: string };
+type PlanosHeroContent = {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  image_url?: string;
+  primary_label?: string;
+};
 
 // Um benefício no formato "Atributo: valor" (ex: "Transporte terrestre: até 125 km")
 // vira uma linha de comparação por valor; sem ":" é tratado como item de checklist
@@ -59,6 +66,10 @@ export function Planos() {
   const { data: site } = useQuery({
     queryKey: ["settings", "site"],
     queryFn: () => getSetting<SiteSettings>("site"),
+  });
+  const { data: hero } = useQuery({
+    queryKey: ["settings", "planos_hero"],
+    queryFn: () => getSetting<PlanosHeroContent>("planos_hero"),
   });
 
   const phoneHref = `tel:+55${(site?.phone ?? "1140000000").replace(/\D/g, "")}`;
@@ -96,11 +107,14 @@ export function Planos() {
       <Seo title={seo.title} description={seo.description} />
 
       <Hero
-        eyebrow="Planos"
-        title="Proteção completa para você e sua família"
-        description="Planos funerários com assistência 24h, sem burocracia na hora em que sua família mais precisa."
-        imageUrl="/hero-placeholder.svg"
-        primaryCta={{ label: "Falar com a equipe", href: phoneHref }}
+        eyebrow={hero?.eyebrow || "Planos"}
+        title={hero?.title || "Proteção completa para você e sua família"}
+        description={
+          hero?.description ||
+          "Planos funerários com assistência 24h, sem burocracia na hora em que sua família mais precisa."
+        }
+        imageUrl={hero?.image_url || "/hero-placeholder.svg"}
+        primaryCta={{ label: hero?.primary_label || "Falar com a equipe", href: phoneHref }}
       />
 
       {!!benefits?.length && (
