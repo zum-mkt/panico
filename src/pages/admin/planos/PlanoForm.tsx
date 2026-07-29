@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { RichTextEditor } from "@/components/ui/rich-text-editor";
 import { uploadPlanImage } from "@/services/plansService";
 import type { Plan } from "@/types/plan";
 
@@ -24,6 +25,7 @@ const schema = z.object({
   price: z.string().optional(),
   benefits: z.array(z.object({ value: z.string().min(1, "Obrigatório") })),
   image_url: z.string().nullable(),
+  details_html: z.string().optional(),
   is_featured: z.boolean(),
   is_active: z.boolean(),
   color: z.string().optional(),
@@ -42,6 +44,7 @@ function toFormValues(p?: Plan | null): PlanFormValues {
     price: p?.price != null ? String(p.price) : "",
     benefits: (p?.benefits ?? []).map((value) => ({ value })),
     image_url: p?.image_url ?? null,
+    details_html: p?.details_html ?? "",
     is_featured: p?.is_featured ?? false,
     is_active: p?.is_active ?? true,
     color: p?.color ?? "",
@@ -123,6 +126,14 @@ export function PlanoForm({
               <Label htmlFor="color">Cor de destaque</Label>
               <Input id="color" type="color" {...form.register("color")} />
             </div>
+          </div>
+
+          <div className="space-y-2">
+            <Label>Detalhes completos (seção expansível na página /planos)</Label>
+            <RichTextEditor
+              value={form.watch("details_html") ?? ""}
+              onChange={(html) => form.setValue("details_html", html)}
+            />
           </div>
 
           <div className="space-y-2">

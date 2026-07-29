@@ -23,6 +23,7 @@ import {
 const currency = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
 type PlansBenefit = { icon?: string; title: string; description?: string };
+type SiteSettings = { phone?: string; whatsapp?: string };
 
 async function listPlansFaq() {
   const { data } = await supabase
@@ -41,6 +42,13 @@ export function Planos() {
     queryFn: () => getSetting<PlansBenefit[]>("plans_benefits"),
   });
   const { data: faqs } = useQuery({ queryKey: ["plans", "faq"], queryFn: listPlansFaq });
+  const { data: site } = useQuery({
+    queryKey: ["settings", "site"],
+    queryFn: () => getSetting<SiteSettings>("site"),
+  });
+
+  const phoneHref = `tel:+55${(site?.phone ?? "1140000000").replace(/\D/g, "")}`;
+  const whatsappHref = `https://wa.me/${site?.whatsapp ?? "5511900000000"}`;
 
   const allBenefits = useMemo(() => {
     const set = new Set<string>();
@@ -62,7 +70,7 @@ export function Planos() {
         title="Proteção completa para você e sua família"
         description="Planos funerários com assistência 24h, sem burocracia na hora em que sua família mais precisa."
         imageUrl="/hero-placeholder.svg"
-        primaryCta={{ label: "Falar com a equipe", href: "tel:+551140000000" }}
+        primaryCta={{ label: "Falar com a equipe", href: phoneHref }}
       />
 
       {!!benefits?.length && (
@@ -125,15 +133,41 @@ export function Planos() {
                     <span className="text-sm font-normal">/mês</span>
                   </p>
                 )}
-                <ul className="flex-1 space-y-2 text-sm">
+                <ul className="space-y-2 text-sm">
                   {plan.benefits.map((benefit) => (
                     <li key={benefit} className="flex items-center gap-2">
                       <Check className="size-4 text-accent" /> {benefit}
                     </li>
                   ))}
                 </ul>
+                {plan.details_html && (
+                  <Accordion type="single" collapsible className="flex-1">
+                    <AccordionItem value="details" className="border-none">
+                      <AccordionTrigger
+                        className={cn(
+                          "py-0 text-sm hover:no-underline",
+                          plan.is_featured ? "text-primary-foreground" : "text-primary",
+                        )}
+                      >
+                        Ver detalhes completos
+                      </AccordionTrigger>
+                      <AccordionContent>
+                        <div
+                          className={cn(
+                            "prose prose-sm max-w-none pt-2 prose-headings:font-heading",
+                            plan.is_featured
+                              ? "prose-invert text-primary-foreground/80"
+                              : "text-secondary",
+                          )}
+                          dangerouslySetInnerHTML={{ __html: plan.details_html }}
+                        />
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                )}
+                {!plan.details_html && <div className="flex-1" />}
                 <Button asChild variant={plan.is_featured ? "secondary" : "default"}>
-                  <a href={plan.cta_url || "tel:+551140000000"}>
+                  <a href={plan.cta_url || phoneHref}>
                     {plan.cta_label || "Contratar"}
                   </a>
                 </Button>
@@ -197,7 +231,7 @@ export function Planos() {
         <CTA
           title="Ainda tem dúvidas sobre qual plano escolher?"
           description="Fale com nossa equipe e encontre o plano ideal para sua família."
-          primaryCta={{ label: "Falar no WhatsApp", href: "https://wa.me/5511900000000" }}
+          primaryCta={{ label: "Falar no WhatsApp", href: whatsappHref }}
         />
       </section>
     </main>

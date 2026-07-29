@@ -5,6 +5,7 @@ export type Plan = {
   price: number | null;
   benefits: string[];
   image_url: string | null;
+  details_html: string | null;
   is_featured: boolean;
   position: number;
   is_active: boolean;

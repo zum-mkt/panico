@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Seo } from "@/components/seo/Seo";
 import { useSeoPage } from "@/hooks/useSeoPage";
 import { listPublicCrowns } from "@/services/crownsService";
+import { getSetting } from "@/services/homeService";
 import { SectionTitle } from "@/components/sections/SectionTitle";
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
@@ -11,8 +12,15 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const currency = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
+type SiteSettings = { whatsapp?: string };
+
 export function Coroas() {
   const { data: crowns } = useQuery({ queryKey: ["crowns", "public"], queryFn: listPublicCrowns });
+  const { data: site } = useQuery({
+    queryKey: ["settings", "site"],
+    queryFn: () => getSetting<SiteSettings>("site"),
+  });
+  const whatsapp = site?.whatsapp ?? "5511900000000";
   const [category, setCategory] = useState("todas");
 
   const categories = useMemo(() => {
@@ -83,7 +91,7 @@ export function Coroas() {
                 )}
                 <Button asChild disabled={!crown.is_available} className="mt-auto">
                   <a
-                    href={`https://wa.me/5511900000000?text=${encodeURIComponent(
+                    href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(
                       `Olá! Gostaria de encomendar a coroa "${crown.title}".`,
                     )}`}
                     target="_blank"

@@ -26,6 +26,8 @@ type HeroContent = {
   secondary_href: string;
 };
 
+type SiteSettings = { phone?: string };
+
 const FALLBACK_HERO: HeroContent = {
   eyebrow: "Funerária Paníco",
   title: "Cuidado, respeito e acolhimento em cada momento",
@@ -43,7 +45,13 @@ export function Home() {
     queryKey: ["settings", "home_hero"],
     queryFn: () => getSetting<HeroContent>("home_hero"),
   });
+  const { data: site } = useQuery({
+    queryKey: ["settings", "site"],
+    queryFn: () => getSetting<SiteSettings>("site"),
+  });
   const h = hero ?? FALLBACK_HERO;
+  const phoneHref = `tel:+55${(site?.phone ?? "1140000000").replace(/\D/g, "")}`;
+  const secondaryHref = h.secondary_href?.startsWith("tel:") ? phoneHref : h.secondary_href;
   const seo = useSeoPage("home", {
     title: "Cuidado, respeito e acolhimento em cada momento",
     description:
@@ -60,7 +68,7 @@ export function Home() {
         imageUrl={h.image_url || "/hero-placeholder.svg"}
         primaryCta={h.primary_label ? { label: h.primary_label, href: h.primary_href || "#" } : undefined}
         secondaryCta={
-          h.secondary_label ? { label: h.secondary_label, href: h.secondary_href || "#" } : undefined
+          h.secondary_label ? { label: h.secondary_label, href: secondaryHref || "#" } : undefined
         }
       />
       <ShortcutsBar />
