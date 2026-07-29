@@ -94,13 +94,13 @@ export function Planos() {
       {!!plans?.length && (
         <section className="mx-auto max-w-6xl space-y-12 px-6 py-20">
           <SectionTitle eyebrow="Escolha o seu" title="Nossos planos" />
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="flex flex-col gap-8">
             {plans.map((plan, i) => (
               <Reveal
                 key={plan.id}
                 delay={i * 0.08}
                 className={cn(
-                  "flex flex-col gap-4 rounded-card border p-8",
+                  "grid gap-8 rounded-card border p-8 sm:grid-cols-[auto_1fr] sm:items-start md:p-10",
                   plan.is_featured
                     ? "border-accent bg-primary text-primary-foreground"
                     : "border-border bg-card",
@@ -113,64 +113,55 @@ export function Planos() {
                     alt=""
                     loading="lazy"
                     decoding="async"
-                    className="mx-auto aspect-square w-32 object-contain"
+                    className="mx-auto aspect-square w-40 object-contain sm:mx-0"
                   />
                 )}
-                <h3 className="font-heading text-xl">{plan.title}</h3>
-                {plan.description && (
-                  <p
-                    className={cn(
-                      "text-sm",
-                      plan.is_featured ? "text-primary-foreground/80" : "text-secondary",
+                <div className="space-y-6">
+                  <div className="flex flex-wrap items-baseline justify-between gap-4">
+                    <h3 className="font-heading text-2xl">{plan.title}</h3>
+                    {plan.price != null && (
+                      <p className="text-3xl">
+                        {currency.format(plan.price)}
+                        <span className="text-sm font-normal">/mês</span>
+                      </p>
                     )}
-                  >
-                    {plan.description}
-                  </p>
-                )}
-                {plan.price != null && (
-                  <p className="text-3xl">
-                    {currency.format(plan.price)}
-                    <span className="text-sm font-normal">/mês</span>
-                  </p>
-                )}
-                <ul className="space-y-2 text-sm">
-                  {plan.benefits.map((benefit) => (
-                    <li key={benefit} className="flex items-center gap-2">
-                      <Check className="size-4 text-accent" /> {benefit}
-                    </li>
-                  ))}
-                </ul>
-                {plan.details_html && (
-                  <Accordion type="single" collapsible className="flex-1">
-                    <AccordionItem value="details" className="border-none">
-                      <AccordionTrigger
-                        className={cn(
-                          "py-0 text-sm hover:no-underline",
-                          plan.is_featured ? "text-primary-foreground" : "text-primary",
-                        )}
-                      >
-                        Ver detalhes completos
-                      </AccordionTrigger>
-                      <AccordionContent>
-                        <div
-                          className={cn(
-                            "prose prose-sm max-w-none pt-2 prose-headings:font-heading",
-                            plan.is_featured
-                              ? "prose-invert text-primary-foreground/80"
-                              : "text-secondary",
-                          )}
-                          dangerouslySetInnerHTML={{ __html: plan.details_html }}
-                        />
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                )}
-                {!plan.details_html && <div className="flex-1" />}
-                <Button asChild variant={plan.is_featured ? "secondary" : "default"}>
-                  <a href={plan.cta_url || phoneHref}>
-                    {plan.cta_label || "Contratar"}
-                  </a>
-                </Button>
+                  </div>
+
+                  {plan.description && (
+                    <p
+                      className={cn(
+                        "text-sm",
+                        plan.is_featured ? "text-primary-foreground/80" : "text-secondary",
+                      )}
+                    >
+                      {plan.description}
+                    </p>
+                  )}
+
+                  <ul className="grid gap-2 text-sm sm:grid-cols-2">
+                    {plan.benefits.map((benefit) => (
+                      <li key={benefit} className="flex items-center gap-2">
+                        <Check className="size-4 shrink-0 text-accent" /> {benefit}
+                      </li>
+                    ))}
+                  </ul>
+
+                  {plan.details_html && (
+                    <div
+                      className={cn(
+                        "prose prose-sm max-w-none border-t pt-6 prose-headings:font-heading",
+                        plan.is_featured
+                          ? "prose-invert border-primary-foreground/15 text-primary-foreground/80"
+                          : "border-border text-secondary",
+                      )}
+                      dangerouslySetInnerHTML={{ __html: plan.details_html }}
+                    />
+                  )}
+
+                  <Button asChild variant={plan.is_featured ? "secondary" : "default"}>
+                    <a href={plan.cta_url || phoneHref}>{plan.cta_label || "Contratar"}</a>
+                  </Button>
+                </div>
               </Reveal>
             ))}
           </div>
