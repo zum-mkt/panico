@@ -12,7 +12,6 @@ const institutionalLinks = [
   { label: "Obituários", to: "/obituarios" },
   { label: "Cemitério", to: "/cemiterio" },
   { label: "Coroas", to: "/coroas" },
-  { label: "Blog", to: "/blog" },
   { label: "Contato", to: "/contato" },
 ];
 

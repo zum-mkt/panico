@@ -44,8 +44,6 @@ const CemiterioAdmin = lazy(() =>
 const ClientesAdmin = lazy(() =>
   import("@/pages/admin/clientes/ClientesAdmin").then((m) => ({ default: m.ClientesAdmin })),
 );
-const Blog = lazy(() => import("@/pages/Blog").then((m) => ({ default: m.Blog })));
-const BlogPost = lazy(() => import("@/pages/BlogPost").then((m) => ({ default: m.BlogPost })));
 const BlogAdmin = lazy(() =>
   import("@/pages/admin/blog/BlogAdmin").then((m) => ({ default: m.BlogAdmin })),
 );
@@ -109,8 +107,6 @@ export function AppRoutes() {
           <Route path="/obituarios/:id" element={<ObituarioDetalhe />} />
           <Route path="/cemiterio" element={<CemiterioParque />} />
           <Route path="/coroas" element={<Coroas />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/contato" element={<Contato />} />
           {/* Catch-all do construtor de páginas — precisa ser a última rota pública. */}
           <Route path="/:slug" element={<DynamicPage />} />
