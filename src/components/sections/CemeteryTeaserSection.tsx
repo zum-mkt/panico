@@ -10,6 +10,7 @@ type CemeteryTeaserContent = {
   title: string;
   description: string;
   cta_label: string;
+  image_url?: string;
 };
 
 const FALLBACK: CemeteryTeaserContent = {
@@ -44,6 +45,17 @@ export function CemeteryTeaserSection() {
             <Link to="/cemiterio">{c.cta_label || "Conhecer o Cemitério Parque"}</Link>
           </Button>
         </div>
+        {c.image_url && (
+          <div className="overflow-hidden rounded-card">
+            <img
+              src={c.image_url}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              className="aspect-[4/3] w-full object-cover"
+            />
+          </div>
+        )}
       </Reveal>
     </section>
   );

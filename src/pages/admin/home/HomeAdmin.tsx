@@ -35,6 +35,7 @@ type CemeteryTeaserContent = {
   title: string;
   description: string;
   cta_label: string;
+  image_url: string;
 };
 
 type CtaContent = { title: string; description: string };
@@ -332,7 +333,9 @@ function CemiterioTab() {
     title: "",
     description: "",
     cta_label: "",
+    image_url: "",
   });
+  const [uploading, setUploading] = useState(false);
   useEffect(() => {
     if (data) setValues(data);
   }, [data]);
@@ -341,6 +344,17 @@ function CemiterioTab() {
     mutationFn: () => upsertSetting("home_cemetery_teaser", values),
     onSuccess: () => toast.success("Bloco do Cemitério salvo."),
   });
+
+  async function handleImage(file?: File) {
+    if (!file) return;
+    setUploading(true);
+    try {
+      const url = await uploadHeroImage(file);
+      setValues((p) => ({ ...p, image_url: url }));
+    } finally {
+      setUploading(false);
+    }
+  }
 
   return (
     <div className="max-w-xl space-y-4">
@@ -373,6 +387,14 @@ function CemiterioTab() {
           value={values.cta_label}
           onChange={(e) => setValues((p) => ({ ...p, cta_label: e.target.value }))}
         />
+      </div>
+      <div className="space-y-2">
+        <Label>Imagem</Label>
+        <Input type="file" accept="image/*" onChange={(e) => handleImage(e.target.files?.[0])} />
+        {uploading && <p className="text-sm text-secondary">Enviando…</p>}
+        {values.image_url && (
+          <img src={values.image_url} alt="" className="h-40 w-full rounded-card object-cover" />
+        )}
       </div>
       <SaveButton onClick={() => mutation.mutate()} pending={mutation.isPending} />
     </div>
