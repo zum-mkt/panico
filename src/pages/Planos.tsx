@@ -12,7 +12,7 @@ import { CTA } from "@/components/sections/CTA";
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
 import { resolveIcon } from "@/lib/iconMap";
-import { cn } from "@/lib/utils";
+import { cn, slugify } from "@/lib/utils";
 import {
   Accordion,
   AccordionContent,
@@ -142,9 +142,10 @@ export function Planos() {
             {plans.map((plan, i) => (
               <Reveal
                 key={plan.id}
+                id={`plano-${slugify(plan.title)}`}
                 delay={i * 0.08}
                 className={cn(
-                  "grid gap-8 rounded-card border p-8 sm:grid-cols-[auto_1fr] sm:items-start md:p-10",
+                  "scroll-mt-24 grid gap-8 rounded-card border p-8 sm:grid-cols-[auto_1fr] sm:items-start md:p-10",
                   plan.is_featured
                     ? "border-accent bg-primary text-primary-foreground"
                     : "border-border bg-card",
@@ -174,7 +175,7 @@ export function Planos() {
                   {plan.description && (
                     <p
                       className={cn(
-                        "text-sm",
+                        "text-sm leading-relaxed",
                         plan.is_featured ? "text-primary-foreground/80" : "text-secondary",
                       )}
                     >
@@ -191,15 +192,37 @@ export function Planos() {
                   </ul>
 
                   {plan.details_html && (
-                    <div
-                      className={cn(
-                        "prose prose-sm max-w-none border-t pt-6 prose-headings:font-heading",
-                        plan.is_featured
-                          ? "prose-invert border-primary-foreground/15 text-primary-foreground/80"
-                          : "border-border text-secondary",
-                      )}
-                      dangerouslySetInnerHTML={{ __html: plan.details_html }}
-                    />
+                    <Accordion type="single" collapsible className="border-t pt-2">
+                      <AccordionItem
+                        value="details"
+                        className={cn(
+                          "border-none",
+                          plan.is_featured ? "border-primary-foreground/15" : "border-border",
+                        )}
+                      >
+                        <AccordionTrigger
+                          className={cn(
+                            "text-sm hover:no-underline",
+                            plan.is_featured ? "text-primary-foreground" : "text-primary",
+                          )}
+                        >
+                          Ver detalhes completos
+                        </AccordionTrigger>
+                        <AccordionContent>
+                          <div
+                            className={cn(
+                              "prose prose-sm max-w-none pt-2",
+                              "prose-headings:font-heading prose-headings:text-base prose-headings:mb-2 prose-headings:mt-4 first:prose-headings:mt-0",
+                              "prose-p:my-0 prose-ul:my-2 prose-li:my-1 [&_li>p]:my-0",
+                              plan.is_featured
+                                ? "prose-invert text-primary-foreground/80"
+                                : "text-secondary",
+                            )}
+                            dangerouslySetInnerHTML={{ __html: plan.details_html }}
+                          />
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
                   )}
 
                   <Button asChild variant={plan.is_featured ? "secondary" : "default"}>

@@ -5,7 +5,7 @@ import { listActivePlans } from "@/services/homeService";
 import { SectionTitle } from "./SectionTitle";
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import { cn, slugify } from "@/lib/utils";
 
 const currency = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
@@ -61,7 +61,7 @@ export function PlansSection() {
               ))}
             </ul>
             <Button asChild variant={plan.is_featured ? "secondary" : "default"} className="w-full">
-              <Link to="/planos">Veja plano completo</Link>
+              <Link to={`/planos#plano-${slugify(plan.title)}`}>Veja plano completo</Link>
             </Button>
           </Reveal>
         ))}

@@ -32,6 +32,7 @@ export function Reveal({
   hover = false,
   className,
   style,
+  id,
 }: {
   children: ReactNode;
   as?: keyof typeof tags;
@@ -40,11 +41,13 @@ export function Reveal({
   hover?: boolean;
   className?: string;
   style?: CSSProperties;
+  id?: string;
 }) {
   const Component = tags[as];
 
   return (
     <Component
+      id={id}
       className={className}
       style={style}
       initial="hidden"

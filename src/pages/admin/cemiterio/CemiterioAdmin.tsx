@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { PageHeroTab } from "@/pages/admin/shared/PageHeroTab";
 
 function TextBlockTab({
   section,
@@ -283,8 +284,9 @@ export function CemiterioAdmin() {
         <p className="text-secondary">Todos os blocos da página são editáveis abaixo.</p>
       </div>
 
-      <Tabs defaultValue="history">
+      <Tabs defaultValue="hero">
         <TabsList>
+          <TabsTrigger value="hero">Hero</TabsTrigger>
           <TabsTrigger value="history">História</TabsTrigger>
           <TabsTrigger value="structure">Estrutura</TabsTrigger>
           <TabsTrigger value="gallery">Galeria</TabsTrigger>
@@ -293,6 +295,18 @@ export function CemiterioAdmin() {
           <TabsTrigger value="location">Localização</TabsTrigger>
           <TabsTrigger value="hours">Horários</TabsTrigger>
         </TabsList>
+        <TabsContent value="hero">
+          <PageHeroTab
+            settingsKey="cemiterio_hero"
+            defaults={{
+              eyebrow: "Cemitério Parque",
+              title: "Um espaço de paz e memória",
+              description: "",
+              image_url: "",
+              primary_label: "",
+            }}
+          />
+        </TabsContent>
         <TabsContent value="history">
           <TextBlockTab section="history" label="história" value={byKey.history as TextBlockContent} />
         </TabsContent>

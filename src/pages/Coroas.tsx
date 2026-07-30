@@ -2,9 +2,10 @@ import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Seo } from "@/components/seo/Seo";
 import { useSeoPage } from "@/hooks/useSeoPage";
+import { usePageHero } from "@/hooks/usePageHero";
 import { listPublicCrowns } from "@/services/crownsService";
 import { getSetting } from "@/services/homeService";
-import { SectionTitle } from "@/components/sections/SectionTitle";
+import { Hero } from "@/components/sections/Hero";
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -38,73 +39,82 @@ export function Coroas() {
     title: "Coroas de Flores",
     description: "Catálogo de coroas de flores da Funerária Paníco, com encomenda rápida pelo WhatsApp.",
   });
+  const { data: hero } = usePageHero("coroas_hero");
 
   return (
-    <main className="mx-auto max-w-6xl space-y-10 px-6 py-24">
+    <main>
       <Seo title={seo.title} description={seo.description} />
 
-      <SectionTitle eyebrow="Catálogo" title="Coroas de Flores" align="left" className="mx-0" />
+      <Hero
+        eyebrow={hero?.eyebrow || "Catálogo"}
+        title={hero?.title || "Coroas de Flores"}
+        description={hero?.description}
+        imageUrl={hero?.image_url || "/hero-placeholder.svg"}
+        primaryCta={hero?.primary_label ? { label: hero.primary_label, href: "#catalogo" } : undefined}
+      />
 
-      {categories.length > 0 && (
-        <Tabs value={category} onValueChange={setCategory}>
-          <TabsList>
-            <TabsTrigger value="todas">Todas</TabsTrigger>
-            {categories.map((cat) => (
-              <TabsTrigger key={cat} value={cat}>
-                {cat}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
-      )}
+      <div id="catalogo" className="mx-auto max-w-6xl space-y-10 px-6 py-24">
+        {categories.length > 0 && (
+          <Tabs value={category} onValueChange={setCategory}>
+            <TabsList>
+              <TabsTrigger value="todas">Todas</TabsTrigger>
+              {categories.map((cat) => (
+                <TabsTrigger key={cat} value={cat}>
+                  {cat}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </Tabs>
+        )}
 
-      {filtered.length === 0 ? (
-        <p className="text-secondary">Nenhuma coroa disponível no momento.</p>
-      ) : (
-        <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-          {filtered.map((crown, i) => (
-            <Reveal
-              key={crown.id}
-              delay={i * 0.05}
-              hover
-              className="flex flex-col overflow-hidden rounded-card border border-border bg-card"
-            >
-              {crown.photos[0] && (
-                <img
-                  src={crown.photos[0]}
-                  alt={crown.title}
-                  loading="lazy"
-                  decoding="async"
-                  className="aspect-square w-full object-cover"
-                />
-              )}
-              <div className="flex flex-1 flex-col gap-2 p-6">
-                <div className="flex items-start justify-between gap-2">
-                  <h3 className="font-heading text-lg text-primary">{crown.title}</h3>
-                  {!crown.is_available && <Badge variant="secondary">Indisponível</Badge>}
+        {filtered.length === 0 ? (
+          <p className="text-secondary">Nenhuma coroa disponível no momento.</p>
+        ) : (
+          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+            {filtered.map((crown, i) => (
+              <Reveal
+                key={crown.id}
+                delay={i * 0.05}
+                hover
+                className="flex flex-col overflow-hidden rounded-card border border-border bg-card"
+              >
+                {crown.photos[0] && (
+                  <img
+                    src={crown.photos[0]}
+                    alt={crown.title}
+                    loading="lazy"
+                    decoding="async"
+                    className="aspect-square w-full object-cover"
+                  />
+                )}
+                <div className="flex flex-1 flex-col gap-2 p-6">
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className="font-heading text-lg text-primary">{crown.title}</h3>
+                    {!crown.is_available && <Badge variant="secondary">Indisponível</Badge>}
+                  </div>
+                  {crown.description && (
+                    <p className="text-sm text-secondary">{crown.description}</p>
+                  )}
+                  {crown.price != null && (
+                    <p className="text-xl text-primary">{currency.format(crown.price)}</p>
+                  )}
+                  <Button asChild disabled={!crown.is_available} className="mt-auto">
+                    <a
+                      href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(
+                        `Olá! Gostaria de encomendar a coroa "${crown.title}".`,
+                      )}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      Encomendar
+                    </a>
+                  </Button>
                 </div>
-                {crown.description && (
-                  <p className="text-sm text-secondary">{crown.description}</p>
-                )}
-                {crown.price != null && (
-                  <p className="text-xl text-primary">{currency.format(crown.price)}</p>
-                )}
-                <Button asChild disabled={!crown.is_available} className="mt-auto">
-                  <a
-                    href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(
-                      `Olá! Gostaria de encomendar a coroa "${crown.title}".`,
-                    )}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Encomendar
-                  </a>
-                </Button>
-              </div>
-            </Reveal>
-          ))}
-        </div>
-      )}
+              </Reveal>
+            ))}
+          </div>
+        )}
+      </div>
     </main>
   );
 }

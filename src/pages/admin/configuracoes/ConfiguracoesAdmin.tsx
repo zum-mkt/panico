@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { PageHeroTab } from "@/pages/admin/shared/PageHeroTab";
 
 type SiteSettings = {
   logo_url?: string;
@@ -299,6 +300,7 @@ export function ConfiguracoesAdmin() {
         <TabsList>
           <TabsTrigger value="geral">Geral</TabsTrigger>
           <TabsTrigger value="unidades">Unidades</TabsTrigger>
+          <TabsTrigger value="contato_hero">Hero — Contato</TabsTrigger>
           <TabsTrigger value="tema">Cores e Fontes</TabsTrigger>
           <TabsTrigger value="scripts">Scripts globais</TabsTrigger>
         </TabsList>
@@ -307,6 +309,18 @@ export function ConfiguracoesAdmin() {
         </TabsContent>
         <TabsContent value="unidades">
           <UnidadesTab />
+        </TabsContent>
+        <TabsContent value="contato_hero">
+          <PageHeroTab
+            settingsKey="contato_hero"
+            defaults={{
+              eyebrow: "Fale conosco",
+              title: "Contato",
+              description: "",
+              image_url: "",
+              primary_label: "",
+            }}
+          />
         </TabsContent>
         <TabsContent value="tema">
           <TemaTab />

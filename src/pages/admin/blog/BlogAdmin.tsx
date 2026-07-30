@@ -15,6 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PageHeroTab } from "@/pages/admin/shared/PageHeroTab";
 import { PostForm, type PostFormValues } from "./PostForm";
 
 function toPayload(
@@ -87,62 +89,83 @@ export function BlogAdmin() {
 
   return (
     <div className="space-y-6 p-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-heading text-2xl text-primary">Blog</h1>
-          <p className="text-secondary">Gerencie os artigos publicados no site.</p>
-        </div>
-        <Button onClick={openCreate}>
-          <Plus className="size-4" /> Novo artigo
-        </Button>
+      <div>
+        <h1 className="font-heading text-2xl text-primary">Blog</h1>
+        <p className="text-secondary">Gerencie os artigos publicados no site.</p>
       </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Título</TableHead>
-            <TableHead>Categoria</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right">Ações</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {(posts ?? []).map((post) => (
-            <TableRow key={post.id}>
-              <TableCell>{post.title}</TableCell>
-              <TableCell>{post.category || "—"}</TableCell>
-              <TableCell>
-                <Badge variant={post.status === "published" ? "default" : "secondary"}>
-                  {post.status === "published" ? "Publicado" : "Rascunho"}
-                </Badge>
-              </TableCell>
-              <TableCell className="flex justify-end gap-2">
-                <Button size="icon-sm" variant="ghost" onClick={() => openEdit(post)}>
-                  <Pencil className="size-4" />
-                </Button>
-                <Button
-                  size="icon-sm"
-                  variant="ghost"
-                  onClick={() => {
-                    if (confirm(`Remover "${post.title}"?`)) deleteMutation.mutate(post.id);
-                  }}
-                >
-                  <Trash2 className="size-4" />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <Tabs defaultValue="lista">
+        <TabsList>
+          <TabsTrigger value="lista">Artigos</TabsTrigger>
+          <TabsTrigger value="hero">Hero da página</TabsTrigger>
+        </TabsList>
+        <TabsContent value="hero">
+          <PageHeroTab
+            settingsKey="blog_hero"
+            defaults={{
+              eyebrow: "Blog",
+              title: "Conteúdos para acolher e informar",
+              description: "",
+              image_url: "",
+              primary_label: "",
+            }}
+          />
+        </TabsContent>
+        <TabsContent value="lista" className="space-y-6">
+          <div className="flex justify-end">
+            <Button onClick={openCreate}>
+              <Plus className="size-4" /> Novo artigo
+            </Button>
+          </div>
 
-      <PostForm
-        key={editing?.id ?? "new"}
-        open={formOpen}
-        onOpenChange={setFormOpen}
-        post={editing}
-        submitting={createMutation.isPending || updateMutation.isPending}
-        onSubmit={(values) => (editing ? updateMutation.mutate(values) : createMutation.mutate(values))}
-      />
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Título</TableHead>
+                <TableHead>Categoria</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-right">Ações</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {(posts ?? []).map((post) => (
+                <TableRow key={post.id}>
+                  <TableCell>{post.title}</TableCell>
+                  <TableCell>{post.category || "—"}</TableCell>
+                  <TableCell>
+                    <Badge variant={post.status === "published" ? "default" : "secondary"}>
+                      {post.status === "published" ? "Publicado" : "Rascunho"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="flex justify-end gap-2">
+                    <Button size="icon-sm" variant="ghost" onClick={() => openEdit(post)}>
+                      <Pencil className="size-4" />
+                    </Button>
+                    <Button
+                      size="icon-sm"
+                      variant="ghost"
+                      onClick={() => {
+                        if (confirm(`Remover "${post.title}"?`)) deleteMutation.mutate(post.id);
+                      }}
+                    >
+                      <Trash2 className="size-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+
+          <PostForm
+            key={editing?.id ?? "new"}
+            open={formOpen}
+            onOpenChange={setFormOpen}
+            post={editing}
+            submitting={createMutation.isPending || updateMutation.isPending}
+            onSubmit={(values) => (editing ? updateMutation.mutate(values) : createMutation.mutate(values))}
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

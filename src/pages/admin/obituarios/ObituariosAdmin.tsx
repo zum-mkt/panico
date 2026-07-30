@@ -15,6 +15,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PageHeroTab } from "@/pages/admin/shared/PageHeroTab";
 import { ObituarioForm, type ObituaryFormValues } from "./ObituarioForm";
 
 const dateFormatter = new Intl.DateTimeFormat("pt-BR", { dateStyle: "long" });
@@ -92,80 +94,100 @@ export function ObituariosAdmin() {
 
   return (
     <div className="space-y-6 p-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="font-heading text-2xl text-primary">Obituários</h1>
-          <p className="text-secondary">Gerencie os avisos de falecimento do site.</p>
-        </div>
-        <Button onClick={openCreate}>
-          <Plus className="size-4" /> Novo obituário
-        </Button>
+      <div>
+        <h1 className="font-heading text-2xl text-primary">Obituários</h1>
+        <p className="text-secondary">Gerencie os avisos de falecimento do site.</p>
       </div>
 
-      <div className="flex gap-3">
-        <Input
-          placeholder="Buscar por nome…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="max-w-xs"
-        />
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
-          className="h-8 rounded-md border border-input bg-transparent px-2 text-sm"
-        >
-          <option value="all">Todos os status</option>
-          <option value="draft">Rascunho</option>
-          <option value="published">Publicado</option>
-        </select>
-      </div>
+      <Tabs defaultValue="lista">
+        <TabsList>
+          <TabsTrigger value="lista">Obituários</TabsTrigger>
+          <TabsTrigger value="hero">Hero da página</TabsTrigger>
+        </TabsList>
+        <TabsContent value="hero">
+          <PageHeroTab
+            settingsKey="obituarios_hero"
+            defaults={{
+              eyebrow: "Homenagens",
+              title: "Obituários",
+              description: "",
+              image_url: "",
+              primary_label: "",
+            }}
+          />
+        </TabsContent>
+        <TabsContent value="lista" className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="flex gap-3">
+              <Input
+                placeholder="Buscar por nome…"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="max-w-xs"
+              />
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
+                className="h-8 rounded-md border border-input bg-transparent px-2 text-sm"
+              >
+                <option value="all">Todos os status</option>
+                <option value="draft">Rascunho</option>
+                <option value="published">Publicado</option>
+              </select>
+            </div>
+            <Button onClick={openCreate}>
+              <Plus className="size-4" /> Novo obituário
+            </Button>
+          </div>
 
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Nome</TableHead>
-            <TableHead>Falecimento</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead className="text-right">Ações</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {filtered.map((o) => (
-            <TableRow key={o.id}>
-              <TableCell>{o.name}</TableCell>
-              <TableCell>{dateFormatter.format(new Date(o.deceased_at))}</TableCell>
-              <TableCell>
-                <Badge variant={o.status === "published" ? "default" : "secondary"}>
-                  {o.status === "published" ? "Publicado" : "Rascunho"}
-                </Badge>
-              </TableCell>
-              <TableCell className="flex justify-end gap-2">
-                <Button size="icon-sm" variant="ghost" onClick={() => openEdit(o)}>
-                  <Pencil className="size-4" />
-                </Button>
-                <Button
-                  size="icon-sm"
-                  variant="ghost"
-                  onClick={() => {
-                    if (confirm(`Remover "${o.name}"?`)) deleteMutation.mutate(o.id);
-                  }}
-                >
-                  <Trash2 className="size-4" />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Nome</TableHead>
+                <TableHead>Falecimento</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-right">Ações</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {filtered.map((o) => (
+                <TableRow key={o.id}>
+                  <TableCell>{o.name}</TableCell>
+                  <TableCell>{dateFormatter.format(new Date(o.deceased_at))}</TableCell>
+                  <TableCell>
+                    <Badge variant={o.status === "published" ? "default" : "secondary"}>
+                      {o.status === "published" ? "Publicado" : "Rascunho"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="flex justify-end gap-2">
+                    <Button size="icon-sm" variant="ghost" onClick={() => openEdit(o)}>
+                      <Pencil className="size-4" />
+                    </Button>
+                    <Button
+                      size="icon-sm"
+                      variant="ghost"
+                      onClick={() => {
+                        if (confirm(`Remover "${o.name}"?`)) deleteMutation.mutate(o.id);
+                      }}
+                    >
+                      <Trash2 className="size-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
 
-      <ObituarioForm
-        key={editing?.id ?? "new"}
-        open={formOpen}
-        onOpenChange={setFormOpen}
-        obituary={editing}
-        submitting={createMutation.isPending || updateMutation.isPending}
-        onSubmit={(values) => (editing ? updateMutation.mutate(values) : createMutation.mutate(values))}
-      />
+          <ObituarioForm
+            key={editing?.id ?? "new"}
+            open={formOpen}
+            onOpenChange={setFormOpen}
+            obituary={editing}
+            submitting={createMutation.isPending || updateMutation.isPending}
+            onSubmit={(values) => (editing ? updateMutation.mutate(values) : createMutation.mutate(values))}
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

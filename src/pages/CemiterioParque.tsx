@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Seo } from "@/components/seo/Seo";
 import { useSeoPage } from "@/hooks/useSeoPage";
+import { usePageHero } from "@/hooks/usePageHero";
+import { Hero } from "@/components/sections/Hero";
 import { Clock, MapPin } from "lucide-react";
 import {
   listActiveCemeterySections,
@@ -53,14 +55,19 @@ export function CemiterioParque() {
     title: "Cemitério Parque",
     description: "Conheça o Cemitério Parque Paníco: estrutura, galeria, localização e horários de funcionamento.",
   });
+  const { data: hero } = usePageHero("cemiterio_hero");
 
   return (
-    <main className="space-y-20 py-20">
+    <main className="space-y-20 pb-20">
       <Seo title={seo.title} description={seo.description} />
 
-      <div className="mx-auto max-w-3xl px-6 text-center">
-        <SectionTitle eyebrow="Cemitério Parque" title="Um espaço de paz e memória" />
-      </div>
+      <Hero
+        eyebrow={hero?.eyebrow || "Cemitério Parque"}
+        title={hero?.title || "Um espaço de paz e memória"}
+        description={hero?.description}
+        imageUrl={hero?.image_url || "/hero-placeholder.svg"}
+        primaryCta={hero?.primary_label ? { label: hero.primary_label, href: "#localizacao" } : undefined}
+      />
 
       {history?.text && (
         <section className="mx-auto grid max-w-6xl items-center gap-8 px-6 md:grid-cols-2">
