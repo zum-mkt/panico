@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useDropzone } from "react-dropzone";
 import { Plus, X } from "lucide-react";
@@ -39,6 +39,56 @@ function ImageField({
       <Input type="file" accept="image/*" onChange={handle} />
       {uploading && <p className="text-sm text-secondary">Enviando…</p>}
       {value && <img src={value} alt="" className="h-20 rounded-md object-cover" />}
+    </div>
+  );
+}
+
+function GalleryField({
+  images,
+  onChange,
+}: {
+  images: string[];
+  onChange: (images: string[]) => void;
+}) {
+  // Espelha a prop num ref e já atualiza o ref no próprio onDrop, antes do
+  // upload seguinte terminar — sem isso, dois uploads em sequência rápida
+  // liam a mesma lista desatualizada e o segundo sobrescrevia o primeiro.
+  const imagesRef = useRef(images);
+  imagesRef.current = images;
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    accept: { "image/*": [] },
+    onDrop: async (files) => {
+      const urls = await Promise.all(files.map(uploadPageImage));
+      const next = [...imagesRef.current, ...urls];
+      imagesRef.current = next;
+      onChange(next);
+    },
+  });
+
+  return (
+    <div className="space-y-3">
+      <div
+        {...getRootProps()}
+        className="cursor-pointer rounded-md border border-dashed border-input p-4 text-center text-sm text-secondary"
+      >
+        <input {...getInputProps()} />
+        {isDragActive ? "Solte as imagens…" : "Clique ou arraste imagens (galeria)"}
+      </div>
+      <div className="flex flex-wrap gap-2">
+        {images.map((url) => (
+          <div key={url} className="relative">
+            <img src={url} alt="" className="size-16 rounded-md object-cover" />
+            <button
+              type="button"
+              onClick={() => onChange(images.filter((u) => u !== url))}
+              className="absolute -top-1 -right-1 rounded-full bg-destructive p-0.5 text-destructive-foreground"
+            >
+              <X className="size-3" />
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -100,14 +150,6 @@ export function BlockFields({
   onChange: (content: Content) => void;
 }) {
   const set = (patch: Content) => onChange({ ...content, ...patch });
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
-    accept: { "image/*": [] },
-    onDrop: async (files) => {
-      const urls = await Promise.all(files.map(uploadPageImage));
-      set({ images: [...((content.images as string[]) ?? []), ...urls] });
-    },
-  });
 
   const { data: forms } = useQuery({
     queryKey: ["admin", "forms"],
@@ -204,32 +246,16 @@ export function BlockFields({
         </div>
       );
 
-    case "gallery": {
-      const images = (content.images as string[]) ?? [];
+    case "gallery":
       return (
         <div className="space-y-3">
           <Input placeholder="Título da seção" value={(content.title as string) ?? ""} onChange={(e) => set({ title: e.target.value })} />
-          <div {...getRootProps()} className="cursor-pointer rounded-md border border-dashed border-input p-4 text-center text-sm text-secondary">
-            <input {...getInputProps()} />
-            {isDragActive ? "Solte as imagens…" : "Clique ou arraste imagens (galeria)"}
-          </div>
-          <div className="flex flex-wrap gap-2">
-            {images.map((url) => (
-              <div key={url} className="relative">
-                <img src={url} alt="" className="size-16 rounded-md object-cover" />
-                <button
-                  type="button"
-                  onClick={() => set({ images: images.filter((u) => u !== url) })}
-                  className="absolute -top-1 -right-1 rounded-full bg-destructive p-0.5 text-destructive-foreground"
-                >
-                  <X className="size-3" />
-                </button>
-              </div>
-            ))}
-          </div>
+          <GalleryField
+            images={(content.images as string[]) ?? []}
+            onChange={(images) => set({ images })}
+          />
         </div>
       );
-    }
 
     case "video":
       return (
