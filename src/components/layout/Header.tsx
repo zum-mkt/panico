@@ -51,7 +51,7 @@ export function Header() {
         <Link to="/" className="flex items-center font-heading text-xl text-primary">
           {site?.logo_url ? (
             <span className="flex items-center rounded-lg bg-white px-3 py-1.5">
-              <img src={site.logo_url} alt="Paníco" className="h-11 w-auto object-contain" />
+              <img src={site.logo_url} alt="Paníco" className="h-16 w-auto object-contain" />
             </span>
           ) : (
             <span className="text-primary-foreground">Paníco</span>
