@@ -23,6 +23,26 @@ function youtubeEmbedUrl(url?: string) {
   return match ? `https://www.youtube.com/embed/${match[1]}` : url;
 }
 
+/**
+ * Conteúdo colado de Word/Google Docs às vezes gera listas quebradas em
+ * múltiplos <ul>/<ol> adjacentes (mesmo item, sem cabeçalho entre eles),
+ * o que atrapalha o layout em colunas. Mescla listas irmãs do mesmo tipo.
+ */
+function mergeAdjacentLists(html: string): string {
+  if (typeof window === "undefined") return html;
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  const body = doc.body;
+  for (let i = body.children.length - 1; i > 0; i--) {
+    const curr = body.children[i];
+    const prev = body.children[i - 1];
+    if ((curr.tagName === "UL" || curr.tagName === "OL") && curr.tagName === prev.tagName) {
+      while (curr.firstChild) prev.appendChild(curr.firstChild);
+      curr.remove();
+    }
+  }
+  return body.innerHTML;
+}
+
 function Block({ section }: { section: PageSection }) {
   const c = section.content as Record<string, string>;
 
@@ -46,8 +66,8 @@ function Block({ section }: { section: PageSection }) {
           {c.body && (
             <Reveal>
               <div
-                className="prose prose-lg max-w-none text-justify leading-relaxed text-foreground prose-headings:font-heading prose-headings:text-primary prose-p:mb-6 prose-p:last:mb-0 [hyphens:auto]"
-                dangerouslySetInnerHTML={{ __html: c.body }}
+                className="prose prose-lg max-w-none text-justify leading-relaxed text-foreground prose-headings:font-heading prose-headings:text-primary prose-h5:mt-6 prose-h5:mb-0 prose-p:mb-6 prose-p:last:mb-0 prose-strong:text-primary prose-ul:my-4 prose-ul:columns-1 prose-ul:gap-x-8 sm:prose-ul:columns-2 prose-li:my-1 prose-li:break-inside-avoid [hyphens:auto]"
+                dangerouslySetInnerHTML={{ __html: mergeAdjacentLists(c.body) }}
               />
             </Reveal>
           )}
