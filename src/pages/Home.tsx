@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getSetting } from "@/services/homeService";
 import { Seo } from "@/components/seo/Seo";
 import { useSeoPage } from "@/hooks/useSeoPage";
-import { Hero } from "@/components/sections/Hero";
+import { HomeHero } from "@/components/sections/HomeHero";
 import { BannerDisplay } from "@/components/sections/BannerDisplay";
 import { ShortcutsBar } from "@/components/sections/ShortcutsBar";
 import { ServicesSection } from "@/components/sections/ServicesSection";
@@ -61,7 +61,7 @@ export function Home() {
   return (
     <main>
       <Seo title={seo.title} description={seo.description} />
-      <Hero
+      <HomeHero
         eyebrow={h.eyebrow}
         title={h.title}
         description={h.description}

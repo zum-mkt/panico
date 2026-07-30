@@ -22,10 +22,11 @@ export function ObituariesSection() {
       <div className="mx-auto max-w-6xl space-y-10 rounded-4xl border border-border bg-gradient-to-b from-primary/[0.04] to-transparent px-6 py-14 md:px-12">
         <Reveal className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
           <div className="space-y-3">
-            <span className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1 text-sm font-medium tracking-wide text-accent">
+            <p className="flex items-center gap-2 text-sm font-medium tracking-wide text-accent uppercase">
               <Flame className="size-3.5" />
-              Obituários
-            </span>
+              Últimas homenagens
+            </p>
+            <h2 className="font-heading text-3xl text-primary md:text-4xl">Obituários</h2>
             <p className="max-w-md text-sm text-secondary">
               Prestamos nossas homenagens às famílias que confiaram seu cuidado a nós.
             </p>
