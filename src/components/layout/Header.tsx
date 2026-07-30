@@ -58,12 +58,12 @@ export function Header() {
           )}
         </Link>
 
-        <nav className="hidden gap-6 md:flex">
+        <nav className="hidden items-center gap-4 xl:flex">
           {links.map((link) => (
             <Link
               key={link.to}
               to={link.to}
-              className="text-sm text-primary-foreground/75 transition-colors hover:text-primary-foreground"
+              className="text-sm whitespace-nowrap text-primary-foreground/75 transition-colors hover:text-primary-foreground"
             >
               {link.label}
             </Link>
@@ -83,7 +83,7 @@ export function Header() {
             onClick={() => setMobileOpen((v) => !v)}
             aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
             aria-expanded={mobileOpen}
-            className="flex size-9 items-center justify-center rounded-full text-primary-foreground md:hidden"
+            className="flex size-9 items-center justify-center rounded-full text-primary-foreground xl:hidden"
           >
             {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
@@ -97,7 +97,7 @@ export function Header() {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="overflow-hidden bg-background md:hidden"
+            className="overflow-hidden bg-background xl:hidden"
           >
             <div className="flex flex-col gap-1 px-6 pb-6">
               {links.map((link) => (
