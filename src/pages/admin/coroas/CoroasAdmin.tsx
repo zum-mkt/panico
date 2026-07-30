@@ -92,6 +92,7 @@ export function CoroasAdmin() {
               description: "",
               image_url: "",
               primary_label: "",
+              primary_href: "",
             }}
           />
         </TabsContent>

@@ -113,6 +113,7 @@ export function ObituariosAdmin() {
               description: "",
               image_url: "",
               primary_label: "",
+              primary_href: "",
             }}
           />
         </TabsContent>

@@ -81,6 +81,15 @@ export function PageHeroTab({
           onChange={(e) => setValues((p) => ({ ...p, primary_label: e.target.value }))}
         />
       </div>
+      <div className="space-y-2">
+        <Label>Link do botão</Label>
+        <Input
+          type="url"
+          placeholder="https://instagram.com/..."
+          value={values.primary_href ?? ""}
+          onChange={(e) => setValues((p) => ({ ...p, primary_href: e.target.value }))}
+        />
+      </div>
       <Button onClick={() => mutation.mutate()} disabled={mutation.isPending}>
         {mutation.isPending ? "Salvando…" : "Salvar"}
       </Button>

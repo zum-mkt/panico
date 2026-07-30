@@ -45,7 +45,15 @@ export function Blog() {
         title={hero?.title || "Conteúdos para acolher e informar"}
         description={hero?.description}
         imageUrl={hero?.image_url || "/hero-placeholder.svg"}
-        primaryCta={hero?.primary_label ? { label: hero.primary_label, href: "#artigos" } : undefined}
+        primaryCta={
+          hero?.primary_label
+            ? {
+                label: hero.primary_label,
+                href: hero.primary_href || "#artigos",
+                external: /^https?:\/\//.test(hero.primary_href || ""),
+              }
+            : undefined
+        }
       />
 
       <div id="artigos" className="mx-auto max-w-6xl space-y-10 px-6 py-24">

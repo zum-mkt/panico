@@ -7,6 +7,7 @@ export type PageHeroContent = {
   description?: string;
   image_url?: string;
   primary_label?: string;
+  primary_href?: string;
 };
 
 /** Hero de uma página interna, editável em /admin via chave de settings. */

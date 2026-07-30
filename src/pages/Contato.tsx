@@ -21,7 +21,15 @@ export function Contato() {
         title={hero?.title || "Contato"}
         description={hero?.description}
         imageUrl={hero?.image_url || "/hero-placeholder.svg"}
-        primaryCta={hero?.primary_label ? { label: hero.primary_label, href: "#formulario" } : undefined}
+        primaryCta={
+          hero?.primary_label
+            ? {
+                label: hero.primary_label,
+                href: hero.primary_href || "#formulario",
+                external: /^https?:\/\//.test(hero.primary_href || ""),
+              }
+            : undefined
+        }
       />
 
       <div id="formulario" className="mx-auto max-w-xl space-y-10 px-6 py-24">

@@ -50,7 +50,15 @@ export function Coroas() {
         title={hero?.title || "Coroas de Flores"}
         description={hero?.description}
         imageUrl={hero?.image_url || "/hero-placeholder.svg"}
-        primaryCta={hero?.primary_label ? { label: hero.primary_label, href: "#catalogo" } : undefined}
+        primaryCta={
+          hero?.primary_label
+            ? {
+                label: hero.primary_label,
+                href: hero.primary_href || "#catalogo",
+                external: /^https?:\/\//.test(hero.primary_href || ""),
+              }
+            : undefined
+        }
       />
 
       <div id="catalogo" className="mx-auto max-w-6xl space-y-10 px-6 py-24">

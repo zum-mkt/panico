@@ -69,7 +69,15 @@ export function CemiterioParque() {
         title={hero?.title || "Um espaço de paz e memória"}
         description={hero?.description}
         imageUrl={hero?.image_url || "/hero-placeholder.svg"}
-        primaryCta={hero?.primary_label ? { label: hero.primary_label, href: "#localizacao" } : undefined}
+        primaryCta={
+          hero?.primary_label
+            ? {
+                label: hero.primary_label,
+                href: hero.primary_href || "#localizacao",
+                external: /^https?:\/\//.test(hero.primary_href || ""),
+              }
+            : undefined
+        }
       />
 
       {history?.text && (

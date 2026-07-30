@@ -108,6 +108,7 @@ export function BlogAdmin() {
               description: "",
               image_url: "",
               primary_label: "",
+              primary_href: "",
             }}
           />
         </TabsContent>
