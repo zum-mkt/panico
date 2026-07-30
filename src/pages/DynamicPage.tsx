@@ -132,24 +132,26 @@ function Block({ section }: { section: PageSection }) {
         <section className="mx-auto max-w-6xl space-y-10 px-6 py-16">
           {c.title && <SectionTitle title={c.title} />}
           {hasLinks ? (
-            <div className="flex flex-wrap items-center justify-center gap-8">
+            <div className="flex flex-wrap items-center justify-center gap-6">
               {images.map((src, i) => {
                 const link = links[i];
-                const image = (
-                  <img
-                    src={src}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                    className="w-40 rounded-card object-contain transition-transform duration-300 hover:scale-105"
-                  />
+                const box = (
+                  <div className="flex size-48 items-center justify-center rounded-card border border-border bg-card p-6 shadow-sm transition-transform duration-300 hover:scale-105">
+                    <img
+                      src={src}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  </div>
                 );
                 return link ? (
                   <a key={src} href={link} target="_blank" rel="noreferrer">
-                    {image}
+                    {box}
                   </a>
                 ) : (
-                  <span key={src}>{image}</span>
+                  <span key={src}>{box}</span>
                 );
               })}
             </div>
