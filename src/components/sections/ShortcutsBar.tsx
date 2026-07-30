@@ -9,11 +9,7 @@ type ShortcutItem = { label: string; href: string; icon: string };
 const FALLBACK_SHORTCUTS: ShortcutItem[] = [
   { label: "Obituários", href: "/obituarios", icon: "HeartHandshake" },
   { label: "Atendimento 24h", href: "tel:+551140000000", icon: "Phone" },
-  {
-    label: "Segunda Via",
-    href: "https://apps.mssistemas.com.br/areacliente.php/login/?codigo=814",
-    icon: "IdCard",
-  },
+  { label: "Área do Cliente", href: "/area-do-cliente", icon: "IdCard" },
   { label: "Planos", href: "/planos", icon: "ClipboardList" },
   { label: "Coroas", href: "/coroas", icon: "Flower2" },
   { label: "Localização", href: "#localizacao", icon: "MapPin" },
