@@ -45,10 +45,12 @@ function ImageField({
 
 function GalleryField({
   images,
+  links,
   onChange,
 }: {
   images: string[];
-  onChange: (images: string[]) => void;
+  links: string[];
+  onChange: (images: string[], links: string[]) => void;
 }) {
   // Espelha a prop num ref e já atualiza o ref no próprio onDrop, antes do
   // upload seguinte terminar — sem isso, dois uploads em sequência rápida
@@ -62,9 +64,22 @@ function GalleryField({
       const urls = await Promise.all(files.map(uploadPageImage));
       const next = [...imagesRef.current, ...urls];
       imagesRef.current = next;
-      onChange(next);
+      onChange(next, links);
     },
   });
+
+  function removeAt(index: number) {
+    onChange(
+      images.filter((_, i) => i !== index),
+      links.filter((_, i) => i !== index),
+    );
+  }
+
+  function setLinkAt(index: number, value: string) {
+    const next = [...links];
+    next[index] = value;
+    onChange(images, next);
+  }
 
   return (
     <div className="space-y-3">
@@ -75,17 +90,25 @@ function GalleryField({
         <input {...getInputProps()} />
         {isDragActive ? "Solte as imagens…" : "Clique ou arraste imagens (galeria)"}
       </div>
-      <div className="flex flex-wrap gap-2">
-        {images.map((url) => (
-          <div key={url} className="relative">
-            <img src={url} alt="" className="size-16 rounded-md object-cover" />
-            <button
-              type="button"
-              onClick={() => onChange(images.filter((u) => u !== url))}
-              className="absolute -top-1 -right-1 rounded-full bg-destructive p-0.5 text-destructive-foreground"
-            >
-              <X className="size-3" />
-            </button>
+      <div className="flex flex-wrap gap-4">
+        {images.map((url, i) => (
+          <div key={url} className="w-32 space-y-1">
+            <div className="relative">
+              <img src={url} alt="" className="size-32 rounded-md object-cover" />
+              <button
+                type="button"
+                onClick={() => removeAt(i)}
+                className="absolute -top-1 -right-1 rounded-full bg-destructive p-0.5 text-destructive-foreground"
+              >
+                <X className="size-3" />
+              </button>
+            </div>
+            <Input
+              placeholder="Link (opcional)"
+              value={links[i] ?? ""}
+              onChange={(e) => setLinkAt(i, e.target.value)}
+              className="h-7 text-xs"
+            />
           </div>
         ))}
       </div>
@@ -252,7 +275,8 @@ export function BlockFields({
           <Input placeholder="Título da seção" value={(content.title as string) ?? ""} onChange={(e) => set({ title: e.target.value })} />
           <GalleryField
             images={(content.images as string[]) ?? []}
-            onChange={(images) => set({ images })}
+            links={(content.links as string[]) ?? []}
+            onChange={(images, links) => set({ images, links })}
           />
         </div>
       );

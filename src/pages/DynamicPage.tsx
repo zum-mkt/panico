@@ -126,10 +126,36 @@ function Block({ section }: { section: PageSection }) {
 
     case "gallery": {
       const images = (section.content.images as string[]) ?? [];
+      const links = (section.content.links as string[]) ?? [];
+      const hasLinks = links.some(Boolean);
       return (
         <section className="mx-auto max-w-6xl space-y-10 px-6 py-16">
           {c.title && <SectionTitle title={c.title} />}
-          <Gallery images={images.map((src) => ({ src, alt: "" }))} />
+          {hasLinks ? (
+            <div className="flex flex-wrap items-center justify-center gap-8">
+              {images.map((src, i) => {
+                const link = links[i];
+                const image = (
+                  <img
+                    src={src}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    className="w-40 rounded-card object-contain transition-transform duration-300 hover:scale-105"
+                  />
+                );
+                return link ? (
+                  <a key={src} href={link} target="_blank" rel="noreferrer">
+                    {image}
+                  </a>
+                ) : (
+                  <span key={src}>{image}</span>
+                );
+              })}
+            </div>
+          ) : (
+            <Gallery images={images.map((src) => ({ src, alt: "" }))} />
+          )}
         </section>
       );
     }
