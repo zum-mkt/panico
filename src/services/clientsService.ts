@@ -5,29 +5,6 @@ import type { Client, ClientDependent, ClientDocument, ClientHistoryEntry } from
 export const clientsCrud = createCrudService<Client>("clients");
 export const dependentsCrud = createCrudService<ClientDependent>("client_dependents");
 
-/**
- * Cria a conta de autenticação. Se o projeto exigir confirmação por
- * e-mail, ainda não há sessão neste momento — o perfil em
- * `public.clients` só pode ser criado depois, com o usuário já
- * autenticado (ver `createOwnClientProfile`), porque a policy de RLS
- * de insert exige auth.uid() = id.
- */
-export async function signUpClient(email: string, password: string) {
-  const { data, error } = await supabase.auth.signUp({ email, password });
-  if (error) throw error;
-  return { hasSession: !!data.session };
-}
-
-export async function createOwnClientProfile(userId: string, email: string, name: string) {
-  const { error } = await supabase.from("clients").insert({ id: userId, name, email });
-  if (error) throw error;
-}
-
-export async function getOwnClient(userId: string): Promise<Client | null> {
-  const { data } = await supabase.from("clients").select("*").eq("id", userId).maybeSingle();
-  return data;
-}
-
 export async function listOwnDependents(clientId: string): Promise<ClientDependent[]> {
   const { data, error } = await supabase
     .from("client_dependents")

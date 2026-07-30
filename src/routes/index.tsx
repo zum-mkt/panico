@@ -3,7 +3,6 @@ import { Route, Routes } from "react-router-dom";
 import { PublicLayout } from "@/components/layout/PublicLayout";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
-import { ProtectedClientRoute } from "@/components/auth/ProtectedClientRoute";
 
 // Lazy loading nas páginas — ver 01-ARQUITETURA_DO_PROJETO.md > Regras.
 const Home = lazy(() => import("@/pages/Home").then((m) => ({ default: m.Home })));
@@ -41,12 +40,6 @@ const CemiterioParque = lazy(() =>
 );
 const CemiterioAdmin = lazy(() =>
   import("@/pages/admin/cemiterio/CemiterioAdmin").then((m) => ({ default: m.CemiterioAdmin })),
-);
-const ClienteLogin = lazy(() =>
-  import("@/pages/area-cliente/ClienteLogin").then((m) => ({ default: m.ClienteLogin })),
-);
-const ClienteDashboard = lazy(() =>
-  import("@/pages/area-cliente/ClienteDashboard").then((m) => ({ default: m.ClienteDashboard })),
 );
 const ClientesAdmin = lazy(() =>
   import("@/pages/admin/clientes/ClientesAdmin").then((m) => ({ default: m.ClientesAdmin })),
@@ -119,15 +112,6 @@ export function AppRoutes() {
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
           <Route path="/contato" element={<Contato />} />
-          <Route path="/area-do-cliente/login" element={<ClienteLogin />} />
-          <Route
-            path="/area-do-cliente"
-            element={
-              <ProtectedClientRoute>
-                <ClienteDashboard />
-              </ProtectedClientRoute>
-            }
-          />
           {/* Catch-all do construtor de páginas — precisa ser a última rota pública. */}
           <Route path="/:slug" element={<DynamicPage />} />
         </Route>

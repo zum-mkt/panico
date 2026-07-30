@@ -6,7 +6,6 @@ import { HelmetProvider } from "react-helmet-async";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { ClientAuthProvider } from "@/contexts/ClientAuthContext";
 import "./index.css";
 import App from "./App.tsx";
 
@@ -19,10 +18,8 @@ createRoot(document.getElementById("root")!).render(
         <QueryClientProvider client={queryClient}>
           <BrowserRouter>
             <AuthProvider>
-              <ClientAuthProvider>
-                <App />
-                <Toaster />
-              </ClientAuthProvider>
+              <App />
+              <Toaster />
             </AuthProvider>
           </BrowserRouter>
         </QueryClientProvider>

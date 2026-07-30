@@ -6,7 +6,6 @@ import { Phone, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getSetting } from "@/services/homeService";
 import { listMenuPages } from "@/services/pagesService";
-import { cn } from "@/lib/utils";
 
 const institutionalLinks = [
   { label: "Planos", to: "/planos" },
@@ -20,10 +19,8 @@ const institutionalLinks = [
 type SiteSettings = { phone?: string; logo_url?: string };
 
 export function Header() {
-  const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const isHome = location.pathname === "/";
   const { data: site } = useQuery({
     queryKey: ["settings", "site"],
     queryFn: () => getSetting<SiteSettings>("site"),
@@ -42,13 +39,6 @@ export function Header() {
   ];
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 16);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
     setMobileOpen(false);
   }, [location.pathname]);
 
@@ -56,29 +46,15 @@ export function Header() {
   const phoneHref = `tel:+55${phone.replace(/\D/g, "")}`;
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-colors",
-        isHome
-          ? "bg-primary shadow-sm"
-          : scrolled
-            ? "bg-background/95 shadow-sm backdrop-blur"
-            : "bg-transparent",
-      )}
-    >
+    <header className="fixed inset-x-0 top-0 z-50 bg-primary shadow-sm">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link to="/" className="flex items-center font-heading text-xl text-primary">
           {site?.logo_url ? (
-            <span
-              className={cn(
-                "flex items-center rounded-lg px-3 py-1.5 transition-colors",
-                isHome && "bg-white",
-              )}
-            >
+            <span className="flex items-center rounded-lg bg-white px-3 py-1.5">
               <img src={site.logo_url} alt="Paníco" className="h-11 w-auto object-contain" />
             </span>
           ) : (
-            <span className={isHome ? "text-primary-foreground" : "text-primary"}>Paníco</span>
+            <span className="text-primary-foreground">Paníco</span>
           )}
         </Link>
 
@@ -87,12 +63,7 @@ export function Header() {
             <Link
               key={link.to}
               to={link.to}
-              className={cn(
-                "text-sm transition-colors",
-                isHome
-                  ? "text-primary-foreground/75 hover:text-primary-foreground"
-                  : "text-foreground/80 hover:text-primary",
-              )}
+              className="text-sm text-primary-foreground/75 transition-colors hover:text-primary-foreground"
             >
               {link.label}
             </Link>
@@ -100,11 +71,7 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button
-            asChild
-            size="sm"
-            className={cn(isHome && "bg-white text-primary hover:bg-white/90")}
-          >
+          <Button asChild size="sm" className="bg-white text-primary hover:bg-white/90">
             <a href={phoneHref}>
               <Phone className="size-4" />
               <span className="hidden sm:inline">Atendimento 24h</span>
@@ -116,10 +83,7 @@ export function Header() {
             onClick={() => setMobileOpen((v) => !v)}
             aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
             aria-expanded={mobileOpen}
-            className={cn(
-              "flex size-9 items-center justify-center rounded-full md:hidden",
-              isHome ? "text-primary-foreground" : "text-foreground",
-            )}
+            className="flex size-9 items-center justify-center rounded-full text-primary-foreground md:hidden"
           >
             {mobileOpen ? <X className="size-5" /> : <Menu className="size-5" />}
           </button>
