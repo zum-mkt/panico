@@ -35,12 +35,12 @@ export function ServicesSection() {
               <button
                 type="button"
                 onClick={() => setSelected(service)}
-                className="w-full space-y-3 rounded-card border border-border bg-card p-6 text-left"
+                className="flex h-56 w-full flex-col gap-3 rounded-card border border-border bg-card p-6 text-left"
               >
-                <Icon className="size-6 text-accent" />
-                <h3 className="font-heading text-lg text-primary">{service.title}</h3>
+                <Icon className="size-6 shrink-0 text-accent" />
+                <h3 className="line-clamp-2 font-heading text-lg text-primary">{service.title}</h3>
                 {service.description && (
-                  <p className="text-sm text-secondary">{service.description}</p>
+                  <p className="line-clamp-3 text-sm text-secondary">{service.description}</p>
                 )}
               </button>
             </Reveal>

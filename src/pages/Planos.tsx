@@ -114,7 +114,8 @@ export function Planos() {
           "Planos funerários com assistência 24h, sem burocracia na hora em que sua família mais precisa."
         }
         imageUrl={hero?.image_url || "/hero-placeholder.svg"}
-        primaryCta={{ label: hero?.primary_label || "Falar com a equipe", href: phoneHref }}
+        primaryCta={{ label: hero?.primary_label || "Ligar agora", href: phoneHref }}
+        secondaryCta={{ label: "Falar no WhatsApp", href: whatsappHref, external: true }}
       />
 
       {!!benefits?.length && (

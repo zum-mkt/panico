@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 export type HeroCta = {
   label: string;
   href: string;
+  external?: boolean;
 };
 
 export function Hero({
@@ -53,12 +54,22 @@ export function Hero({
             <div className="flex flex-wrap gap-3 pt-2">
               {primaryCta && (
                 <Button asChild size="lg">
-                  <a href={primaryCta.href}>{primaryCta.label}</a>
+                  <a
+                    href={primaryCta.href}
+                    {...(primaryCta.external ? { target: "_blank", rel: "noreferrer" } : {})}
+                  >
+                    {primaryCta.label}
+                  </a>
                 </Button>
               )}
               {secondaryCta && (
                 <Button asChild variant="outline" size="lg">
-                  <a href={secondaryCta.href}>{secondaryCta.label}</a>
+                  <a
+                    href={secondaryCta.href}
+                    {...(secondaryCta.external ? { target: "_blank", rel: "noreferrer" } : {})}
+                  >
+                    {secondaryCta.label}
+                  </a>
                 </Button>
               )}
             </div>
