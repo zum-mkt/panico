@@ -9,7 +9,11 @@ type ShortcutItem = { label: string; href: string; icon: string };
 const FALLBACK_SHORTCUTS: ShortcutItem[] = [
   { label: "Obituários", href: "/obituarios", icon: "HeartHandshake" },
   { label: "Atendimento 24h", href: "tel:+551140000000", icon: "Phone" },
-  { label: "Segunda Via", href: "/area-do-cliente", icon: "IdCard" },
+  {
+    label: "Segunda Via",
+    href: "https://apps.mssistemas.com.br/areacliente.php/login/?codigo=814",
+    icon: "IdCard",
+  },
   { label: "Planos", href: "/planos", icon: "ClipboardList" },
   { label: "Coroas", href: "/coroas", icon: "Flower2" },
   { label: "Localização", href: "#localizacao", icon: "MapPin" },
@@ -34,7 +38,8 @@ export function ShortcutsBar() {
       <div className="mx-auto grid max-w-6xl grid-cols-3 gap-4 px-6 py-6 md:grid-cols-6">
         {items.map(({ label, href, icon }) => {
           const Icon = resolveIcon(icon);
-          const isExternal = href.startsWith("tel:") || href.startsWith("#");
+          const isAbsolute = /^https?:\/\//.test(href);
+          const isExternal = href.startsWith("tel:") || href.startsWith("#") || isAbsolute;
           const content = (
             <>
               <Icon className="size-5 text-accent" />
@@ -42,7 +47,12 @@ export function ShortcutsBar() {
             </>
           );
           return isExternal ? (
-            <a key={label} href={href} className="flex flex-col items-center gap-2 text-center">
+            <a
+              key={label}
+              href={href}
+              {...(isAbsolute ? { target: "_blank", rel: "noreferrer" } : {})}
+              className="flex flex-col items-center gap-2 text-center"
+            >
               {content}
             </a>
           ) : (

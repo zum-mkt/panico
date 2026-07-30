@@ -17,6 +17,7 @@ import type {
 } from "@/types/cemetery";
 import { SectionTitle } from "@/components/sections/SectionTitle";
 import { Gallery } from "@/components/sections/Gallery";
+import { CTA } from "@/components/sections/CTA";
 import { Reveal } from "@/components/ui/reveal";
 import {
   Accordion,
@@ -24,6 +25,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+
+const CEMETERY_CLIENT_AREA_URL = "https://apps.mssistemas.com.br/areacliente.php/login/?&app=&codigo=1020";
 
 function youtubeEmbedUrl(url?: string) {
   if (!url) return null;
@@ -173,6 +176,18 @@ export function CemiterioParque() {
           )}
         </section>
       )}
+
+      <section className="mx-auto max-w-6xl px-6">
+        <CTA
+          title="Já é titular de um jazigo no Cemitério Parque?"
+          description="Acesse a área do cliente para consultar dados, 2ª via de documentos e histórico do seu jazigo."
+          primaryCta={{
+            label: "Acessar área do cliente",
+            href: CEMETERY_CLIENT_AREA_URL,
+            external: true,
+          }}
+        />
+      </section>
 
       {!!faqs?.length && (
         <section className="mx-auto max-w-3xl space-y-10 px-6">
