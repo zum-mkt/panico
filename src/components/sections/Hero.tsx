@@ -48,7 +48,16 @@ export function Hero({
           <h1 className="font-heading text-4xl leading-tight text-primary md:text-5xl">
             {title}
           </h1>
-          {description && <p className="max-w-md text-lg text-secondary">{description}</p>}
+          {description && (
+            <div className="max-w-md space-y-4 text-lg text-secondary">
+              {description
+                .split(/\n{2,}/)
+                .filter(Boolean)
+                .map((paragraph, i) => (
+                  <p key={i}>{paragraph}</p>
+                ))}
+            </div>
+          )}
 
           {(primaryCta || secondaryCta) && (
             <div className="flex flex-wrap gap-3 pt-2">
