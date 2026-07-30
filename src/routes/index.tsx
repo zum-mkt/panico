@@ -8,6 +8,9 @@ import { ProtectedClientRoute } from "@/components/auth/ProtectedClientRoute";
 // Lazy loading nas páginas — ver 01-ARQUITETURA_DO_PROJETO.md > Regras.
 const Home = lazy(() => import("@/pages/Home").then((m) => ({ default: m.Home })));
 const Login = lazy(() => import("@/pages/admin/Login").then((m) => ({ default: m.Login })));
+const ResetPassword = lazy(() =>
+  import("@/pages/admin/ResetPassword").then((m) => ({ default: m.ResetPassword })),
+);
 const Dashboard = lazy(() =>
   import("@/pages/admin/Dashboard").then((m) => ({ default: m.Dashboard })),
 );
@@ -130,6 +133,7 @@ export function AppRoutes() {
         </Route>
 
         <Route path="/admin/login" element={<Login />} />
+        <Route path="/admin/redefinir-senha" element={<ResetPassword />} />
 
         <Route
           path="/admin"
