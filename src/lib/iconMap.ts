@@ -14,6 +14,8 @@ import {
   Sparkles,
   Megaphone,
   BookOpen,
+  HeartPulse,
+  Accessibility,
   type LucideIcon,
 } from "lucide-react";
 
@@ -35,6 +37,8 @@ const iconMap: Record<string, LucideIcon> = {
   Sparkles,
   Megaphone,
   BookOpen,
+  HeartPulse,
+  Accessibility,
 };
 
 export const iconNames = Object.keys(iconMap);

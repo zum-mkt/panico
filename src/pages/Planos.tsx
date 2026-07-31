@@ -23,6 +23,7 @@ import {
 const currency = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
 type PlansBenefit = { icon?: string; title: string; description?: string };
+type PlansPerk = { icon?: string; title: string; description?: string; items: string[]; note?: string };
 type SiteSettings = { phone?: string; whatsapp?: string };
 type PlanosHeroContent = {
   eyebrow?: string;
@@ -46,6 +47,30 @@ function checklistBenefits(benefits: string[]) {
   return benefits.filter((b) => !isAttributeBenefit(b));
 }
 
+// Benefícios comuns a todos os planos (não variam por plano) — ver
+// PlanosAdmin > Hero da página; editável via settings "plans_perks".
+const FALLBACK_PERKS: PlansPerk[] = [
+  {
+    icon: "HeartPulse",
+    title: "Benefícios em Vida",
+    description: "Valores diferenciados para:",
+    items: [
+      "Consultas médicas",
+      "Ultrassom",
+      "Ressonância Magnética",
+      "Tomografia",
+      "Exames laboratoriais",
+      "Atendimento odontológico",
+    ],
+  },
+  {
+    icon: "Accessibility",
+    title: "Materiais para Convalescença",
+    items: ["Cadeira de rodas*", "Cadeira de banho*", "Muletas*", "Andadores*", "Cama hospitalar*", "Colchões*"],
+    note: "*Disponíveis conforme estoque",
+  },
+];
+
 async function listPlansFaq() {
   const { data } = await supabase
     .from("faq")
@@ -62,6 +87,11 @@ export function Planos() {
     queryKey: ["settings", "plans_benefits"],
     queryFn: () => getSetting<PlansBenefit[]>("plans_benefits"),
   });
+  const { data: perks } = useQuery({
+    queryKey: ["settings", "plans_perks"],
+    queryFn: () => getSetting<PlansPerk[]>("plans_perks"),
+  });
+  const perksList = perks ?? FALLBACK_PERKS;
   const { data: faqs } = useQuery({ queryKey: ["plans", "faq"], queryFn: listPlansFaq });
   const { data: site } = useQuery({
     queryKey: ["settings", "site"],
@@ -129,6 +159,33 @@ export function Planos() {
                   <Icon className="mx-auto size-6 text-accent" />
                   <h3 className="font-heading text-lg text-primary">{b.title}</h3>
                   {b.description && <p className="text-sm text-secondary">{b.description}</p>}
+                </Reveal>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
+      {!!perksList.length && (
+        <section className="mx-auto max-w-6xl space-y-12 px-6 py-20">
+          <SectionTitle eyebrow="Comuns a todos os planos" title="Benefícios adicionais" />
+          <div className="grid gap-10 sm:grid-cols-2">
+            {perksList.map((perk, i) => {
+              const Icon = resolveIcon(perk.icon);
+              return (
+                <Reveal key={perk.title} delay={i * 0.06} className="space-y-4 text-center">
+                  <Icon className="mx-auto size-6 text-accent" />
+                  <h3 className="font-heading text-lg text-primary">{perk.title}</h3>
+                  {perk.description && <p className="text-sm text-secondary">{perk.description}</p>}
+                  <ul className="mx-auto grid max-w-xs grid-cols-2 gap-x-4 gap-y-1.5 text-left text-sm">
+                    {perk.items.map((item) => (
+                      <li key={item} className="flex items-center gap-1.5 text-secondary">
+                        <Check className="size-3.5 shrink-0 text-accent" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                  {perk.note && <p className="text-xs text-secondary/70">{perk.note}</p>}
                 </Reveal>
               );
             })}
