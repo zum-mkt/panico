@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { listActiveServices } from "@/services/homeService";
 import { resolveIcon } from "@/lib/iconMap";
 import { SectionTitle } from "./SectionTitle";
+import { SectionTitleSkeleton, CardGridSkeleton } from "./SectionSkeleton";
 import { Reveal } from "@/components/ui/reveal";
 import {
   Dialog,
@@ -16,11 +17,20 @@ type HomeService = NonNullable<
 >[number];
 
 export function ServicesSection() {
-  const { data: services } = useQuery({
+  const { data: services, isLoading } = useQuery({
     queryKey: ["home", "services"],
     queryFn: listActiveServices,
   });
   const [selected, setSelected] = useState<HomeService | null>(null);
+
+  if (isLoading) {
+    return (
+      <section className="mx-auto max-w-6xl space-y-12 px-6 py-20">
+        <SectionTitleSkeleton />
+        <CardGridSkeleton count={4} cols="sm:grid-cols-2 md:grid-cols-4" />
+      </section>
+    );
+  }
 
   if (!services?.length) return null;
 

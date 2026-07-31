@@ -10,10 +10,28 @@ const dateFormatter = new Intl.DateTimeFormat("pt-BR", { day: "2-digit", month: 
 const timeFormatter = new Intl.DateTimeFormat("pt-BR", { hour: "2-digit", minute: "2-digit" });
 
 export function ObituariesSection() {
-  const { data: obituaries } = useQuery({
+  const { data: obituaries, isLoading } = useQuery({
     queryKey: ["home", "obituaries"],
     queryFn: () => listRecentObituaries(),
   });
+
+  if (isLoading) {
+    return (
+      <section className="px-6 py-20">
+        <div className="mx-auto max-w-6xl animate-pulse space-y-10 rounded-4xl border border-border bg-gradient-to-b from-primary/[0.04] to-transparent px-6 py-14 md:px-12">
+          <div className="space-y-3">
+            <div className="h-3.5 w-40 rounded-full bg-border" />
+            <div className="h-9 w-56 rounded-full bg-border" />
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <div key={i} className="h-72 rounded-card bg-border/50" />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   if (!obituaries?.length) return null;
 

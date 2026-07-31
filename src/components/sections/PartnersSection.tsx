@@ -1,12 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
 import { listActivePartners, getSetting } from "@/services/homeService";
 import { SectionTitle } from "./SectionTitle";
+import { SectionTitleSkeleton, CardGridSkeleton } from "./SectionSkeleton";
 import { Reveal } from "@/components/ui/reveal";
 
 type PartnersContent = { eyebrow?: string; title?: string; description?: string };
 
 export function PartnersSection() {
-  const { data: partners } = useQuery({
+  const { data: partners, isLoading } = useQuery({
     queryKey: ["home", "partners"],
     queryFn: listActivePartners,
   });
@@ -14,6 +15,15 @@ export function PartnersSection() {
     queryKey: ["settings", "home_partners"],
     queryFn: () => getSetting<PartnersContent>("home_partners"),
   });
+
+  if (isLoading) {
+    return (
+      <section className="mx-auto max-w-6xl space-y-12 px-6 py-20">
+        <SectionTitleSkeleton />
+        <CardGridSkeleton count={3} cols="sm:grid-cols-2 md:grid-cols-3" />
+      </section>
+    );
+  }
 
   if (!partners?.length) return null;
 

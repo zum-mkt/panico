@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Check } from "lucide-react";
 import { listActivePlans } from "@/services/homeService";
 import { SectionTitle } from "./SectionTitle";
+import { SectionTitleSkeleton, CardGridSkeleton } from "./SectionSkeleton";
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
 import { cn, slugify } from "@/lib/utils";
@@ -10,10 +11,19 @@ import { cn, slugify } from "@/lib/utils";
 const currency = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
 export function PlansSection() {
-  const { data: plans } = useQuery({
+  const { data: plans, isLoading } = useQuery({
     queryKey: ["home", "plans"],
     queryFn: listActivePlans,
   });
+
+  if (isLoading) {
+    return (
+      <section className="mx-auto max-w-6xl space-y-12 px-6 py-20">
+        <SectionTitleSkeleton />
+        <CardGridSkeleton count={3} cols="md:grid-cols-3" />
+      </section>
+    );
+  }
 
   if (!plans?.length) return null;
 

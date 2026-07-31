@@ -10,6 +10,7 @@ import { Gallery } from "@/components/sections/Gallery";
 import { SectionTitle } from "@/components/sections/SectionTitle";
 import { DynamicFormRenderer } from "@/components/sections/DynamicFormRenderer";
 import { Reveal } from "@/components/ui/reveal";
+import { PageLoader } from "@/components/ui/page-loader";
 import {
   Accordion,
   AccordionContent,
@@ -213,12 +214,13 @@ function Block({ section }: { section: PageSection }) {
 
 export function DynamicPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["pages", slug],
     queryFn: () => getPublishedPageBySlug(slug!),
     enabled: !!slug,
   });
 
+  if (isLoading) return <PageLoader />;
   if (!data) return null;
 
   // O header é fixo e transparente até rolar a página; blocos que não sejam

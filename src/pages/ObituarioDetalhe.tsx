@@ -18,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Reveal } from "@/components/ui/reveal";
+import { PageLoader } from "@/components/ui/page-loader";
 import { toast } from "sonner";
 import { toTitleCasePt, formatLocation } from "@/lib/textFormat";
 
@@ -101,7 +102,7 @@ export function ObituarioDetalhe() {
   const queryClient = useQueryClient();
   const [shareCopied, setShareCopied] = useState(false);
 
-  const { data: obituary } = useQuery({
+  const { data: obituary, isLoading } = useQuery({
     queryKey: ["obituaries", id],
     queryFn: () => getObituaryById(id!),
     enabled: !!id,
@@ -129,6 +130,7 @@ export function ObituarioDetalhe() {
     onError: () => toast.error("Não foi possível enviar sua mensagem."),
   });
 
+  if (isLoading) return <PageLoader />;
   if (!obituary) return null;
 
   const pageUrl = window.location.href;

@@ -3,6 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { PublicLayout } from "@/components/layout/PublicLayout";
 import { AdminLayout } from "@/components/layout/AdminLayout";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoute";
+import { PageLoader } from "@/components/ui/page-loader";
 
 // Lazy loading nas páginas — ver 01-ARQUITETURA_DO_PROJETO.md > Regras.
 const Home = lazy(() => import("@/pages/Home").then((m) => ({ default: m.Home })));
@@ -97,7 +98,7 @@ const SeoAdmin = lazy(() =>
 
 export function AppRoutes() {
   return (
-    <Suspense fallback={null}>
+    <Suspense fallback={<PageLoader />}>
       <Routes>
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />

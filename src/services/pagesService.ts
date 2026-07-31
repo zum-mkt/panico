@@ -9,22 +9,18 @@ export const sectionsCrud = createCrudService<PageSection>("page_sections");
 export async function getPublishedPageBySlug(
   slug: string,
 ): Promise<{ page: Page; sections: PageSection[] } | null> {
-  const { data: page } = await supabase
+  const { data } = await supabase
     .from("pages")
-    .select("*")
+    .select("*, page_sections(*)")
     .eq("slug", slug)
     .eq("status", "published")
+    .eq("page_sections.is_active", true)
+    .order("position", { referencedTable: "page_sections" })
     .maybeSingle();
-  if (!page) return null;
+  if (!data) return null;
 
-  const { data: sections } = await supabase
-    .from("page_sections")
-    .select("*")
-    .eq("page_id", page.id)
-    .eq("is_active", true)
-    .order("position");
-
-  return { page, sections: sections ?? [] };
+  const { page_sections, ...page } = data as Page & { page_sections: PageSection[] | null };
+  return { page: page as Page, sections: page_sections ?? [] };
 }
 
 export async function listMenuPages(): Promise<Pick<Page, "slug" | "title" | "menu_label">[]> {
