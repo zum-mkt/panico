@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getPublishedPageBySlug } from "@/services/pagesService";
 import type { PageSection } from "@/types/page";
+import { MapPin } from "lucide-react";
 import { Seo } from "@/components/seo/Seo";
 import { Hero } from "@/components/sections/Hero";
 import { CTA } from "@/components/sections/CTA";
@@ -151,7 +152,24 @@ function Block({ section }: { section: PageSection }) {
       const hasLinks = links.some(Boolean);
       return (
         <section className="mx-auto max-w-6xl space-y-10 px-6 py-16">
-          {c.title && <SectionTitle title={c.title} />}
+          {(c.title || c.address) && (
+            <div className="space-y-3">
+              {c.title && <SectionTitle title={c.title} />}
+              {c.address && (
+                <a
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+                    [c.address, c.title].filter(Boolean).join(", "),
+                  )}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mx-auto flex max-w-xl items-center justify-center gap-2 text-center text-sm text-secondary transition-colors hover:text-primary"
+                >
+                  <MapPin className="size-4 shrink-0 text-accent" />
+                  {c.address}
+                </a>
+              )}
+            </div>
+          )}
           {hasLinks ? (
             <div className="flex flex-wrap items-center justify-center gap-6">
               {images.map((src, i) => {

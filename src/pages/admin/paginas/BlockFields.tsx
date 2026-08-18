@@ -273,6 +273,11 @@ export function BlockFields({
       return (
         <div className="space-y-3">
           <Input placeholder="Título da seção" value={(content.title as string) ?? ""} onChange={(e) => set({ title: e.target.value })} />
+          <Input
+            placeholder="Endereço (opcional)"
+            value={(content.address as string) ?? ""}
+            onChange={(e) => set({ address: e.target.value })}
+          />
           <GalleryField
             images={(content.images as string[]) ?? []}
             links={(content.links as string[]) ?? []}
