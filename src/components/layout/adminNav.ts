@@ -19,6 +19,7 @@ import {
   Church,
   MessageSquareQuote,
   HelpCircle,
+  BellRing,
 } from "lucide-react";
 
 export type AdminNavItem = {
@@ -36,6 +37,7 @@ export const adminNavItems: AdminNavItem[] = [
   { label: "Páginas", to: "/admin/paginas", icon: FileText },
   { label: "Serviços", to: "/admin/servicos", icon: Church },
   { label: "Obituários", to: "/admin/obituarios", icon: HeartHandshake },
+  { label: "Inscritos", to: "/admin/inscritos", icon: BellRing },
   { label: "Planos", to: "/admin/planos", icon: ClipboardList },
   { label: "Coroas", to: "/admin/coroas", icon: Flower2 },
   { label: "Cemitério", to: "/admin/cemiterio", icon: TreePine },

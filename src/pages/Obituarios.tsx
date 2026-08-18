@@ -7,6 +7,7 @@ import { useSeoPage } from "@/hooks/useSeoPage";
 import { usePageHero } from "@/hooks/usePageHero";
 import { listPublishedObituariesPage } from "@/services/obituariesService";
 import { Hero } from "@/components/sections/Hero";
+import { ObituaryNotificationSignup } from "@/components/sections/ObituaryNotificationSignup";
 import { Reveal } from "@/components/ui/reveal";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -82,6 +83,8 @@ export function Obituarios() {
             className="pl-9"
           />
         </div>
+
+        <ObituaryNotificationSignup />
 
         {filtered.length === 0 ? (
           <p className="text-secondary">Nenhum obituário encontrado.</p>

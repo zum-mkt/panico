@@ -412,3 +412,12 @@ enabled = true
 # declarative_schema_path = "./database"
 # JSON string passed through to pg-delta SQL formatting.
 # format_options = "{\"keywordCase\":\"upper\",\"indent\":2,\"maxWidth\":80,\"commaStyle\":\"trailing\"}"
+
+# Chamadas server-to-server (trigger/cron do Postgres via pg_net), nunca do
+# browser — a autorização é o segredo compartilhado x-webhook-secret (ver
+# supabase/functions/_shared/supabaseAdmin.ts), não o JWT do Supabase Auth.
+[functions.notify-obituary-subscribers]
+verify_jwt = false
+
+[functions.send-subscription-confirmation]
+verify_jwt = false

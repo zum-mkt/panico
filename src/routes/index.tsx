@@ -23,6 +23,12 @@ const Obituarios = lazy(() =>
 const ObituarioDetalhe = lazy(() =>
   import("@/pages/ObituarioDetalhe").then((m) => ({ default: m.ObituarioDetalhe })),
 );
+const ConfirmarInscricao = lazy(() =>
+  import("@/pages/ConfirmarInscricao").then((m) => ({ default: m.ConfirmarInscricao })),
+);
+const Desinscricao = lazy(() =>
+  import("@/pages/Desinscricao").then((m) => ({ default: m.Desinscricao })),
+);
 const ObituariosAdmin = lazy(() =>
   import("@/pages/admin/obituarios/ObituariosAdmin").then((m) => ({
     default: m.ObituariosAdmin,
@@ -95,6 +101,9 @@ const FaqAdmin = lazy(() =>
 const SeoAdmin = lazy(() =>
   import("@/pages/admin/seo/SeoAdmin").then((m) => ({ default: m.SeoAdmin })),
 );
+const InscritosAdmin = lazy(() =>
+  import("@/pages/admin/inscritos/InscritosAdmin").then((m) => ({ default: m.InscritosAdmin })),
+);
 
 export function AppRoutes() {
   return (
@@ -106,6 +115,8 @@ export function AppRoutes() {
           <Route path="/planos" element={<Planos />} />
           <Route path="/obituarios" element={<Obituarios />} />
           <Route path="/obituarios/:id" element={<ObituarioDetalhe />} />
+          <Route path="/confirmar-inscricao/:token" element={<ConfirmarInscricao />} />
+          <Route path="/desinscricao/:token" element={<Desinscricao />} />
           <Route path="/cemiterio" element={<CemiterioParque />} />
           <Route path="/coroas" element={<Coroas />} />
           <Route path="/contato" element={<Contato />} />
@@ -131,6 +142,7 @@ export function AppRoutes() {
           <Route path="paginas" element={<PaginasAdmin />} />
           <Route path="paginas/:id" element={<PageBuilder />} />
           <Route path="obituarios" element={<ObituariosAdmin />} />
+          <Route path="inscritos" element={<InscritosAdmin />} />
           <Route path="planos" element={<PlanosAdmin />} />
           <Route path="coroas" element={<CoroasAdmin />} />
           <Route path="cemiterio" element={<CemiterioAdmin />} />

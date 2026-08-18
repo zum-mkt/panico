@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { Flame, Calendar, MapPin, Clock, ArrowRight, ArrowUpRight } from "lucide-react";
 import { listRecentObituaries } from "@/services/homeService";
+import { ObituaryNotificationSignup } from "@/components/sections/ObituaryNotificationSignup";
 import { Reveal } from "@/components/ui/reveal";
 import { Button } from "@/components/ui/button";
 import { toTitleCasePt, formatLocation } from "@/lib/textFormat";
@@ -33,7 +34,15 @@ export function ObituariesSection() {
     );
   }
 
-  if (!obituaries?.length) return null;
+  if (!obituaries?.length) {
+    return (
+      <section className="px-6 py-20">
+        <div className="mx-auto max-w-6xl rounded-4xl border border-border bg-gradient-to-b from-primary/[0.04] to-transparent px-6 py-14 md:px-12">
+          <ObituaryNotificationSignup divided={false} />
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="px-6 py-20">
@@ -133,6 +142,8 @@ export function ObituariesSection() {
             </Reveal>
           ))}
         </div>
+
+        <ObituaryNotificationSignup />
       </div>
     </section>
   );
