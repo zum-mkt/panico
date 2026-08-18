@@ -63,11 +63,11 @@ function Block({ section }: { section: PageSection }) {
     case "text":
       return (
         <section className="mx-auto max-w-3xl space-y-6 px-6 py-16">
-          {c.title && <SectionTitle title={c.title} />}
+          {c.title && <SectionTitle title={c.title} description={c.subtitle} />}
           {c.body && (
             <Reveal>
               <div
-                className="prose prose-lg max-w-none text-justify leading-relaxed text-foreground prose-headings:font-heading prose-headings:text-primary prose-h5:mt-6 prose-h5:mb-0 prose-p:mb-6 prose-p:last:mb-0 prose-strong:text-primary prose-ul:my-4 prose-ul:columns-1 prose-ul:gap-x-8 sm:prose-ul:columns-2 prose-li:my-1 prose-li:break-inside-avoid [hyphens:auto]"
+                className="prose prose-lg max-w-none text-justify leading-relaxed text-foreground prose-headings:font-heading prose-headings:text-primary prose-h2:mt-12 prose-h2:mb-4 prose-h2:text-2xl prose-h2:first:mt-0 prose-h5:mt-6 prose-h5:mb-0 prose-p:mb-6 prose-p:last:mb-0 prose-strong:text-primary prose-blockquote:border-accent/40 prose-blockquote:text-center prose-blockquote:not-italic prose-blockquote:text-primary prose-ul:my-4 prose-ul:columns-1 prose-ul:gap-x-8 sm:prose-ul:columns-2 prose-li:my-1 prose-li:break-inside-avoid [hyphens:auto]"
                 dangerouslySetInnerHTML={{ __html: mergeAdjacentLists(c.body) }}
               />
             </Reveal>
