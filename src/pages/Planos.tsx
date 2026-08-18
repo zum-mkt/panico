@@ -151,11 +151,15 @@ export function Planos() {
       {!!benefits?.length && (
         <section className="mx-auto max-w-6xl space-y-12 px-6 py-20">
           <SectionTitle eyebrow="Por que contratar" title="Benefícios" />
-          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
+          <div className="flex flex-wrap justify-center gap-8">
             {benefits.map((b, i) => {
               const Icon = resolveIcon(b.icon);
               return (
-                <Reveal key={b.title} delay={i * 0.06} className="space-y-2 text-center">
+                <Reveal
+                  key={b.title}
+                  delay={i * 0.06}
+                  className="w-full max-w-64 space-y-2 text-center sm:w-64"
+                >
                   <Icon className="mx-auto size-6 text-accent" />
                   <h3 className="font-heading text-lg text-primary">{b.title}</h3>
                   {b.description && <p className="text-sm text-secondary">{b.description}</p>}
