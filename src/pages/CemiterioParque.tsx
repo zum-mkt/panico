@@ -2,8 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Seo } from "@/components/seo/Seo";
 import { useSeoPage } from "@/hooks/useSeoPage";
 import { usePageHero } from "@/hooks/usePageHero";
-import { Hero } from "@/components/sections/Hero";
-import { Clock, MapPin } from "lucide-react";
+import { HomeHero } from "@/components/sections/HomeHero";
+import { Clock, MapPin, ExternalLink } from "lucide-react";
 import {
   listActiveCemeterySections,
   listCemeteryFaq,
@@ -16,7 +16,6 @@ import type {
   VideoContent,
 } from "@/types/cemetery";
 import { SectionTitle } from "@/components/sections/SectionTitle";
-import { Gallery } from "@/components/sections/Gallery";
 import { CTA } from "@/components/sections/CTA";
 import { Reveal } from "@/components/ui/reveal";
 import {
@@ -60,15 +59,25 @@ export function CemiterioParque() {
   });
   const { data: hero } = usePageHero("cemiterio_hero");
 
+  const historyParagraphs = (history?.text ?? "")
+    .split(/\n+/)
+    .map((p) => p.trim())
+    .filter(Boolean);
+
+  const galleryImages = gallery?.images ?? [];
+  const featuredGallery = galleryImages[0];
+  const remainingGallery = galleryImages.slice(1);
+
   return (
-    <main className="space-y-20 pb-20">
+    <main className="pb-20">
       <Seo title={seo.title} description={seo.description} />
 
-      <Hero
+      <HomeHero
         eyebrow={hero?.eyebrow || "Cemitério Parque"}
         title={hero?.title || "Um espaço de paz e memória"}
         description={hero?.description}
         imageUrl={hero?.image_url || "/hero-placeholder.svg"}
+        imageAlt="Fachada do Cemitério Parque Irmãos Panico"
         primaryCta={
           hero?.primary_label
             ? {
@@ -76,54 +85,100 @@ export function CemiterioParque() {
                 href: hero.primary_href || "#localizacao",
                 external: /^https?:\/\//.test(hero.primary_href || ""),
               }
-            : undefined
+            : { label: "Ver localização", href: "#localizacao" }
         }
       />
 
-      {history?.text && (
-        <section className="mx-auto grid max-w-6xl items-center gap-8 px-6 md:grid-cols-2">
-          {history.image_url && (
-            <Reveal variant="scale" className="overflow-hidden rounded-card">
-              <img src={history.image_url} alt="" className="aspect-[4/3] w-full object-cover" loading="lazy" />
+      {historyParagraphs.length > 0 && (
+        <section className="mx-auto grid max-w-6xl items-center gap-10 px-6 py-20 md:grid-cols-2 md:gap-16">
+          {history?.image_url && (
+            <Reveal variant="scale" className="overflow-hidden rounded-hero">
+              <img
+                src={history.image_url}
+                alt="Vista do Cemitério Parque Irmãos Panico"
+                className="aspect-[4/3] w-full object-cover"
+                loading="lazy"
+                decoding="async"
+              />
             </Reveal>
           )}
-          <Reveal className="space-y-3">
-            <h2 className="font-heading text-2xl text-primary">{history.title || "História"}</h2>
-            <p className="text-secondary">{history.text}</p>
+          <Reveal className="space-y-5">
+            <p className="text-sm font-medium tracking-wide text-accent uppercase">História</p>
+            <h2 className="font-heading text-3xl text-primary md:text-4xl">
+              {history?.title || "História"}
+            </h2>
+            <div className="space-y-4 leading-relaxed text-secondary">
+              {historyParagraphs.map((paragraph, i) => (
+                <p key={i}>{paragraph}</p>
+              ))}
+            </div>
           </Reveal>
         </section>
       )}
 
       {structure?.text && (
-        <section className="mx-auto grid max-w-6xl items-center gap-8 px-6 md:grid-cols-2">
-          <Reveal className="order-2 space-y-3 md:order-1">
-            <h2 className="font-heading text-2xl text-primary">
+        <section className="mx-auto grid max-w-6xl items-center gap-10 px-6 pb-20 md:grid-cols-2 md:gap-16">
+          <Reveal className="order-2 space-y-5 md:order-1">
+            <p className="text-sm font-medium tracking-wide text-accent uppercase">Estrutura</p>
+            <h2 className="font-heading text-3xl text-primary md:text-4xl">
               {structure.title || "Estrutura"}
             </h2>
-            <p className="text-secondary">{structure.text}</p>
+            <div className="space-y-4 text-secondary leading-relaxed">
+              {structure.text
+                .split(/\n+/)
+                .map((p) => p.trim())
+                .filter(Boolean)
+                .map((paragraph, i) => (
+                  <p key={i}>{paragraph}</p>
+                ))}
+            </div>
           </Reveal>
           {structure.image_url && (
-            <Reveal variant="scale" className="order-1 overflow-hidden rounded-card md:order-2">
+            <Reveal variant="scale" className="order-1 overflow-hidden rounded-hero md:order-2">
               <img
                 src={structure.image_url}
                 alt=""
                 className="aspect-[4/3] w-full object-cover"
                 loading="lazy"
+                decoding="async"
               />
             </Reveal>
           )}
         </section>
       )}
 
-      {!!gallery?.images?.length && (
-        <section className="mx-auto max-w-6xl space-y-10 px-6">
+      {galleryImages.length > 0 && (
+        <section className="mx-auto max-w-6xl space-y-10 px-6 pb-20">
           <SectionTitle eyebrow="Galeria" title="Conheça nossos espaços" />
-          <Gallery images={gallery.images.map((src) => ({ src, alt: "" }))} />
+          <div className="grid gap-4 md:grid-cols-2">
+            {featuredGallery && (
+              <Reveal variant="scale" className="overflow-hidden rounded-hero md:col-span-2">
+                <img
+                  src={featuredGallery}
+                  alt="Avenida central do cemitério parque"
+                  className="aspect-[21/9] w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </Reveal>
+            )}
+            {remainingGallery.map((src, i) => (
+              <Reveal key={src} variant="scale" delay={i * 0.06} className="overflow-hidden rounded-card">
+                <img
+                  src={src}
+                  alt=""
+                  className="aspect-[4/3] w-full object-cover"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </Reveal>
+            ))}
+          </div>
         </section>
       )}
 
       {video?.youtube_url && (
-        <section className="mx-auto max-w-4xl space-y-6 px-6">
+        <section className="mx-auto max-w-4xl space-y-6 px-6 pb-20">
           <SectionTitle eyebrow="Vídeo" title={video.title || "Conheça em vídeo"} />
           <Reveal className="aspect-video overflow-hidden rounded-card">
             <iframe
@@ -138,7 +193,7 @@ export function CemiterioParque() {
       )}
 
       {drone?.youtube_url && (
-        <section className="mx-auto max-w-4xl space-y-6 px-6">
+        <section className="mx-auto max-w-4xl space-y-6 px-6 pb-20">
           <SectionTitle eyebrow="Vista aérea" title={drone.title || "Imagens de drone"} />
           <Reveal className="aspect-video overflow-hidden rounded-card">
             <iframe
@@ -153,28 +208,38 @@ export function CemiterioParque() {
       )}
 
       {(location?.address || hours?.schedule?.length) && (
-        <section className="mx-auto grid max-w-6xl gap-8 px-6 md:grid-cols-2" id="localizacao">
+        <section className="mx-auto grid max-w-6xl gap-8 px-6 pb-20 md:grid-cols-2" id="localizacao">
           {location?.address && (
             <Reveal className="space-y-4">
               <p className="flex items-center gap-2 font-heading text-lg text-primary">
-                <MapPin className="size-5" /> Localização
+                <MapPin className="size-5 text-accent" /> Localização
               </p>
+              <p className="text-secondary">{location.address}</p>
               <iframe
-                title="Mapa"
+                title="Mapa do Cemitério Parque Irmãos Panico"
                 className="h-64 w-full rounded-card border border-border"
                 loading="lazy"
                 src={`https://www.google.com/maps?q=${encodeURIComponent(location.address)}&output=embed`}
               />
+              <a
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(location.address)}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+              >
+                Abrir no Google Maps
+                <ExternalLink className="size-3.5" />
+              </a>
             </Reveal>
           )}
           {!!hours?.schedule?.length && (
             <Reveal className="space-y-4">
               <p className="flex items-center gap-2 font-heading text-lg text-primary">
-                <Clock className="size-5" /> Horários
+                <Clock className="size-5 text-accent" /> Horários
               </p>
-              <ul className="space-y-2 rounded-card border border-border bg-card p-6">
+              <ul className="space-y-3 rounded-card border border-border bg-card p-6">
                 {hours.schedule!.map((h) => (
-                  <li key={h.day} className="flex justify-between text-sm">
+                  <li key={h.day} className="flex justify-between gap-4 text-sm">
                     <span>{h.day}</span>
                     <span className="text-secondary">{h.hours}</span>
                   </li>
@@ -185,7 +250,7 @@ export function CemiterioParque() {
         </section>
       )}
 
-      <section className="mx-auto max-w-6xl px-6">
+      <section className="mx-auto max-w-6xl px-6 pb-20">
         <CTA
           title="Já é titular de um jazigo no Cemitério Parque?"
           description="Acesse a área do cliente para consultar dados, 2ª via de documentos e histórico do seu jazigo."
@@ -198,7 +263,7 @@ export function CemiterioParque() {
       </section>
 
       {!!faqs?.length && (
-        <section className="mx-auto max-w-3xl space-y-10 px-6">
+        <section className="mx-auto max-w-3xl space-y-10 px-6 pb-4">
           <SectionTitle eyebrow="Dúvidas" title="Perguntas frequentes" />
           <Accordion type="single" collapsible>
             {faqs.map((faq) => (
