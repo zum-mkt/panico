@@ -155,7 +155,7 @@ export function CemiterioParque() {
               <Reveal variant="scale" className="overflow-hidden rounded-hero md:col-span-2">
                 <img
                   src={featuredGallery}
-                  alt="Avenida central do cemitério parque"
+                  alt="Fachada do Cemitério Parque Irmãos Panico"
                   className="aspect-[21/9] w-full object-cover"
                   loading="lazy"
                   decoding="async"
@@ -167,7 +167,7 @@ export function CemiterioParque() {
                 <img
                   src={src}
                   alt=""
-                  className="aspect-[4/3] w-full object-cover"
+                  className="aspect-square w-full object-cover"
                   loading="lazy"
                   decoding="async"
                 />
